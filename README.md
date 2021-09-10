@@ -1,11 +1,14 @@
 ﻿
 # Keep Eating! :joy:
+Keep Eating is a mulitplayer game project for Temple CIS4398 capstone course. In this game, you can get to your heart's content, or you can ruin your opponent's good time by 
+picking up the bombs and explode them to death :smiling_imp:. Just like Megumin!
 
 ## Revision History
 | Revision | Author | Revision Date| Comments
 |----------|------|----------|---------|
 | 1.0 | Brendan Lisowski, Darnell Faison, Huifeng Liang, Ji Park, Ju-Hung Chen, Minyi Li, Omran Farighi | Sept. 2,2021 | Initiated |
 |1.01|Darnell Faison|Sept. 3, 2021| Detail added for lobbies and player interaction. |
+|1.02|Ju-Hung Chen|Sept. 9 2021| Add game discription outline |
 
 ## Project Abstract
 This document proposes an online video game in which players compete against each other in order to eat more food than their opponents. The game takes place inside an arena where food items spawn in from the sides. Players eat by colliding with the food, earning points. The player with the most points when a timer runs out is the winner. Players can create their own lobbies to play against each other over the internet.
