@@ -10,6 +10,7 @@ picking up the bombs and explode them to death :smiling_imp:. Just like Megumin!
 |1.01|Darnell Faison|Sept. 3, 2021| Detail added for lobbies and player interaction. |
 |1.02|Ju-Hung Chen|Sept. 9 2021| Add game discription outline |
 |1.03|Brendan Lisowski, Ju-Hung Chen| Sept. 14, 2021| Update system block diagram, update user stories|
+|1.04|Ji Park| Sept. 14, 2021| Update user stories|
 
 
 
@@ -54,10 +55,12 @@ In order to complete this project, all team members need:
 
 ## User Story 
 ### Ji wants a fun way to pass the time
-- Ji download the app from the Google Play Store
-- Upon opening the app, he creates his profile
-- He can now see the main menu and he chooses to “join a game”
-- Ji joins a game with random players and is placed on a specific team to compete on
+- Ji downloads the app from the Google Play Store
+- Upon the start of the app, he is prompted to create an account and personalize his profile/character
+- After creating his account, he is directed to the main menu where he selects “join a game”
+- Ji joins a random server and waits in the lobby for it to be filled with enough players to start the game
+- After the host starts the game, all of the players are randomized into two teams to compete against each other
+- The winning team is decided by the team that survived the longest and/or optimized the most points by eating the food generated across the map
 
 ### Darnell wants to play a multiplayer game with his friends:
 - Darnell runs the app and from the main menu, creates a lobby for his friends to join.
