@@ -9,8 +9,8 @@ picking up the bombs and explode them to death :smiling_imp:. Just like Megumin!
 | 1.0 | Brendan Lisowski, Darnell Faison, Huifeng Liang, Ji Park, Ju-Hung Chen, Minyi Li, Omran Farighi | Sept. 2,2021 | Initiated |
 |1.01|Darnell Faison|Sept. 3, 2021| Detail added for lobbies and player interaction. |
 |1.02|Ju-Hung Chen|Sept. 9 2021| Add game discription outline |
-|1.03|Brendan Lisowski, Ju-Hung Chen| Sept. 14, 2021| Update system block diagram, update user stories|
-|1.04|Ji Park| Sept. 14, 2021| Update user stories|
+|1.03|Brendan Lisowski, Ju-Hung Chen, Omran Farighi| Sept. 14, 2021| Update system block diagram, update user stories|
+|1.04|Ji Park, Omran Farighi| Sept. 14, 2021| Update user stories|
 
 
 
@@ -63,10 +63,16 @@ In order to complete this project, all team members need:
 - The winning team is decided by the team that survived the longest and/or optimized the most points by eating the food generated across the map
 
 ### Darnell wants to play a multiplayer game with his friends:
-- Darnell runs the app and from the main menu, creates a lobby for his friends to join.
-- When his friends run the app, the choose the “join lobby” function from the main menu
-- They enter the lobby code Darnell provided and are able to join his match.
-- The game randomly splits the group up into two separate teams to compete against each other.
+- Darnell wants to play a multiplayer game with his friends:
+- Darnell downloads the Keep Eating game from the Google Play Store.
+- His friends also download the same app from the Play Store.
+- They all start the app and from the main menu, Darnell selects the “create lobby” function.
+- Darnell is able to generate a unique lobby code for his friends to use to join his lobby.
+- Darnell distributes the code to his friends.
+- His friends select the “join lobby” function from the main menu to join the lobby Darnell has already created.
+- While his friends are joining the lobby, Darnell is able to set the rules for the game and selects a map to play on.
+- Once everyone is in the lobby, Darnell starts the match and the players are separated into two teams, ready to compete.
+
 
 
 ## System Block Diagram
