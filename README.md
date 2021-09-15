@@ -9,6 +9,9 @@ picking up the bombs and explode them to death :smiling_imp:. Just like Megumin!
 | 1.0 | Brendan Lisowski, Darnell Faison, Huifeng Liang, Ji Park, Ju-Hung Chen, Minyi Li, Omran Farighi | Sept. 2,2021 | Initiated |
 |1.01|Darnell Faison|Sept. 3, 2021| Detail added for lobbies and player interaction. |
 |1.02|Ju-Hung Chen|Sept. 9 2021| Add game discription outline |
+|1.03|Brendan Lisowski, Ju-Hung Chen| Sept. 14, 2021| Update system block diagram, update user stories|
+
+
 
 ## Project Abstract
 This document proposes an online video game in which players compete against each other in order to eat more food than their opponents. The game takes place inside an arena where food items spawn in from the sides. Players eat by colliding with the food, earning points. The player with the most points when a timer runs out is the winner. Players can create their own lobbies to play against each other over the internet.
@@ -50,14 +53,18 @@ In order to complete this project, all team members need:
 -   AWS Cloud Computing Service
 
 ## User Story 
-### Unlucky Ji Park: 
-Ji was living in the greater Philadelphia area when the region was hit by a strong storm knocking out the power for his neighborhood. With no power, all he has left is his phone that he charges in his car every few hours. Bored with nothing to do while he waits for his power to come back on, Ji keeps himself entertained by playing Keep Eating to help pass the time.
+### Ji wants a fun way to pass the time
+- Ji download the app from the Google Play Store
+- Upon opening the app, he creates his profile
+- He can now see the main menu and he chooses to “join a game”
+- Ji joins a game with random players and is placed on a specific team to compete on
 
-### Darnell and Friends: 
-Darnell is having a birthday party with three of his closest friends. To make sure everyone is having fun at the party, Darnell has his friends download Keep Eating. With everyone on the app, Darnell and his friends have endless fun playing the game and staying entertained throughout the party.
+### Darnell wants to play a multiplayer game with his friends:
+- Darnell runs the app and from the main menu, creates a lobby for his friends to join.
+- When his friends run the app, the choose the “join lobby” function from the main menu
+- They enter the lobby code Darnell provided and are able to join his match.
+- The game randomly splits the group up into two separate teams to compete against each other.
 
-### Brendan: 
-Brendan has been playing Keep Eating for a month now and has been able to unlock several skins and accessories for his avatar. A friend of his just started playing the game but did not have any unlockables due to the lack of experience and achievement points. Brendan and his friend work together to help his friend gain experience and achievements so he can make his avatar unique and personal.
 
 ## System Block Diagram
-
+![Systam Block Diagram](/images/systemblockdiagram.png)
