@@ -56,4 +56,32 @@ public class TestMove : MonoBehaviour
 
         transform.position = pos;
     }
+
+    private void OntriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 7)
+        {
+            Destroy(other.gameObject);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
