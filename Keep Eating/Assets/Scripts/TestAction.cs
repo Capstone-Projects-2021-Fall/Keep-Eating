@@ -19,8 +19,8 @@ using UnityEngine;
 */
 public class TestAction : MonoBehaviour
 {
-
-    public float speed = 5f;        
+    private int health = 300;
+    public float speed = 5f;
     private Vector2 pos;        //2D vector
 
     // Start is called before the first frame update
@@ -55,5 +55,36 @@ public class TestAction : MonoBehaviour
         pos.y += v * speed * Time.deltaTime;
 
         transform.position = pos;
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            Attack();
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            PickUp();
+        }
+
+    }
+
+
+    void Attack()
+    {
+        Debug.Log("Attacking...");
+    }
+    void PickUp()
+    {
+        Debug.Log("Picking up...");
+    }
+
+    void TakeDamage(int damageAmount)
+    {
+        health = health - damageAmount;
+
+        if(health < 0)
+        {
+            //respownd
+        }
     }
 }
