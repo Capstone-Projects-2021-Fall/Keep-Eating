@@ -57,11 +57,12 @@ public class TestMove : MonoBehaviour
         transform.position = pos;
     }
 
-    private void OntriggerEnter(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.layer == 7)
+        if (other.gameObject.CompareTag("food") )
         {
-            Destroy(other.gameObject);
+            if (Input.GetKey(KeyCode.F))
+                Destroy(other.gameObject);
         }
     }
 
