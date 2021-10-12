@@ -56,4 +56,33 @@ public class TestMove : MonoBehaviour
 
         transform.position = pos;
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("food") )
+        {
+            if (Input.GetKey(KeyCode.F))
+                Destroy(other.gameObject);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
