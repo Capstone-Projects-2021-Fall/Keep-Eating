@@ -17,7 +17,7 @@ using UnityEngine;
    script through the editor. It provides methods for 
    interacting with the engine (like start() and update()).
 */
-public class TestAction : MonoBehaviour
+public class TestMove : MonoBehaviour
 {
     private int health = 300;
     public float speed = 5f;
