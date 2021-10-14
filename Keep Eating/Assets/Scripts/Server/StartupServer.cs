@@ -2,7 +2,6 @@ using UnityEngine;
 #if UNITY_SERVER
 public class StartupServer : MonoBehaviour
 {
-
     // Helper function for getting the command line arguments
     // src: https://stackoverflow.com/a/45578115/1956540
     public static bool IsArgFlagPresent(string name)

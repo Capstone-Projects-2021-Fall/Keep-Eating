@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Text;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine.UI;
 #if !UNITY_SERVER
@@ -11,6 +12,7 @@ public class NetworkClient : MonoBehaviour
     private Telepathy.Client _client = new Telepathy.Client(MaxMessageSize);
     private string _playerSessionId;
     public Text _statusText;
+    public Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();
     public List<GameObject> eaters = new List<GameObject>();
     public List<GameObject> enforcers = new List<GameObject>();
     public List<GameObject> food = new List<GameObject>();
@@ -27,7 +29,7 @@ public class NetworkClient : MonoBehaviour
         else if (networkMessage._opCode == "NEW_PLAYER")
         {
             Debug.Log("New Player Joined");
-            StartupClient.GameStatus = "STARTED";
+            NewPlayerConnected(networkMessage._playerSessionId, networkMessage._enforcer, new Vector3 (0,0,0));
         }
         else if (networkMessage._opCode == "START")
         {
@@ -36,8 +38,8 @@ public class NetworkClient : MonoBehaviour
         }
         else if (networkMessage._opCode == "POSITION_CHANGED")
         {
-            Debug.Log("Winner");
-            GameEnded("GAME OVER - WINNER");
+            Debug.Log("Position Changed");
+            ChangePlayerPosition(networkMessage._playerSessionId, networkMessage._hPos, networkMessage._vPos);
         }
         else
         {
@@ -57,20 +59,35 @@ public class NetworkClient : MonoBehaviour
         ProcessMessage(networkMessage);
     }
 
-    public void WPressed()
-    {
-        NetworkMessage networkMessage = new NetworkMessage("W", _playerSessionId, 0.0f, 0.0f, false);
-        Send(networkMessage);
-    }
 
     private void OnConnected()
     {
         Debug.Log("Client Connected");
-        NetworkMessage networkMessage = new NetworkMessage("CONNECT", _playerSessionId, 0.0f, 0.0f, false);
+        NetworkMessage networkMessage = new NetworkMessage("CONNECT", _playerSessionId);
         Send(networkMessage);
 
         Debug.Log("after send message");
     }
+
+    public void PlayerMove(float h, float v)
+    {
+        NetworkMessage networkMessage = new NetworkMessage("PLAYER_MOVED", _playerSessionId, h, v);
+        Send(networkMessage);
+    }
+
+
+    public void ChangePlayerPosition(string playerSessionID, float h, float y)
+    {
+        float speed = 5f;
+        Vector2 newPos = players[playerSessionID].transform.position;
+
+        newPos.x = h * speed * Time.deltaTime;
+        newPos.y = y * speed * Time.deltaTime;
+
+        players[playerSessionID].transform.position = newPos;
+
+    }
+
 
     public void Send(NetworkMessage networkMessage)
     {
@@ -93,9 +110,17 @@ public class NetworkClient : MonoBehaviour
         StartupClient.GameStatus = gameOverMessage;
     }
 
-    private void NewPlayerConnected()
+    private void NewPlayerConnected(string playerSessionID, bool isEnforcer, Vector3 spawnPos)
     {
-
+        GameObject spawner = GameObject.Find("InstantiatePlayer");
+        if (players.ContainsKey(playerSessionID))
+        {
+            GameObject newPlayer = spawner.GetComponent<InstantiatePlayer>().NewPlayer(isEnforcer, spawnPos);
+            if (playerSessionID == _playerSessionId){
+                newPlayer.AddComponent<CameraMovement>();
+            }
+            players.Add(playerSessionID, newPlayer);
+        }
     }
 
     void Awake()

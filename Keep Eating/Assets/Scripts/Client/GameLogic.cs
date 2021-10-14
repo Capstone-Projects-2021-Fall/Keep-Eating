@@ -9,10 +9,15 @@ public class GameLogic : MonoBehaviour
 
     void Update()
     {
-        if (Startup.GameStatus == "STARTED" && Input.GetKeyDown("w"))
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+
+        if (StartupClient.GameStatus == "CONNECTED")
         {
-            Debug.Log("w key was pressed");
-            _NetworkClient.WPressed();
+            if (h != 0 || v != 0)
+            {
+                _NetworkClient.PlayerMove(h, v);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
-using UnityEngine;
 #if UNITY_SERVER
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -8,11 +8,12 @@ using System.Text;
 public class NetworkServer : MonoBehaviour
 {
     private static int MaxMessageSize = 1024;
-    private static int MaxPlayersPerSession = 10;
-    private static int MinPlayersPerSession = 5;
+    //private static int MaxPlayersPerSession = 10;
+    //private static int MinPlayersPerSession = 5;
     private int enforcerNum = 0;
     private Telepathy.Server _server = new Telepathy.Server(MaxMessageSize);
     private Dictionary<int, string> _playerSessions;
+    public Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
     private GameLiftServer _gameLiftServer;
     public string GameSessionState = "";
     public string GameOverState = "GAME_OVER";
@@ -45,20 +46,29 @@ public class NetworkServer : MonoBehaviour
                 NetworkMessage responseMessage = new NetworkMessage("CONNECTED", networkMessage._playerSessionId, 0.0f, 0.0f);
                 SendMessage(connectionId, responseMessage);
 
+                GameObject newPlayer = InitPlayerObject(networkMessage._playerSessionId);
+
+                foreach(KeyValuePair<string, GameObject> player in _players){
+                    NetworkMessage responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key , player.Value.tag, player.Value.transform.position.x, player.Value.transform.position.y);
+                    SendMessage(connectionId, responseMessage2);
+                }
+
+                 foreach (KeyValuePair<int, string> playerSession in _playerSessions){
+                    NetworkMessage responseMessage3 = new NetworkMessage("NEW_PLAYER", networkMessage._playerSessionId, newPlayer.transform.position.x, newPlayer.transform.position.y);
+                    SendMessage(playerSession.Key, responseMessage3);
+                 }
+
                 CheckAndSendGameReadyToStartMsg(connectionId);
 
             }
-            else if (networkMessage._opCode == "W")
-            {
-                Debug.Log("W OP CODE HIT");
-                if (GameSessionState == "STARTED")
-                {
-                    CheckForGameOver(connectionId);
-                }
-                else
-                {
-                    Debug.LogWarning("Received W opCode before game started.");
-                }
+            else if (networkMessage._opCode == "PLAYER_MOVED")
+            {   
+                
+                _players[networkMessage._playerSessionId].transform.position = new Vector3(networkMessage._hPos, networkMessage._vPos, 0);
+                 foreach (KeyValuePair<int, string> playerSession in _playerSessions){
+                    NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._hPos, networkMessage._vPos);
+                    SendMessage(playerSession.Key, responseMessage);
+                 }
             }
 
             // can handle additional opCods here
@@ -68,6 +78,40 @@ public class NetworkServer : MonoBehaviour
         {
             Debug.Log("ProcessMessage: empty message or null opCode, message ignored.");
         }
+    }
+
+    public GameObject InitPlayerObject(string playerSessionId){
+        bool isEnforcer = false;
+        if (enforcerNum == 0){
+            int enforcer = UnityEngine.Random.Range(0,1);
+            if (enforcer == 1){
+                isEnforcer = true;
+            }
+        }
+
+        int rand = UnityEngine.Random.Range(1, 4);
+        Vector3 spawnPos = new Vector3 (0,0,0);
+
+        switch (rand){
+            case 1:
+                spawnPos = GameObject.Find("spawn1").transform.position;
+                break;
+            case 2:
+                spawnPos = GameObject.Find("spawn2").transform.position;
+                break;
+            case 3:
+                spawnPos = GameObject.Find("spawn3").transform.position;
+                break;
+            case 4:
+                spawnPos = GameObject.Find("spawn4").transform.position;
+                break;
+        }
+
+        GameObject spawner = GameObject.Find("InstantiatePlayer");
+        GameObject newPlayer = spawner.GetComponent<InstantiatePlayer>().NewPlayer(isEnforcer, spawnPos);
+        _players.Add(playerSessionId, newPlayer);
+        return newPlayer;
+
     }
 
     public void SendMessage(int connectionId, NetworkMessage networkMessage)
@@ -82,7 +126,7 @@ public class NetworkServer : MonoBehaviour
 
     private void CheckAndSendGameReadyToStartMsg(int connectionId)
     {
-        if (_playerSessions.Count == MaxPlayersPerSession)
+        if (_playerSessions.Count == 2)
         {
             Debug.Log("Game is full and is ready to start.");
 
