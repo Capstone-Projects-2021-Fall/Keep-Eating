@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Loader : MonoBehaviour
+public class Menu : MonoBehaviour
 {
-    [SerializeField] int currentSceneIndex;
     // Start is called before the first frame update
     void Start()
     {
-        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         
     }
 
@@ -18,10 +16,8 @@ public class Loader : MonoBehaviour
     {
         
     }
-    public void loadScene(int index){
-        SceneManager.LoadScene(index);
-    }
-    public void loadScene(){
-        Debug.Log("Bye");
+    public void BackScene(){
+        SceneManager.LoadScene("Main Menu");
+        
     }
 }
