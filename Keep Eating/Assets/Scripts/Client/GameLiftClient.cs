@@ -15,8 +15,8 @@ public class GameLiftClient
     private NetworkClient _badNetworkClient;
     private static string IsProdArg = "-isProd"; // command line arg that indicates production build if present
     private string _playerUuid;
-    private string CognitoIdentityPool = "us-east-2:361c168b-2d76-4a46-906f-ee9fa9f0589f";
-    private string FleetId = "YOUR_FLEET_ID"; // TODO: probably don't hardcode this, use alias or something
+    private string CognitoIdentityPool = "us-east-2:ed906346-f7e9-43ef-9cf0-3438c1a4ca28";
+    private string FleetId = "fleet-32e7f2e5-96a2-4172-b36d-df141238aa3b"; // TODO: probably don't hardcode this, use alias or something
 
     async private void CreatePlayerSession(GameSession gameSession)
     {
@@ -149,7 +149,7 @@ public class GameLiftClient
 
         if (IsArgFlagPresent(IsProdArg))
         {
-            _amazonGameLiftClient = new AmazonGameLiftClient(credentials, RegionEndpoint.USEast1);
+            _amazonGameLiftClient = new AmazonGameLiftClient(credentials, RegionEndpoint.USEast2);
         }
         else
         {

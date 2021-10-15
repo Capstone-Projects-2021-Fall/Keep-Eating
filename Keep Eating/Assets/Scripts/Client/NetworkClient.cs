@@ -23,6 +23,7 @@ public class NetworkClient : MonoBehaviour
     {
         if (networkMessage._opCode == "CONNECTED")
         {
+            _statusText.text = "connected";
             Debug.Log("Connection to server confirmed.");
             StartupClient.GameStatus = "CONNECTED";
         }
