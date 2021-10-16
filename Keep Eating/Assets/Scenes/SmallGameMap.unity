@@ -424,8 +424,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1121967217}
   smoothing: 0.1
-  maxPosition: {x: 64.5, y: 69.5, z: 0}
-  minPosition: {x: -63.8, y: -69.1, z: 0}
+  maxPosition: {x: 63.9, y: 69.9, z: 0}
+  minPosition: {x: -63.9, y: -69.3, z: 0}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
