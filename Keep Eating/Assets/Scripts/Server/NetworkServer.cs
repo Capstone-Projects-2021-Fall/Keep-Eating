@@ -48,27 +48,34 @@ public class NetworkServer : MonoBehaviour
 
                 GameObject newPlayer = InitPlayerObject(networkMessage._playerSessionId);
 
-                foreach(KeyValuePair<string, GameObject> player in _players){
-                    NetworkMessage responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key , player.Value.tag, player.Value.transform.position.x, player.Value.transform.position.y);
+                foreach (KeyValuePair<string, GameObject> player in _players)
+                {
+                    NetworkMessage responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key, player.Value.tag, player.Value.transform.position.x, player.Value.transform.position.y);
                     SendMessage(connectionId, responseMessage2);
                 }
 
-                 foreach (KeyValuePair<int, string> playerSession in _playerSessions){
+                foreach (KeyValuePair<int, string> playerSession in _playerSessions)
+                {
                     NetworkMessage responseMessage3 = new NetworkMessage("NEW_PLAYER", networkMessage._playerSessionId, newPlayer.transform.position.x, newPlayer.transform.position.y);
                     SendMessage(playerSession.Key, responseMessage3);
-                 }
+                }
 
                 CheckAndSendGameReadyToStartMsg(connectionId);
 
             }
             else if (networkMessage._opCode == "PLAYER_MOVED")
-            {   
-                
+            {
+
                 _players[networkMessage._playerSessionId].transform.position = new Vector3(networkMessage._hPos, networkMessage._vPos, 0);
-                 foreach (KeyValuePair<int, string> playerSession in _playerSessions){
+                foreach (KeyValuePair<int, string> playerSession in _playerSessions)
+                {
                     NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._hPos, networkMessage._vPos);
                     SendMessage(playerSession.Key, responseMessage);
-                 }
+                }
+            }
+            else if (networkMessage._opCode == "KILL")
+            {
+                CheckForGameOver(connectionId);
             }
 
             // can handle additional opCods here

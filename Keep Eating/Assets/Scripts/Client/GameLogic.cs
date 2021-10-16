@@ -9,6 +9,12 @@ public class GameLogic : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.X) && Input.GetKeyDown(KeyCode.P))
+        {
+            _NetworkClient.killGameSession();
+        }
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 

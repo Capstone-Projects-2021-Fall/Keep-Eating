@@ -717,7 +717,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388b358bcdcd2e54886732a41c3569ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _server: {fileID: 0}
 --- !u!114 &1076537533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730,10 +729,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5693b238d2aef1a4bae272c08416194e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enforcerNum: 0
-  _gameLiftServer: {fileID: 0}
-  GameSessionState: 
-  GameOverState: GAME_OVER
 --- !u!1 &1149948319
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,7 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a56c69bab597e3d4e8fb46ccfe24a301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NetworkClient: {fileID: 0}
+  _NetworkClient: {fileID: 1150433176}
 --- !u!114 &1150433176
 MonoBehaviour:
   m_ObjectHideFlags: 0

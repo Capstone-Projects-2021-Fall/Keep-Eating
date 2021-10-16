@@ -162,5 +162,10 @@ public class NetworkClient : MonoBehaviour
         _client.Disconnect();
     }
 
+    public void killGameSession()
+    {
+        NetworkMessage networkMessage = new NetworkMessage("KILL", _playerSessionId);
+        Send(networkMessage);
+    }
 }
 #endif
