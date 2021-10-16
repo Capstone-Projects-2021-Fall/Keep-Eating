@@ -90,6 +90,7 @@ public class TestMove : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
+       
         if (other.gameObject.CompareTag("food") )
         {
             if (Input.GetKey(KeyCode.F))
