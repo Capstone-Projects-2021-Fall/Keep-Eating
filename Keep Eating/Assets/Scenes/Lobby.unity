@@ -678,7 +678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1076537530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,7 +688,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1076537529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5693b238d2aef1a4bae272c08416194e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e01534957b75234081879627e170e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1076537531
@@ -717,6 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388b358bcdcd2e54886732a41c3569ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _server: {fileID: 0}
 --- !u!114 &1076537533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726,9 +727,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1076537529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e01534957b75234081879627e170e19, type: 3}
+  m_Script: {fileID: 11500000, guid: 5693b238d2aef1a4bae272c08416194e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enforcerNum: 0
+  _gameLiftServer: {fileID: 0}
+  GameSessionState: 
+  GameOverState: GAME_OVER
 --- !u!1 &1149948319
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,9 +847,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1150433174}
-  - component: {fileID: 1150433175}
   - component: {fileID: 1150433177}
   - component: {fileID: 1150433176}
+  - component: {fileID: 1150433175}
   m_Layer: 0
   m_Name: ClientStartup
   m_TagString: Untagged
@@ -875,23 +880,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1150433173}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7080e509709fea4c8be54f7470241f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1150433176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150433173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a56c69bab597e3d4e8fb46ccfe24a301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NetworkClient: {fileID: 1150433177}
---- !u!114 &1150433177
+  _NetworkClient: {fileID: 0}
+--- !u!114 &1150433176
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -903,10 +896,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e21a54d18532fa408ef0b7d7e47056d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _statusText: {fileID: 816783568}
+  _statusText: {fileID: 0}
   eaters: []
   enforcers: []
   food: []
+--- !u!114 &1150433177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150433173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7080e509709fea4c8be54f7470241f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1596876423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,7 +1085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eaterPrefab: {fileID: 1433564120937361195, guid: 5c61ac2679f61464c926a52bdd7edbc5, type: 3}
-  enforcerPrefab: {fileID: 0}
+  enforcerPrefab: {fileID: 5411228161986647728, guid: 32dade0617e8efa4eadbd07a1004b0a8, type: 3}
 --- !u!4 &2053074542
 Transform:
   m_ObjectHideFlags: 0

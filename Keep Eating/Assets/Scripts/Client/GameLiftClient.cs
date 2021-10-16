@@ -13,10 +13,10 @@ public class GameLiftClient
 {
     private AmazonGameLiftClient _amazonGameLiftClient;
     private NetworkClient _badNetworkClient;
-    private static string IsProdArg = "-isProd"; // command line arg that indicates production build if present
+    private static string IsProdArg = "production"; // command line arg that indicates production build if present
     private string _playerUuid;
-    private string CognitoIdentityPool = "us-east-2:ed906346-f7e9-43ef-9cf0-3438c1a4ca28";
-    private string FleetId = "fleet-32e7f2e5-96a2-4172-b36d-df141238aa3b"; // TODO: probably don't hardcode this, use alias or something
+    private string CognitoIdentityPool = "us-east-2:2e0f787b-ab2c-43cd-9691-5ec1c51ef75b";
+    private string FleetId = "fleet-102ed918-d81f-49e7-b956-a0d27b6ca01a"; // TODO: probably don't hardcode this, use alias or something
 
     async private void CreatePlayerSession(GameSession gameSession)
     {
@@ -144,7 +144,7 @@ public class GameLiftClient
 
         CognitoAWSCredentials credentials = new CognitoAWSCredentials(
            CognitoIdentityPool,
-           RegionEndpoint.USEast1
+           RegionEndpoint.USEast2
         );
 
         if (IsArgFlagPresent(IsProdArg))
