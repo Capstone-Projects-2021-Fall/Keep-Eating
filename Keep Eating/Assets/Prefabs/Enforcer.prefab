@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6934956388718703684}
   m_Layer: 0
   m_Name: Enforcer
-  m_TagString: Untagged
+  m_TagString: Enforcer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

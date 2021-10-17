@@ -51,7 +51,7 @@ public class NetworkServer : MonoBehaviour
                 foreach (KeyValuePair<string, GameObject> player in _players)
                 {
                     NetworkMessage responseMessage2;
-                    if (player.Value.tag.Equals("enforcer")){
+                    if (player.Value.tag.Equals("Enforcer")){
                         responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key, player.Value.transform.position.x, player.Value.transform.position.y, true);
                     }
                     else {
