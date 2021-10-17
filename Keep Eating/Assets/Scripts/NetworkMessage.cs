@@ -4,33 +4,29 @@ public class NetworkMessage
     public string _opCode;
     public string _playerSessionId;
     public float _hPos, _vPos;
-    public bool _enforcer = false;
+    public bool _enforcer;
 
-
+    /*
     //Generic Message
     public NetworkMessage(string opCode, string playerSessionId)
     {
         _opCode = opCode;
         _playerSessionId = playerSessionId;
     }
+    */
 
     //Connection Message
     //Contains boolean to state wheter the player connecting is an enforcer
-    public NetworkMessage(string opCode, string playerSessionId, string enforcer, float hPos, float vPos)
+    public NetworkMessage(string opCode, string playerSessionId, float hPos, float vPos, bool enforcer)
     {
         _opCode = opCode;
         _playerSessionId = playerSessionId;
-        
-        if (enforcer.Equals("Enforcer"))
-        {
-            _enforcer = true;
-        }
-        else
-        {
-            _enforcer = false;
-        }
+        _hPos = hPos;
+        _vPos = vPos;
+        _enforcer = enforcer;
     }
 
+    /*
     //Movement Message
     public NetworkMessage(string opCode, string playerSessionId, float hPos, float vPos)
     {
@@ -39,4 +35,5 @@ public class NetworkMessage
         _hPos = hPos;
         _vPos = vPos;
     }
+    */
 }

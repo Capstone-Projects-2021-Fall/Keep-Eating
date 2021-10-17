@@ -64,7 +64,7 @@ public class NetworkClient : MonoBehaviour
     private void OnConnected()
     {
         Debug.Log("Client Connected");
-        NetworkMessage networkMessage = new NetworkMessage("CONNECT", _playerSessionId);
+        NetworkMessage networkMessage = new NetworkMessage("CONNECT", _playerSessionId, 0.0f, 0.0f, false);
         Send(networkMessage);
 
         Debug.Log("after send message");
@@ -72,7 +72,7 @@ public class NetworkClient : MonoBehaviour
 
     public void PlayerMove(float h, float v)
     {
-        NetworkMessage networkMessage = new NetworkMessage("PLAYER_MOVED", _playerSessionId, h, v);
+        NetworkMessage networkMessage = new NetworkMessage("PLAYER_MOVED", _playerSessionId, h, v, false);
         Send(networkMessage);
     }
 
@@ -165,7 +165,7 @@ public class NetworkClient : MonoBehaviour
     public void killGameSession()
     {
         Debug.Log("Hello");
-        NetworkMessage networkMessage = new NetworkMessage("KILL", _playerSessionId);
+        NetworkMessage networkMessage = new NetworkMessage("KILL", _playerSessionId, 0.0f, 0.0f, false);
         Send(networkMessage);
     }
 }

@@ -43,20 +43,26 @@ public class NetworkServer : MonoBehaviour
                 HandleConnect(connectionId, networkMessage._playerSessionId);
 
                 // send response
-                NetworkMessage responseMessage = new NetworkMessage("CONNECTED", networkMessage._playerSessionId);
+                NetworkMessage responseMessage = new NetworkMessage("CONNECTED", networkMessage._playerSessionId, 0.0f, 0.0f, false);
                 SendMessage(connectionId, responseMessage);
 
                 GameObject newPlayer = InitPlayerObject(networkMessage._playerSessionId);
 
                 foreach (KeyValuePair<string, GameObject> player in _players)
                 {
-                    NetworkMessage responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key, player.Value.tag, player.Value.transform.position.x, player.Value.transform.position.y);
+                    NetworkMessage responseMessage2;
+                    if (player.Value.tag.Equals("enforcer")){
+                        responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key, player.Value.transform.position.x, player.Value.transform.position.y, true);
+                    }
+                    else {
+                        responseMessage2 = new NetworkMessage("NEW_PLAYER", player.Key, player.Value.transform.position.x, player.Value.transform.position.y, false);
+                    }
                     SendMessage(connectionId, responseMessage2);
                 }
 
                 foreach (KeyValuePair<int, string> playerSession in _playerSessions)
                 {
-                    NetworkMessage responseMessage3 = new NetworkMessage("NEW_PLAYER", networkMessage._playerSessionId, newPlayer.transform.position.x, newPlayer.transform.position.y);
+                    NetworkMessage responseMessage3 = new NetworkMessage("NEW_PLAYER", networkMessage._playerSessionId, newPlayer.transform.position.x, newPlayer.transform.position.y, false);
                     SendMessage(playerSession.Key, responseMessage3);
                 }
 
@@ -69,7 +75,7 @@ public class NetworkServer : MonoBehaviour
                 _players[networkMessage._playerSessionId].transform.position = new Vector3(networkMessage._hPos, networkMessage._vPos, 0);
                 foreach (KeyValuePair<int, string> playerSession in _playerSessions)
                 {
-                    NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._hPos, networkMessage._vPos);
+                    NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._hPos, networkMessage._vPos, false);
                     SendMessage(playerSession.Key, responseMessage);
                 }
             }
@@ -141,7 +147,7 @@ public class NetworkServer : MonoBehaviour
             foreach (KeyValuePair<int, string> playerSession in _playerSessions)
             {
                 GameSessionState = "STARTED";
-                NetworkMessage responseMessage = new NetworkMessage("START", playerSession.Value);
+                NetworkMessage responseMessage = new NetworkMessage("START", playerSession.Value, 0.0f, 0.0f, false);
                 SendMessage(playerSession.Key, responseMessage);
             }
         }
@@ -178,11 +184,11 @@ public class NetworkServer : MonoBehaviour
                 NetworkMessage responseMessage;
                 if (playerSession.Key == fromConnectionId)
                 {
-                    responseMessage = new NetworkMessage("WIN", playerSession.Value);
+                    responseMessage = new NetworkMessage("WIN", playerSession.Value, 0.0f, 0.0f, false);
                 }
                 else
                 {
-                    responseMessage = new NetworkMessage("LOSE", playerSession.Value);
+                    responseMessage = new NetworkMessage("LOSE", playerSession.Value, 0.0f, 0.0f, false);
                 }
 
                 SendMessage(playerSession.Key, responseMessage);
