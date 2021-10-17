@@ -10,9 +10,13 @@ public class GameLogic : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.X) && Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.X))
         {
-            _NetworkClient.killGameSession();
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                _NetworkClient.killGameSession();
+                //Debug.Log("Hello");
+            }
         }
 
         float h = Input.GetAxis("Horizontal");

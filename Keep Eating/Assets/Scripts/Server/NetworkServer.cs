@@ -43,7 +43,7 @@ public class NetworkServer : MonoBehaviour
                 HandleConnect(connectionId, networkMessage._playerSessionId);
 
                 // send response
-                NetworkMessage responseMessage = new NetworkMessage("CONNECTED", networkMessage._playerSessionId, 0.0f, 0.0f);
+                NetworkMessage responseMessage = new NetworkMessage("CONNECTED", networkMessage._playerSessionId);
                 SendMessage(connectionId, responseMessage);
 
                 GameObject newPlayer = InitPlayerObject(networkMessage._playerSessionId);

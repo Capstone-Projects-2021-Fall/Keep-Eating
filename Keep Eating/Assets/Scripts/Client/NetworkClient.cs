@@ -164,6 +164,7 @@ public class NetworkClient : MonoBehaviour
 
     public void killGameSession()
     {
+        Debug.Log("Hello");
         NetworkMessage networkMessage = new NetworkMessage("KILL", _playerSessionId);
         Send(networkMessage);
     }

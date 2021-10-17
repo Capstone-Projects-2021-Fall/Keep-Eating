@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e21a54d18532fa408ef0b7d7e47056d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _statusText: {fileID: 0}
+  _statusText: {fileID: 816783568}
   eaters: []
   enforcers: []
   food: []
