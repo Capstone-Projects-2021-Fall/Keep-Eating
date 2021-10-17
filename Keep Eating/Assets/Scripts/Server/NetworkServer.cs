@@ -141,7 +141,7 @@ public class NetworkServer : MonoBehaviour
             foreach (KeyValuePair<int, string> playerSession in _playerSessions)
             {
                 GameSessionState = "STARTED";
-                NetworkMessage responseMessage = new NetworkMessage("START", playerSession.Value, 0.0f, 0.0f);
+                NetworkMessage responseMessage = new NetworkMessage("START", playerSession.Value);
                 SendMessage(playerSession.Key, responseMessage);
             }
         }
@@ -178,11 +178,11 @@ public class NetworkServer : MonoBehaviour
                 NetworkMessage responseMessage;
                 if (playerSession.Key == fromConnectionId)
                 {
-                    responseMessage = new NetworkMessage("WIN", playerSession.Value, 0.0f, 0.0f);
+                    responseMessage = new NetworkMessage("WIN", playerSession.Value);
                 }
                 else
                 {
-                    responseMessage = new NetworkMessage("LOSE", playerSession.Value, 0.0f, 0.0f);
+                    responseMessage = new NetworkMessage("LOSE", playerSession.Value);
                 }
 
                 SendMessage(playerSession.Key, responseMessage);

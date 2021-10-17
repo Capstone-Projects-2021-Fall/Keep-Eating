@@ -16,7 +16,7 @@ public class GameLiftClient
     private static string IsProdArg = "production"; // command line arg that indicates production build if present
     private string _playerUuid;
     private string CognitoIdentityPool = "us-east-2:2e0f787b-ab2c-43cd-9691-5ec1c51ef75b";
-    private string FleetId = "fleet-102ed918-d81f-49e7-b956-a0d27b6ca01a"; // TODO: probably don't hardcode this, use alias or something
+    private string FleetId = "fleet-fac81f45-d6fc-490f-b17e-aabc6aa48e3d"; // TODO: probably don't hardcode this, use alias or something
 
     async private void CreatePlayerSession(GameSession gameSession)
     {
