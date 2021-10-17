@@ -107,16 +107,16 @@ public class NetworkServer : MonoBehaviour
 
         switch (rand){
             case 1:
-                spawnPos = GameObject.Find("spawn1").transform.position;
+                spawnPos = GameObject.Find("Spawn1").transform.position;
                 break;
             case 2:
-                spawnPos = GameObject.Find("spawn2").transform.position;
+                spawnPos = GameObject.Find("Spawn2").transform.position;
                 break;
             case 3:
-                spawnPos = GameObject.Find("spawn3").transform.position;
+                spawnPos = GameObject.Find("Spawn3").transform.position;
                 break;
             case 4:
-                spawnPos = GameObject.Find("spawn4").transform.position;
+                spawnPos = GameObject.Find("Spawn4").transform.position;
                 break;
         }
 
