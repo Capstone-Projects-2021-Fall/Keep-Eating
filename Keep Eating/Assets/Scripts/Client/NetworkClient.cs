@@ -79,16 +79,16 @@ public class NetworkClient : MonoBehaviour
     }
 
 
-    public void ChangePlayerPosition(string playerID, float h, float y)
+    public void ChangePlayerPosition(string playerId, float h, float y)
     {
         Debug.Log("Change Player Position");
         float speed = 5f;
-        Vector2 newPos = players[playerID].transform.position;
+        Vector2 newPos = players[playerId].transform.position;
 
         newPos.x = h * speed * Time.deltaTime;
         newPos.y = y * speed * Time.deltaTime;
 
-        players[playerID].transform.position = newPos;
+        players[playerId].transform.position = newPos;
 
     }
 

@@ -13,7 +13,7 @@ public class NetworkServer : MonoBehaviour
     private int enforcerNum = 0;
     private Telepathy.Server _server = new Telepathy.Server(MaxMessageSize);
     private Dictionary<int, string> _playerSessions;
-    public Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
+    public Dictionary<string, GameObject> _players;
     private GameLiftServer _gameLiftServer;
     public string GameSessionState = "";
     public string GameOverState = "GAME_OVER";
@@ -74,7 +74,9 @@ public class NetworkServer : MonoBehaviour
             else if (networkMessage._opCode == "PLAYER_MOVED")
             {
 
-                _players[networkMessage._playerSessionId].transform.position = new Vector3(networkMessage._hPos, networkMessage._vPos, 0);
+                _players[networkMessage._playerId].transform.position = new Vector3(networkMessage._hPos, networkMessage._vPos, 0);
+                
+                //sends playerId's new position to every client
                 foreach (KeyValuePair<int, string> playerSession in _playerSessions)
                 {
                     NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._playerId, networkMessage._hPos, networkMessage._vPos, false);
@@ -270,7 +272,7 @@ public class NetworkServer : MonoBehaviour
     void Awake()
     {
         _playerSessions = new Dictionary<int, string>();
-
+        _players = new Dictionary<string, GameObject>();
         _gameLiftServer = GetComponent<GameLiftServer>();
 
         Application.runInBackground = true;
