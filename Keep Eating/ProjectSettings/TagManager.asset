@@ -3,10 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
+<<<<<<< HEAD
   tags:
   - food
   - Eater
   - Enforcer
+=======
+  tags: []
+>>>>>>> main
   layers:
   - Default
   - TransparentFX
@@ -14,7 +18,7 @@ TagManager:
   - 
   - Water
   - UI
-  - player
+  - rock
   - food
   - 
   - 
@@ -41,6 +45,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: background
+    uniqueID: 2493045379
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
