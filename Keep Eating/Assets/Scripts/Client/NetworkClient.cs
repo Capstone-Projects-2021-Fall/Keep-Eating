@@ -16,6 +16,7 @@ public class NetworkClient : MonoBehaviour
     public List<GameObject> eaters = new List<GameObject>();
     public List<GameObject> enforcers = new List<GameObject>();
     public List<GameObject> food = new List<GameObject>();
+    private string _playerId;
     private int enforcerNum = 0;
     private int playerNum = 0;
 
@@ -30,7 +31,7 @@ public class NetworkClient : MonoBehaviour
         else if (networkMessage._opCode == "NEW_PLAYER")
         {
             Debug.Log("New Player Joined");
-            NewPlayerConnected(networkMessage._playerSessionId, networkMessage._enforcer, new Vector3 (0,0,0));
+            NewPlayerConnected(networkMessage._playerId, networkMessage._enforcer, new Vector3 (0,0,0));
         }
         else if (networkMessage._opCode == "START")
         {
@@ -40,7 +41,7 @@ public class NetworkClient : MonoBehaviour
         else if (networkMessage._opCode == "POSITION_CHANGED")
         {
             Debug.Log("Position Changed");
-            ChangePlayerPosition(networkMessage._playerSessionId, networkMessage._hPos, networkMessage._vPos);
+            ChangePlayerPosition(networkMessage._playerId, networkMessage._hPos, networkMessage._vPos);
         }
         else
         {
@@ -64,7 +65,7 @@ public class NetworkClient : MonoBehaviour
     private void OnConnected()
     {
         Debug.Log("Client Connected");
-        NetworkMessage networkMessage = new NetworkMessage("CONNECT", _playerSessionId, 0.0f, 0.0f, false);
+        NetworkMessage networkMessage = new NetworkMessage("CONNECT", _playerSessionId, _playerId, 0.0f, 0.0f, false);
         Send(networkMessage);
 
         Debug.Log("after send message");
@@ -72,20 +73,22 @@ public class NetworkClient : MonoBehaviour
 
     public void PlayerMove(float h, float v)
     {
-        NetworkMessage networkMessage = new NetworkMessage("PLAYER_MOVED", _playerSessionId, h, v, false);
+        Debug.Log("Player Moved");
+        NetworkMessage networkMessage = new NetworkMessage("PLAYER_MOVED", _playerSessionId, _playerId, h, v, false);
         Send(networkMessage);
     }
 
 
-    public void ChangePlayerPosition(string playerSessionID, float h, float y)
+    public void ChangePlayerPosition(string playerID, float h, float y)
     {
+        Debug.Log("Change Player Position");
         float speed = 5f;
-        Vector2 newPos = players[playerSessionID].transform.position;
+        Vector2 newPos = players[playerID].transform.position;
 
         newPos.x = h * speed * Time.deltaTime;
         newPos.y = y * speed * Time.deltaTime;
 
-        players[playerSessionID].transform.position = newPos;
+        players[playerID].transform.position = newPos;
 
     }
 
@@ -111,16 +114,18 @@ public class NetworkClient : MonoBehaviour
         StartupClient.GameStatus = gameOverMessage;
     }
 
-    private void NewPlayerConnected(string playerSessionID, bool isEnforcer, Vector3 spawnPos)
+    private void NewPlayerConnected(string playerId, bool isEnforcer, Vector3 spawnPos)
     {
+        Debug.Log("New Player Connected Function");
         GameObject spawner = GameObject.Find("InstantiatePlayer");
-        if (players.ContainsKey(playerSessionID))
+        if (!players.ContainsKey(playerId))
         {
             GameObject newPlayer = spawner.GetComponent<InstantiatePlayer>().NewPlayer(isEnforcer, spawnPos);
-            if (playerSessionID == _playerSessionId){
+            if (playerId == _playerId){
+                Debug.Log("adding camera component");
                 newPlayer.AddComponent<CameraMovement>();
             }
-            players.Add(playerSessionID, newPlayer);
+            players.Add(playerId, newPlayer);
         }
     }
 
@@ -165,8 +170,13 @@ public class NetworkClient : MonoBehaviour
     public void killGameSession()
     {
         Debug.Log("Hello");
-        NetworkMessage networkMessage = new NetworkMessage("KILL", _playerSessionId, 0.0f, 0.0f, false);
+        NetworkMessage networkMessage = new NetworkMessage("KILL", _playerSessionId, "", 0.0f, 0.0f, false);
         Send(networkMessage);
+    }
+
+    public void SetPlayerId(string playerId)
+    {
+        _playerId = playerId;
     }
 }
 #endif

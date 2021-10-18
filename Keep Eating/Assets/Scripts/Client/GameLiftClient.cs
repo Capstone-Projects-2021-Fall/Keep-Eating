@@ -16,7 +16,7 @@ public class GameLiftClient
     private static string IsProdArg = "production"; // command line arg that indicates production build if present
     private string _playerUuid;
     private string CognitoIdentityPool = "us-east-2:2e0f787b-ab2c-43cd-9691-5ec1c51ef75b";
-    private string FleetId = "fleet-fac81f45-d6fc-490f-b17e-aabc6aa48e3d"; // TODO: probably don't hardcode this, use alias or something
+    private string FleetId = "fleet-e523b98a-7499-4359-a356-13cfe26c3187"; // TODO: probably don't hardcode this, use alias or something
 
     async private void CreatePlayerSession(GameSession gameSession)
     {
@@ -103,6 +103,8 @@ public class GameLiftClient
         Debug.Log("setup");
 
         _badNetworkClient = GameObject.FindObjectOfType<NetworkClient>();
+
+        _badNetworkClient.SetPlayerId(_playerUuid);
 
         CreateGameLiftClient();
 
