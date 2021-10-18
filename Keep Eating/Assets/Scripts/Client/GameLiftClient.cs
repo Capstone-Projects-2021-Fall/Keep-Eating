@@ -16,7 +16,7 @@ public class GameLiftClient
     private static string IsProdArg = "production"; // command line arg that indicates production build if present
     private string _playerUuid;
     private string CognitoIdentityPool = "us-east-2:2e0f787b-ab2c-43cd-9691-5ec1c51ef75b";
-    private string FleetId = "fleet-e523b98a-7499-4359-a356-13cfe26c3187"; // TODO: probably don't hardcode this, use alias or something
+    private string FleetId = "fleet-1ec96adf-52a6-4114-9ea6-8ed2f1631c8a"; // TODO: probably don't hardcode this, use alias or something
 
     async private void CreatePlayerSession(GameSession gameSession)
     {
@@ -61,7 +61,7 @@ public class GameLiftClient
         var createGameSessionRequest = new Amazon.GameLift.Model.CreateGameSessionRequest();
         createGameSessionRequest.FleetId = FleetId; // can also use AliasId
         createGameSessionRequest.CreatorId = _playerUuid;
-        createGameSessionRequest.MaximumPlayerSessionCount = 2; // search for two player game
+        createGameSessionRequest.MaximumPlayerSessionCount = 5; // search for two player game
 
         Task<CreateGameSessionResponse> createGameSessionRequestTask = _amazonGameLiftClient.CreateGameSessionAsync(createGameSessionRequest);
         Debug.Log("after task createGameSessionRequestTask");

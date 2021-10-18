@@ -9,7 +9,7 @@ public class NetworkServer : MonoBehaviour
 {
     private static int MaxMessageSize = 1024;
     //private static int MaxPlayersPerSession = 10;
-    //private static int MinPlayersPerSession = 5;
+    private static int MinPlayersPerSession = 5;
     private int enforcerNum = 0;
     private Telepathy.Server _server = new Telepathy.Server(MaxMessageSize);
     private Dictionary<int, string> _playerSessions;
@@ -46,8 +46,9 @@ public class NetworkServer : MonoBehaviour
                 NetworkMessage responseMessage = new NetworkMessage("CONNECTED", networkMessage._playerSessionId, networkMessage._playerId, 0.0f, 0.0f, false);
                 SendMessage(connectionId, responseMessage);
 
-                GameObject newPlayer = InitPlayerObject(networkMessage._playerSessionId);
+                GameObject newPlayer = InitPlayerObject(networkMessage._playerId);
 
+                //Initializes all existing player GameObjects on the  newPlayer client
                 foreach (KeyValuePair<string, GameObject> player in _players)
                 {
                     NetworkMessage responseMessage2;
@@ -60,6 +61,7 @@ public class NetworkServer : MonoBehaviour
                     SendMessage(connectionId, responseMessage2);
                 }
 
+                //Initializes the newPlayer GameObject on the other clients
                 foreach (KeyValuePair<int, string> playerSession in _playerSessions)
                 {
                     NetworkMessage responseMessage3 = new NetworkMessage("NEW_PLAYER", networkMessage._playerSessionId, networkMessage._playerId, newPlayer.transform.position.x, newPlayer.transform.position.y, false);
@@ -139,7 +141,7 @@ public class NetworkServer : MonoBehaviour
 
     private void CheckAndSendGameReadyToStartMsg(int connectionId)
     {
-        if (_playerSessions.Count == 2)
+        if (_playerSessions.Count == MinPlayersPerSession)
         {
             Debug.Log("Game is full and is ready to start.");
 
