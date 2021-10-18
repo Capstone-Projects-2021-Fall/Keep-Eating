@@ -31,7 +31,7 @@ public class NetworkClient : MonoBehaviour
         else if (networkMessage._opCode == "NEW_PLAYER")
         {
             Debug.Log("New Player Joined");
-            NewPlayerConnected(networkMessage._playerId, networkMessage._enforcer, new Vector3 (0,0,0));
+            NewPlayerConnected(networkMessage._playerId, networkMessage._enforcer, new Vector3 (networkMessage._hPos, networkMessage._vPos,0));
         }
         else if (networkMessage._opCode == "START")
         {
@@ -81,15 +81,7 @@ public class NetworkClient : MonoBehaviour
 
     public void ChangePlayerPosition(string playerId, float h, float y)
     {
-        Debug.Log("Change Player Position");
-        float speed = 5f;
-        Vector2 newPos = players[playerId].transform.position;
-
-        newPos.x = h * speed * Time.deltaTime;
-        newPos.y = y * speed * Time.deltaTime;
-
-        players[playerId].transform.position = newPos;
-
+        players[playerId].transform.position = new Vector3(h, y, 0);
     }
 
 

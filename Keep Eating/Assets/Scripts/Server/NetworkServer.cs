@@ -73,13 +73,17 @@ public class NetworkServer : MonoBehaviour
             }
             else if (networkMessage._opCode == "PLAYER_MOVED")
             {
+                float speed = 5f;
+                Vector3 newPos = _players[networkMessage._playerId].transform.position;
 
-                _players[networkMessage._playerId].transform.position = new Vector3(networkMessage._hPos, networkMessage._vPos, 0);
+                newPos.x = networkMessage._hPos * speed * Time.deltaTime;
+                newPos.y = networkMessage._vPos * speed * Time.deltaTime;
+                _players[networkMessage._playerId].transform.position = newPos;
                 
                 //sends playerId's new position to every client
                 foreach (KeyValuePair<int, string> playerSession in _playerSessions)
                 {
-                    NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._playerId, networkMessage._hPos, networkMessage._vPos, false);
+                    NetworkMessage responseMessage = new NetworkMessage("POSITION_CHANGED", networkMessage._playerSessionId, networkMessage._playerId, newPos.x, newPos.y, false);
                     SendMessage(playerSession.Key, responseMessage);
                 }
             }
