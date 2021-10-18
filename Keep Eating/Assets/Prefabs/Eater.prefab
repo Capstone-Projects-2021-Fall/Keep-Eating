@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1433564120937361207}
   m_Layer: 6
   m_Name: Eater
-  m_TagString: Player
+  m_TagString: Eater
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1433564120937361195}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18cb20ecfda76b5408f0c3666283982d, type: 3}
   m_Name: 
