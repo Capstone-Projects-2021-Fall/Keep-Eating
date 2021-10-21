@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
         mousepos.y -= objectpos.y;
 
         float angle = Mathf.Atan2(mousepos.y, mousepos.x) * Mathf.Rad2Deg;
+        Debug.Log("angle = " + angle);
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
         if (weapon != null)

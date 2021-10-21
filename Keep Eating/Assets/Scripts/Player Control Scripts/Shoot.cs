@@ -14,7 +14,16 @@ public class Shoot : MonoBehaviour
     // Update is called once per frame
     public void ShootGun()
     {
-                Instantiate(bullet, barrel.position, barrel.rotation);
+        if (this.gameObject.name == "Revolver")
+        {
+            Instantiate(bullet, barrel.position, barrel.rotation);
+        }
+        else if (this.gameObject.name == "Shotgun")
+        {
+            Instantiate(bullet, barrel.position, barrel.rotation);
+            Instantiate(bullet, barrel.position, barrel.rotation).GetComponent<RevolverBulletMove>().ShotgunBullet(1);
+            Instantiate(bullet, barrel.position, barrel.rotation).GetComponent<RevolverBulletMove>().ShotgunBullet(2);
+        }
     }
 }
 

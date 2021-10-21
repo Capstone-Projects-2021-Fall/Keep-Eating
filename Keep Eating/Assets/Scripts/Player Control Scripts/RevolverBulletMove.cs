@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,5 +27,22 @@ public class RevolverBulletMove : MonoBehaviour
         transform.position += direction * step;
     }
 
+
+    public void ShotgunBullet(int num)
+    {
+        float newX = 0; 
+        float newY = 0;
+        if (num == 1)
+        {
+            newX = (float)(direction.x * Math.Cos(0.2617994) - direction.y * Math.Sin(0.2617994));
+            newY = (float)(direction.x * Math.Cos(0.2617994) + direction.y * Math.Sin(0.2617994));
+        }
+        else
+        {
+            newX = (float)(direction.x * Math.Cos(-0.2617994) - direction.y * Math.Sin(-0.2617994));
+            newY = (float)(direction.x * Math.Cos(-0.2617994) + direction.y * Math.Sin(-0.2617994));
+        }
+        direction = new Vector3(newX, newY, 0);
+    }
 }
 
