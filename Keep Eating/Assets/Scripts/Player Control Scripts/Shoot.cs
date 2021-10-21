@@ -12,7 +12,7 @@ public class Shoot : MonoBehaviour
  
 
     // Update is called once per frame
-    void ShootGun()
+    public void ShootGun()
     {
                 Instantiate(bullet, barrel.position, barrel.rotation);
     }
