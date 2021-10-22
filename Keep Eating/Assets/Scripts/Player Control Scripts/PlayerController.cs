@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         mousepos.y -= objectpos.y;
 
         float angle = Mathf.Atan2(mousepos.y, mousepos.x) * Mathf.Rad2Deg;
-        Debug.Log("angle = " + angle);
+
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
         if (weapon != null)
@@ -68,11 +68,28 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.F))
             {
+                Debug.Log("hello?");
+                if (hasWeapon)
+                {
+                    Destroy(weapon);
+                }
                 weapon = Instantiate(weapon, this.gameObject.transform);
                 weapon.transform.localScale = scale;
+                if (weapon.name == "Revolver(Clone")
+                {
+                    weapon.transform.position = this.gameObject.transform.position + new Vector3(.88f, .88f, 0);
+                }
+                else
+                {
+                    weapon.transform.position = this.gameObject.transform.position + new Vector3(1.5f, 0, 0);
+                }
                 Destroy(collision.gameObject);
                 hasWeapon = true;
             }
+        }
+        else if (collision.gameObject.tag == "Food")
+        {
+
         }
     }
 

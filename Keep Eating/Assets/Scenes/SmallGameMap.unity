@@ -144,11 +144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1397510723838696701, guid: 568994b656f0368408044ecf972901c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.8
+      value: 27.9
       objectReference: {fileID: 0}
     - target: {fileID: 1397510723838696701, guid: 568994b656f0368408044ecf972901c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 14.1
       objectReference: {fileID: 0}
     - target: {fileID: 1397510723838696701, guid: 568994b656f0368408044ecf972901c6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1215,6 +1215,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3541037316473131721, guid: 2315767e571304843b98430cfef01c99, type: 3}
   m_PrefabInstance: {fileID: 1249213698}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1260592529 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7031785118315161562, guid: 8c936eac33dcbb7469992f46e995823f, type: 3}
+  m_PrefabInstance: {fileID: 798337450}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1355123840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2067,6 +2072,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2504298112705446738, guid: 2d86fede782666143ab5e0d132fc6a96, type: 3}
+      propertyPath: m_TagString
+      value: Gun
+      objectReference: {fileID: 0}
     - target: {fileID: 3903670254310768329, guid: 2d86fede782666143ab5e0d132fc6a96, type: 3}
       propertyPath: m_Name
       value: Shotgun
@@ -2077,11 +2086,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4320871112971562175, guid: 2d86fede782666143ab5e0d132fc6a96, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4320871112971562175, guid: 2d86fede782666143ab5e0d132fc6a96, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4627107289797364863, guid: 2d86fede782666143ab5e0d132fc6a96, type: 3}
       propertyPath: m_RootOrder
@@ -2160,8 +2169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee725f91a23b1d94aa3fe7486ba11c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
-  barrel: {fileID: 0}
+  bullet: {fileID: 6786104390410705595, guid: 30f8981a7e127174facb5035bd94e7fe, type: 3}
+  barrel: {fileID: 1260592529}
 --- !u!61 &1935703104
 BoxCollider2D:
   m_ObjectHideFlags: 0
