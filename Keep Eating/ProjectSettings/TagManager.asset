@@ -7,6 +7,8 @@ TagManager:
   - food
   - Eater
   - Enforcer
+  - Bullet
+  - Gun
   layers:
   - Default
   - TransparentFX
