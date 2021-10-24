@@ -47,7 +47,12 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel("Lobby");
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            Debug.Log("Loading Lobby Scene");
+            PhotonNetwork.LoadLevel("Lobby");
+        }
     }
 
 }

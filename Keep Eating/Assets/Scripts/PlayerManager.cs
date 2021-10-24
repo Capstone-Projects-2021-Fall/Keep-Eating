@@ -1,21 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
     public float speed;
     private Vector3 pos, scale;        //2D vector
     GameObject weapon;
     bool hasWeapon = false;
+    [Tooltip("The current Health of our player")]
+    public float Health = 1f;
 
 
- 
+
+    private void Start()
+    {
+        CameraWork _cameraWork = this.gameObject.GetComponent<CameraWork>();
+
+        if (_cameraWork != null)
+        {
+            if (photonView.IsMine)
+            {
+                _cameraWork.OnStartFollowing();
+            }
+        }
+        else
+        {
+            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+        }
+
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
-        
+
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
+
+        if (photonView.IsMine)
+        {
+            ProcessInputs();
+            if (Health <= 0f)
+            {
+                GameManager.Instance.LeaveRoom();
+            }
+        }   
+
+    }
+
+
+    void ProcessInputs()
+    {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
@@ -56,11 +96,29 @@ public class PlayerController : MonoBehaviour
                 gameObject.GetComponentInChildren<Shoot>().ShootGun();
             }
         }
-
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
+        if (!other.name.Contains("Bullet"))
+        {
+            return;
+        }
+
+        Health -= 0.1f;
+    }
     void OnTriggerStay2D(Collider2D collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (collision.gameObject.tag == "Gun")
         {
             scale = new Vector3(.22f, .22f, 0f);

@@ -21,7 +21,8 @@ public class Loader : MonoBehaviour
     public void loadScene(int index){
         SceneManager.LoadScene(index);
     }
-    public void loadScene(){
+    public void quitGame(){
         Debug.Log("Bye");
+        Application.Quit();
     }
 }
