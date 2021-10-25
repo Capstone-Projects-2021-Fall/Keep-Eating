@@ -2,24 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
+
+namespace Com.tuf31404.KeepEating
 {
-    public Transform target;
-    public float smoothing = 0.5f;
-
-    void Start()
+    public class CameraMovement : MonoBehaviour
     {
-        target = GameObject.Find("Main Camera").transform;
-    }
+        public Transform cameraTransform;
+        public float smoothing = 0.5f;
+        public Transform playerTransform;
+        private bool isFollowing = false;
 
-    void LateUpdate()
-    {
-        if (transform.position != target.position)
+        void Start()
         {
-            Vector3 targetPosition = new Vector3(target.position.x,
-                                                 target.position.y,
-                                                 transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing);
+            Debug.Log("camera movement start");
+            cameraTransform = Camera.main.transform;
+        }
+
+        public void StartFollowing()
+        {
+            Debug.Log("start following CM");
+            isFollowing = true;
+        }
+
+        void LateUpdate()
+        {
+            if (isFollowing)
+            {
+                //Debug.Log("following update");
+                if (cameraTransform != null)
+                {
+                    cameraTransform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, -10);
+                }
+            }
         }
     }
 }
