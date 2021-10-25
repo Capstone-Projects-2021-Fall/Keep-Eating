@@ -22,7 +22,7 @@ namespace Com.tuf31404.KeepEating
 
         [Tooltip("Pixel offset from the player target")]
         [SerializeField]
-        private Vector3 screenOffset = new Vector3(0f, 5f, 0f);
+        private Vector3 screenOffset = new Vector3(0f, 10f, 0f);
 
 
         float characterControllerHeight = 0f;
@@ -43,6 +43,7 @@ namespace Com.tuf31404.KeepEating
             if (playerNameText != null)
             {
                 playerNameText.text = target.photonView.Owner.NickName;
+                Debug.Log(target.photonView.Owner.NickName + " hi");
             }
 
             targetTransform = this.target.GetComponent<Transform>();

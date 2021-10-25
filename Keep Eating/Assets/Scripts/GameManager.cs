@@ -14,7 +14,7 @@ namespace Com.tuf31404.KeepEating
         public GameObject playerPrefab;
         public GameObject eaterPrefab;
         public GameObject enforcerPrefab;
-
+        private const byte playersNeededToStart = 2;
 
         private void Start()
         {
@@ -68,8 +68,11 @@ namespace Com.tuf31404.KeepEating
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.LogFormat("OnPlayerEnteredRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
-
-                LoadArena();
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart)
+                {
+                    Debug.Log("Starting game");
+                    LoadArena();
+                }
             }
         }
 

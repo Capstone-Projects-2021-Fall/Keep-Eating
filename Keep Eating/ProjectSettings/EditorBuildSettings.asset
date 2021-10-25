@@ -10,14 +10,17 @@ EditorBuildSettings:
     guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
-    guid: 9fdcc73222f04eb4791e5508f8da0fe9
-  - enabled: 1
-    path: Assets/Scenes/Main Menu.unity
-    guid: bf1f5bc7a2b5cb647aaca4ae7a497f3b
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Loading.unity
     guid: 73ec0d47af59cbe49bf3fd5cabebd245
   - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: bf1f5bc7a2b5cb647aaca4ae7a497f3b
+  - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 9c972f73a00d83e478e8cbd4d8286e4b
+  - enabled: 1
+    path: Assets/Scenes/SmallGameMap.unity
+    guid: 1127b4415422bbf48aad56ca5ecf8973
   m_configObjects: {}
