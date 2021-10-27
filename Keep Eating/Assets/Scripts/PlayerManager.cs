@@ -183,11 +183,27 @@ namespace Com.tuf31404.KeepEating
             }
             else if (collision.gameObject.tag == "Food")
             {
-
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    if (!PhotonNetwork.IsMasterClient)
+                    {
+                        photonView.RPC("PickUpFood", RpcTarget.MasterClient, 1);
+                    }
+                    else
+                    {
+                        PickUpFood(1);
+                    }
+                }
             }
         }
 
-
+        [PunRPC]
+        void PickUpFood(int foodId)
+        {
+            string food = "Food" + foodId;
+            Debug.Log(food + " destroyed");
+            PhotonNetwork.Destroy(GameObject.Find(food));
+        }
 
 
 #if UNITY_5_4_OR_NEWER
