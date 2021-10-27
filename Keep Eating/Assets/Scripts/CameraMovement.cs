@@ -1,3 +1,8 @@
+/*
+ Used by the Player Manager script to make the camera follow your player.
+
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

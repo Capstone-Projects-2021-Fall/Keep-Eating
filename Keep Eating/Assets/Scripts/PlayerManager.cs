@@ -1,3 +1,10 @@
+/*
+    Used by the PLAYER prefab.
+    Controlls a bunch of player stuff.
+ */
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +16,7 @@ namespace Com.tuf31404.KeepEating
     public class PlayerManager : MonoBehaviourPunCallbacks
     {
         public float speed;
-        private Vector3 pos, scale;        //2D vector
+        private Vector3 pos, scale;       
         GameObject weapon;
         bool hasWeapon = false;
 
@@ -17,6 +24,8 @@ namespace Com.tuf31404.KeepEating
         public float Health = 1f;
 
         [Tooltip("The Player's UI GameObject Prefab")]
+
+        //PlayerUiPrefab is the name and health bar that appears above your character.
         [SerializeField]
         public GameObject PlayerUiPrefab;
 
@@ -25,12 +34,16 @@ namespace Com.tuf31404.KeepEating
         CameraMovement cameraMovement;
 
         void Awake()
-        {
+        {   
+            //PhotonView.IsMine is used so this only runs on your player object.
+            //This is needed because other players will also be running this script, but you don't
+            //want them to run some of this code - like you only want your character to move when you press a key.
             if (photonView.IsMine)
             {
                 PlayerManager.LocalPlayerInstance = this.gameObject;
             }
            
+            //Saves this gameObject instance when the scene is changed.
             DontDestroyOnLoad(this.gameObject);
         }
 
@@ -39,6 +52,7 @@ namespace Com.tuf31404.KeepEating
         {
 
             Debug.Log("PLAYER MANAGER START");
+            //Camera movement - see CameraMovement script
             cameraMovement = this.gameObject.GetComponent<CameraMovement>();
 
             if (cameraMovement != null)
@@ -54,7 +68,7 @@ namespace Com.tuf31404.KeepEating
             }
 
 #if UNITY_5_4_OR_NEWER
-            // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
+            
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
 #endif
 
@@ -73,7 +87,7 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
-        // Update is called once per frame
+        
         void Update()
         {
 

@@ -1,3 +1,9 @@
+/*
+    Used by the Connect To Server GameObject on the Loading scene.
+    Pretty much just connects to a Photon server. 
+ */
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
