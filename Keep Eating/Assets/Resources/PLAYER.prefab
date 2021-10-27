@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2063921439197384138}
   - component: {fileID: -7914678325390154641}
   - component: {fileID: 1567309424}
+  - component: {fileID: 4977271463402215108}
   m_Layer: 6
   m_Name: PLAYER
   m_TagString: Eater
@@ -222,3 +223,22 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   smoothing: 0.5
   playerTransform: {fileID: 5353768009470380068}
+--- !u!95 &4977271463402215108
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353768009470380091}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

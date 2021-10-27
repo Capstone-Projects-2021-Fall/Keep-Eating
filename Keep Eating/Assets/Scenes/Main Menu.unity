@@ -774,7 +774,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1507833709}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Loader, Assembly-CSharp
         m_MethodName: quitGame
         m_Mode: 1
@@ -1677,50 +1677,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487534318}
   m_CullTransparentMesh: 1
---- !u!1 &1507833708
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1507833710}
-  - component: {fileID: 1507833709}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1507833709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1507833708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dff76f9c93e8485ea9f0d85e8805dfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSceneIndex: -12
---- !u!4 &1507833710
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1507833708}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 374.97586, y: 280.47064, z: -8.884657}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1548048993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1764,7 +1720,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1589576736
 GameObject:
@@ -2120,7 +2076,6 @@ GameObject:
   - component: {fileID: 1998283866}
   - component: {fileID: 1998283865}
   - component: {fileID: 1998283864}
-  - component: {fileID: 1998283867}
   m_Layer: 5
   m_Name: Join Lobby Button
   m_TagString: Untagged
@@ -2242,19 +2197,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1998283862}
   m_CullTransparentMesh: 1
---- !u!114 &1998283867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1998283862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dff76f9c93e8485ea9f0d85e8805dfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSceneIndex: 0
 --- !u!1 &2027674579
 GameObject:
   m_ObjectHideFlags: 0
@@ -2562,7 +2504,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1507833709}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Loader, Assembly-CSharp
         m_MethodName: loadScene
         m_Mode: 3

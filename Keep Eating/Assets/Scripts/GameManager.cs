@@ -14,7 +14,7 @@ namespace Com.tuf31404.KeepEating
         public GameObject playerPrefab;
         public GameObject eaterPrefab;
         public GameObject enforcerPrefab;
-        private const byte playersNeededToStart = 2;
+        private const byte playersNeededToStart = 1;
 
         private void Start()
         {

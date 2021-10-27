@@ -15,9 +15,13 @@ namespace Com.tuf31404.KeepEating
         void Start()
         {
             Debug.Log("camera movement start");
-            cameraTransform = Camera.main.transform;
+            GetCamera();
         }
 
+        public void GetCamera()
+        {
+            cameraTransform = Camera.main.transform;
+        }
         public void StartFollowing()
         {
             Debug.Log("start following CM");
@@ -32,6 +36,10 @@ namespace Com.tuf31404.KeepEating
                 if (cameraTransform != null)
                 {
                     cameraTransform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, -10);
+                }
+                else
+                {
+                    Debug.Log("CAMERA NULL");
                 }
             }
         }

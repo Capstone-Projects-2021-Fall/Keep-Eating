@@ -22,6 +22,7 @@ namespace Com.tuf31404.KeepEating
 
 
         public static GameObject LocalPlayerInstance;
+        CameraMovement cameraMovement;
 
         void Awake()
         {
@@ -29,20 +30,22 @@ namespace Com.tuf31404.KeepEating
             {
                 PlayerManager.LocalPlayerInstance = this.gameObject;
             }
-
+           
             DontDestroyOnLoad(this.gameObject);
         }
 
 
         private void Start()
         {
-            CameraMovement _cameraMovement = this.gameObject.GetComponent<CameraMovement>();
 
-            if (_cameraMovement != null)
+            Debug.Log("PLAYER MANAGER START");
+            cameraMovement = this.gameObject.GetComponent<CameraMovement>();
+
+            if (cameraMovement != null)
             {
                 if (photonView.IsMine)
                 {
-                    _cameraMovement.StartFollowing();
+                    cameraMovement.StartFollowing();
                 }
                 else
                 {
@@ -99,6 +102,7 @@ namespace Com.tuf31404.KeepEating
 
             transform.position = pos;
 
+            
             Vector3 mousepos = Input.mousePosition;
             mousepos.z = 0;
             Vector3 objectpos = Camera.main.WorldToScreenPoint(transform.position);
@@ -190,6 +194,7 @@ namespace Com.tuf31404.KeepEating
         void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
         {
             this.CalledOnLevelWasLoaded(scene.buildIndex);
+            
         }
 #endif
 
@@ -213,6 +218,8 @@ namespace Com.tuf31404.KeepEating
 
             GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
             _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+
+            cameraMovement.GetCamera();
         }
 
 #if UNITY_5_4_OR_NEWER
