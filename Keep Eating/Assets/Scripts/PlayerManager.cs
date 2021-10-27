@@ -176,6 +176,10 @@ namespace Com.tuf31404.KeepEating
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
+                 
+                    photonView.RPC("PickUpShotgun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
+                   
+                    /*
                     Debug.Log("hello?");
                     if (hasWeapon)
                     {
@@ -193,6 +197,7 @@ namespace Com.tuf31404.KeepEating
                     }
                     Destroy(collision.gameObject);
                     hasWeapon = true;
+                    */
                 }
             }
             else if (collision.gameObject.tag == "Food")
@@ -217,6 +222,16 @@ namespace Com.tuf31404.KeepEating
             string food = "Food" + foodId;
             Debug.Log(food + " destroyed");
             PhotonNetwork.Destroy(GameObject.Find(food));
+        }
+
+        [PunRPC]
+        void PickUpShotgun(int shotgunId, int playerId)
+        {
+            PhotonView player = PhotonView.Find(playerId);
+            PhotonView shotgun = PhotonView.Find(shotgunId);
+            GameObject shotgunObj = shotgun.gameObject;
+            GameObject playerObj = player.gameObject;
+            shotgunObj.transform.parent = playerObj.transform;
         }
 
 
