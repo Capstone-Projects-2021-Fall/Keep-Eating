@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 
 namespace Com.tuf31404.KeepEating
@@ -12,11 +13,10 @@ namespace Com.tuf31404.KeepEating
 
         public static GameManager Instance;
         public GameObject playerPrefab;
-        public GameObject eaterPrefab;
-        public GameObject enforcerPrefab;
         private const byte playersNeededToStart = 2;
         [SerializeField]
         private GameSettings gameSettings;
+
 
         private void Start()
         {
@@ -39,6 +39,9 @@ namespace Com.tuf31404.KeepEating
                     Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
                 }
             }
+            UnityEngine.UI.Text codeText = GameObject.Find("Lobby Code").GetComponent<UnityEngine.UI.Text>();
+            codeText.text = PhotonNetwork.CurrentRoom.Name;
+            DontDestroyOnLoad(GameObject.Find("Team Manager"));
         }
 
 
@@ -49,6 +52,7 @@ namespace Com.tuf31404.KeepEating
 
         public void LeaveRoom()
         {
+            PhotonTeamExtensions.LeaveCurrentTeam(PhotonNetwork.LocalPlayer);
             PhotonNetwork.LeaveRoom();
         }
 
@@ -81,7 +85,6 @@ namespace Com.tuf31404.KeepEating
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             Debug.LogFormat("OnPlayerLeftRoom() {0}", otherPlayer.NickName);
-
             if (PhotonNetwork.IsMasterClient)
             {
                 Debug.LogFormat("OnPlayerLeftRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
@@ -89,5 +92,6 @@ namespace Com.tuf31404.KeepEating
                 LoadArena();
             }
         }
+
     }
 }

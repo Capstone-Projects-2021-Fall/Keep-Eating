@@ -19,7 +19,7 @@ namespace Com.tuf31404.KeepEating
 
         void Start()
         {
-            Debug.Log("camera movement start");
+            //Debug.Log("camera movement start");
             GetCamera();
         }
 
