@@ -143,7 +143,15 @@ namespace Com.tuf31404.KeepEating
             {
                 if (hasWeapon)
                 {
-                    gameObject.GetComponentInChildren<Shoot>().ShootGun();
+                    Debug.Log("Shoot attempt");
+                    if (!PhotonNetwork.IsMasterClient)
+                    {
+                        photonView.RPC("ShootGun", RpcTarget.MasterClient, this.gameObject.transform.GetChild(0).gameObject.GetPhotonView().ViewID);
+                    }
+                    else
+                    {
+                        gameObject.GetComponentInChildren<Shoot>().ShootGun();
+                    }
                 }
             }
         }
@@ -160,7 +168,8 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-            Health -= 0.1f;
+            //PhotonNetwork.Destroy(other.gameObject);
+            //Health -= 0.1f;
         }
         void OnTriggerStay2D(Collider2D collision)
         {
@@ -178,7 +187,8 @@ namespace Com.tuf31404.KeepEating
                 {
                  
                     photonView.RPC("PickUpShotgun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
-                   
+
+                    hasWeapon = true;
                     /*
                     Debug.Log("hello?");
                     if (hasWeapon)
@@ -234,7 +244,12 @@ namespace Com.tuf31404.KeepEating
             shotgunObj.transform.parent = playerObj.transform;
         }
 
-
+        [PunRPC]
+        void ShootGun(int gunId)
+        {
+            Debug.Log("in shoot rpc");
+            PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
+        }
 #if UNITY_5_4_OR_NEWER
         void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
         {

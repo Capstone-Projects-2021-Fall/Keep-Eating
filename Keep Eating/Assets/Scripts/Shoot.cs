@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Shoot : MonoBehaviour
 {
@@ -14,15 +15,17 @@ public class Shoot : MonoBehaviour
     // Update is called once per frame
     public void ShootGun()
     {
+        Debug.Log("in shootgun");
         if (this.gameObject.name == "Revolver(Clone)")
         {
-            Instantiate(bullet, barrel.position, barrel.rotation);
+            PhotonNetwork.Instantiate("RevolverBullet", barrel.position, barrel.rotation);
         }
-        else if (this.gameObject.name == "Shotgun(Clone)")
+        else if (this.gameObject.name == "Shotgun1")
         {
+            Debug.Log("shooting shotgun");
             for (int i = 0; i < 5; i++)
             {
-                Instantiate(bullet, barrel.position, barrel.rotation);
+                PhotonNetwork.Instantiate("ShotgunBullet", barrel.position, barrel.rotation);
             }
         }
     }

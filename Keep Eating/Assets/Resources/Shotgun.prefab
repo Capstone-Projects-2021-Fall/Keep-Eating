@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -2826581418977383747}
   - component: {fileID: 5066845624944237473}
   - component: {fileID: -7669506206658616764}
+  - component: {fileID: -5345138110098018013}
   m_Layer: 0
   m_Name: Shotgun
   m_TagString: Gun
@@ -134,6 +135,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 7.83, y: 2.73}
   m_EdgeRadius: 0
+--- !u!114 &-5345138110098018013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2504298112705446738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee725f91a23b1d94aa3fe7486ba11c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 6786104390410705595, guid: 30f8981a7e127174facb5035bd94e7fe, type: 3}
+  barrel: {fileID: 1006867420606101186}
 --- !u!1 &4621900458908077347
 GameObject:
   m_ObjectHideFlags: 0

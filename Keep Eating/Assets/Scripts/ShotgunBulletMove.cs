@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShotgunBulletMove : MonoBehaviour
 {
-    private float speed = 50f;
+    private float speed = 100f;
     private Vector3 mousePos;
     private Vector3 direction = Vector3.zero;
 
@@ -16,7 +16,7 @@ public class ShotgunBulletMove : MonoBehaviour
         // z is set to 0 so the camera can see it
         mousePos.z = 0;
         direction = (mousePos - transform.position).normalized ;
-        Destroy(gameObject, 0.75f);
+        Destroy(gameObject, 0.5f);
         direction = Quaternion.Euler(0, -45, 0) * direction;
     }
 

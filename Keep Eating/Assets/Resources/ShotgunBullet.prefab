@@ -45,9 +45,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShotgunBullet
       objectReference: {fileID: 0}
+    - target: {fileID: 6975977158558800285, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
+      propertyPath: m_Color.b
+      value: 0.018066913
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975977158558800285, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
+      propertyPath: m_Color.g
+      value: 0.01886791
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975977158558800285, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
+      propertyPath: m_Color.r
+      value: 0.018419668
+      objectReference: {fileID: 0}
     - target: {fileID: 7403988743182253287, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7403988743182253287, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9381
       objectReference: {fileID: 0}
     - target: {fileID: 7403988743182253287, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
       propertyPath: m_LocalPosition.x
@@ -55,7 +71,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7403988743182253287, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0031
       objectReference: {fileID: 0}
     - target: {fileID: 7403988743182253287, guid: f9ecb4d4c3ce0d34385b9bcc74420d72, type: 3}
       propertyPath: m_LocalPosition.z
