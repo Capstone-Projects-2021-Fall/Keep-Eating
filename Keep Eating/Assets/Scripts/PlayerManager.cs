@@ -1,6 +1,22 @@
 /*
-    Used by the PLAYER prefab.
-    Controlls a bunch of player stuff.
+    This is used by ALL player prefabs, including the local versions of other clients.
+    When writing code in this room, it is important to use photonView.IsMine to make sure
+    you are only controlling your own character.
+
+    There are a lot of things that are not automatically synchronized and need to be synchronized
+    using RPC calls to send messages through the server. This is done as such:
+        sending message:    myPhotonView.RPC("FunctionName", RpcTargets.<desired recipient>, function arguments);
+        When the recipient receives the message is calls the "FunctionName" function which is a normal function 
+        but with the tag [Pun RPC] above it. 
+    A photon view is necessary to send an RPC message. 
+    The message call and the [Pun RPC] must be in the same class. 
+
+
+    TODO: Add if statements to control what the player can do depending on their team.
+          Revolver pickup.
+          Stop the player from moving if they are dead or stunned.
+          Add fists.
+          Maybe change weapon and food prefab tags and names.
  */
 
 
@@ -55,6 +71,7 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+            //Only the player prefab that you control can call these methods.
             if (photonView.IsMine)
             {
                 Debug.Log("PLAYER MANAGER START");
@@ -76,6 +93,7 @@ namespace Com.tuf31404.KeepEating
                 UpdateTeamMax();
                 Debug.Log("eaters = " + eaterTeamMax + " enforcers = " + enforcerTeamMax);
                 teamsManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
+                //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -117,9 +135,9 @@ namespace Com.tuf31404.KeepEating
 
         }
 
+
         public void SwitchTeams(byte teamNum)
         {
-
             if (teamNum == myTeam)
             {
                 return;
@@ -135,7 +153,10 @@ namespace Com.tuf31404.KeepEating
             {
                 myTeam = 1;
             }
+            //Makes a call to all clients that they have joined a team.
+            //RpcTarget.AllBuffered ensures that players that join after the call recieve the message.
             photonView.RPC("SetTeam", RpcTarget.AllBuffered, myTeam, photonView.ViewID);
+            //Changes sprite depending on team.
             if (myTeam == 1)
             {
                 this.gameObject.GetComponent<SpriteRenderer>().sprite = eaterSprite;
@@ -252,6 +273,8 @@ namespace Com.tuf31404.KeepEating
             }
         }
         
+
+        //This method is to enssure there is always about a 75/25 eater/enforcer ratio.
         private void UpdateTeamMax()
         {
             int roomCount = PhotonNetwork.CurrentRoom.PlayerCount;

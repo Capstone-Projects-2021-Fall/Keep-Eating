@@ -1,3 +1,8 @@
+/*
+        Name says it all.
+        Reads the player name input field and saves it.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

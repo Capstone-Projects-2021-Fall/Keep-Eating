@@ -1,3 +1,12 @@
+/*
+    Should probably be called Lobby (Room) Manager.
+    Controls what happens when players join and leave the room.
+
+    TODO: Maybe implement a game settings jawn to choose the map and set the 
+          max players per room, idk.
+ */
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,13 +21,13 @@ namespace Com.tuf31404.KeepEating
     public class GameManager : MonoBehaviourPunCallbacks
     {
 
-        public static GameManager Instance;
-        public GameObject playerPrefab;
+        public static GameManager Instance;                 //I forget what this is for lol.
+        public GameObject playerPrefab;                     //Player prefab has no sprite until player joins a team.
         private const byte playersNeededToStart = 2;
         [SerializeField]
-        private GameSettings gameSettings;
+        private GameSettings gameSettings;                  //Not sure if we need this
         [SerializeField]
-        private PhotonTeamsManager teamManager;
+        private PhotonTeamsManager teamManager;             
         [SerializeField]
         private Button startButton;
 
@@ -45,10 +54,12 @@ namespace Com.tuf31404.KeepEating
                     Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
                 }
             }
+
             UnityEngine.UI.Text codeText = GameObject.Find("Lobby Code").GetComponent<UnityEngine.UI.Text>();
-            codeText.text = PhotonNetwork.CurrentRoom.Name;
-            DontDestroyOnLoad(GameObject.Find("Team Manager"));
-            startButton.onClick.AddListener(() => StartGame());
+            codeText.text = PhotonNetwork.CurrentRoom.Name;         //Lobby code
+            DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
+            DontDestroyOnLoad(GameObject.Find("Team Manager"));     //Team Manager object goes to the map
+            startButton.onClick.AddListener(() => StartGame());     //Start button listener
         }
 
 
@@ -66,6 +77,7 @@ namespace Com.tuf31404.KeepEating
 
         void LoadArena()
         {
+            //You'll see this IsMasterClient a lot. Some functions should only be called by the Master Client.
             if (!PhotonNetwork.IsMasterClient)
             {
                 Debug.LogError("Only Master can load the arena.....");
@@ -73,16 +85,27 @@ namespace Com.tuf31404.KeepEating
             PhotonNetwork.LoadLevel("SmallGameMap");
         }
 
-
+        /*
+            Called when the start button is pressed. 
+            Can only be used by the Master Client.
+            Checks that there are at least 5 players and at least 1 enforcer.
+         */
         public void StartGame()
         {
             if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(2) > 0)
             {
                 Debug.Log("Starting game");
+                //Loads the game map and starts the game.
                 LoadArena();
             }
         }
 
+
+        /*
+            I was using this to automatically start the game after enough player joined
+            before the start button was implemented.
+            Might remove.
+         */
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", newPlayer.NickName);
@@ -100,6 +123,8 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+
+        //Not sure why this was ever here
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             Debug.LogFormat("OnPlayerLeftRoom() {0}", otherPlayer.NickName);
@@ -107,7 +132,7 @@ namespace Com.tuf31404.KeepEating
             {
                 Debug.LogFormat("OnPlayerLeftRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
 
-                LoadArena();
+                //LoadArena();
             }
         }
 

@@ -1,3 +1,8 @@
+/*
+        This script controls the timer.
+        Might move to GameStateManager class in the future.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +21,7 @@ public class Timer : MonoBehaviour
     PhotonView pV;
     void Start()
     {
+        //Master Client gets the start time and sends it to the other players.
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
             startTime = PhotonNetwork.Time;

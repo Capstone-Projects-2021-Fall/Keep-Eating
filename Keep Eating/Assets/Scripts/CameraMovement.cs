@@ -1,6 +1,6 @@
 /*
- Used by the Player Manager script to make the camera follow your player.
-
+    Used by the Player Manager script to make the camera follow your player.
+    Everything in here is fairly straight forward.
  */
 
 using System.Collections;

@@ -1,3 +1,9 @@
+/*
+        This script controls the UI that displays the player's name 
+        and health bar. I hate the way the health bar looks but it will
+        have to do for now.
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
