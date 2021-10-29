@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -16,6 +17,11 @@ namespace Com.tuf31404.KeepEating
         private const byte playersNeededToStart = 2;
         [SerializeField]
         private GameSettings gameSettings;
+        [SerializeField]
+        private PhotonTeamsManager teamManager;
+        [SerializeField]
+        private Button startButton;
+
 
 
         private void Start()
@@ -42,6 +48,7 @@ namespace Com.tuf31404.KeepEating
             UnityEngine.UI.Text codeText = GameObject.Find("Lobby Code").GetComponent<UnityEngine.UI.Text>();
             codeText.text = PhotonNetwork.CurrentRoom.Name;
             DontDestroyOnLoad(GameObject.Find("Team Manager"));
+            startButton.onClick.AddListener(() => StartGame());
         }
 
 
@@ -67,18 +74,29 @@ namespace Com.tuf31404.KeepEating
         }
 
 
+        public void StartGame()
+        {
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(2) > 0)
+            {
+                Debug.Log("Starting game");
+                LoadArena();
+            }
+        }
+
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", newPlayer.NickName);
 
             if (PhotonNetwork.IsMasterClient)
             {
+                /*
                 Debug.LogFormat("OnPlayerEnteredRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
                 if (PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart)
                 {
                     Debug.Log("Starting game");
                     LoadArena();
                 }
+                */
             }
         }
 
