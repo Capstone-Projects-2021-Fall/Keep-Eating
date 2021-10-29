@@ -51,6 +51,7 @@ namespace Com.tuf31404.KeepEating
         public Sprite eaterSprite, enforcerSprite;
         private byte myTeam;
         Button eaterSwitch, enforcerSwitch;
+        bool iShot;
 
 
         #region Init
@@ -115,6 +116,7 @@ namespace Com.tuf31404.KeepEating
 
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
+                iShot = false;
             }
         }
 
@@ -217,6 +219,7 @@ namespace Com.tuf31404.KeepEating
                     {
                         gameObject.GetComponentInChildren<Shoot>().ShootGun();
                     }
+                    iShot = true;
                 }
             }
         }
@@ -233,8 +236,12 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-            //PhotonNetwork.Destroy(other.gameObject);
-            //Health -= 0.1f;
+            if (PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code == 1)
+            {
+                PhotonNetwork.Destroy(other.gameObject);
+                Health -= 0.1f;
+            }
+            
         }
         void OnTriggerStay2D(Collider2D collision)
         {
