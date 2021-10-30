@@ -10,6 +10,10 @@ TagManager:
   - Bullet
   - Gun
   - Food
+  - EaterSpawn
+  - EnforcerSpawn
+  - WeaponSpawn
+  - FoodSpawn
   layers:
   - Default
   - TransparentFX

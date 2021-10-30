@@ -51,6 +51,8 @@ namespace Com.tuf31404.KeepEating
         public Sprite eaterSprite, enforcerSprite;
         private byte myTeam;
         Button eaterSwitch, enforcerSwitch;
+        [SerializeField]
+        private GameStateManager gsm;
 
 
         #region Init
@@ -336,6 +338,45 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        public void Spawn(int spawnNum)
+        {
+
+            Debug.Log("Spawn player");
+            if (myTeam == 1)
+            {
+                switch (spawnNum)
+                {
+                    case 0:
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                        break;
+                    case 1:
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (1)").transform.position;
+                        break;
+                    case 2:
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (2)").transform.position;
+                        break;
+                    default:
+                        Debug.Log("Oops enforcer spawn");
+                        break;
+                }
+            }
+            else
+            {
+                switch (spawnNum)
+                {
+                    case 0:
+                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn").transform.position;
+                        break;
+                    case 1:
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (1)").transform.position;
+                        break;
+                    default:
+                        Debug.Log("Oops enforcer spawn");
+                        break;
+                }
+            }
+        }
+
         #endregion
 
         #region RPC functions
@@ -407,6 +448,19 @@ namespace Com.tuf31404.KeepEating
             _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
 
             cameraMovement.GetCamera();
+            if (photonView.IsMine)
+            {
+                gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
+                gsm.player = this;
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    Debug.Log("hello spawn");
+                    gsm.SpawnPlayers();
+                    //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                }
+
+                
+            }
         }
 
         public override void OnDisable()

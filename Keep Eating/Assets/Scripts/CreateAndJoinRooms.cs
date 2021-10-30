@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
 
 namespace Com.tuf31404.KeepEating
@@ -23,6 +24,7 @@ namespace Com.tuf31404.KeepEating
         //If no Code is entered, a random code is generated
         public void CreateRoom()
         {
+            RoomOptions roomOps = new RoomOptions() { PublishUserId = true };
             if (createInput.text == "")
             {
                 var rand = new System.Random();
@@ -36,11 +38,11 @@ namespace Com.tuf31404.KeepEating
                 string codeString = new string(code);
                 Debug.Log("Code: " + codeString);
 
-                PhotonNetwork.CreateRoom(codeString);
+                PhotonNetwork.CreateRoom(codeString, roomOps);
             }
             else
             {
-                PhotonNetwork.CreateRoom(createInput.text);
+                PhotonNetwork.CreateRoom(createInput.text, roomOps);
             }
         }
 
