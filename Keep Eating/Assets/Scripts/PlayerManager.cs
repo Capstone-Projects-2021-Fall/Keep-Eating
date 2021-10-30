@@ -457,6 +457,7 @@ namespace Com.tuf31404.KeepEating
                     Debug.Log("hello spawn");
                     gsm.SpawnPlayers();
                     //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                    gsm.SpawnFood();
                 }
 
                 

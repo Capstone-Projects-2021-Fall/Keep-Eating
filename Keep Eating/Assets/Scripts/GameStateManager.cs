@@ -28,12 +28,22 @@ namespace Com.tuf31404.KeepEating
         private int eaterPoints;
         private int pointsToWin;
         private int eaterIndex, enforcerIndex;
+        private Vector3[] foodSpawns;
         private Text hudText;                           //The text GameObject that displays the time.
         Dictionary<int, Player> players;
         public PlayerManager player;
         [SerializeField]
         PhotonView pv;
 
+        private void Awake()
+        {
+            foodSpawns = new Vector3[5];
+            foodSpawns[0] = GameObject.Find("FoodSpawn").transform.position;
+            foodSpawns[1] = GameObject.Find("FoodSpawn (1)").transform.position;
+            foodSpawns[2] = GameObject.Find("FoodSpawn (2)").transform.position;
+            foodSpawns[3] = GameObject.Find("FoodSpawn (3)").transform.position;
+            foodSpawns[4] = GameObject.Find("FoodSpawn (4)").transform.position;
+        }
         // Start is called before the first frame update
         void Start()
         {
@@ -65,6 +75,19 @@ namespace Com.tuf31404.KeepEating
                     Debug.Log("Enforcer spawned");
                     pv.RPC("Spawn", RpcTarget.AllBuffered, enforcerIndex++, players[i + 1].UserId);
                 }
+            }
+        }
+
+        public void SpawnFood()
+        {
+            string food = "Food";
+            int rand;
+            foreach(Vector3 pos in foodSpawns)
+            {
+                rand = UnityEngine.Random.Range(1, 4);
+                food += rand;
+                PhotonNetwork.Instantiate(food, pos, Quaternion.identity);
+                food = "food";
             }
         }
 
