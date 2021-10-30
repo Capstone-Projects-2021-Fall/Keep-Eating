@@ -140,7 +140,7 @@ namespace Com.tuf31404.KeepEating
             TODO: This whole function. Maybe make a food enum instead of using a string.
                   Have the eater call this when they eat something.
         */
-        public void AddPoints(string food)
+        public void AddPoints(int food)
         {
 
         }
@@ -150,7 +150,7 @@ namespace Com.tuf31404.KeepEating
             eatersDead++;
         }
 
-        public void Respawn()
+        public void PlayerRespawn()
         {
             eatersDead--;
         }
@@ -169,6 +169,36 @@ namespace Com.tuf31404.KeepEating
                 Debug.Log("PlayerID error");
                 Debug.Log("player id = " + playerId + " local = " + PhotonNetwork.LocalPlayer.UserId);
             }
+        }
+
+        public void Respawn(GameObject foodObject)
+        {
+            string foodName = foodObject.name;
+
+            if (foodName.Contains("Food1")){
+                AddPoints(10);
+            }
+            else if (foodName.Contains("Food2")){
+                    AddPoints(20);
+            }
+            else
+            {
+                AddPoints(30);
+            }
+            Vector3 foodPos = foodObject.transform.position;
+            string food = "Food";
+            food += UnityEngine.Random.Range(1, 4);
+            IEnumerator coroutine = SpawnWaiter(foodPos, food);
+
+            StartCoroutine(coroutine);
+            PhotonNetwork.Destroy(foodObject);
+        }
+
+        IEnumerator SpawnWaiter(Vector3 pos, string food)
+        {
+            float waitTime = UnityEngine.Random.Range(20, 40);
+            yield return new WaitForSeconds(waitTime);
+            PhotonNetwork.Instantiate(food, pos, Quaternion.identity);
         }
 
     }

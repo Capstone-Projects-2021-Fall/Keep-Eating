@@ -270,11 +270,11 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (!PhotonNetwork.IsMasterClient)
                     {
-                        photonView.RPC("PickUpFood", RpcTarget.MasterClient, 1);
+                        photonView.RPC("PickUpFood", RpcTarget.MasterClient, collision.gameObject.name);
                     }
                     else
                     {
-                        PickUpFood(1);
+                        PickUpFood(collision.gameObject.name);
                     }
                 }
             }
@@ -380,6 +380,7 @@ namespace Com.tuf31404.KeepEating
         #endregion
 
         #region RPC functions
+
         [PunRPC]
         void SetTeam(byte teamId, int viewId)
         {
@@ -396,11 +397,10 @@ namespace Com.tuf31404.KeepEating
         }
 
         [PunRPC]
-        void PickUpFood(int foodId)
+        void PickUpFood(string foodName)
         {
-            string food = "Food" + foodId;
-            Debug.Log(food + " destroyed");
-            PhotonNetwork.Destroy(GameObject.Find(food));
+            Debug.Log(foodName + " destroyed");
+            gsm.Respawn(GameObject.Find(foodName));
         }
 
         [PunRPC]
