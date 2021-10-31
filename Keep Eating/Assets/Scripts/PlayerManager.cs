@@ -265,17 +265,13 @@ namespace Com.tuf31404.KeepEating
 
                 if (foodCollision && myTeam == 1)
                 {
-                    if (foodId != lastFood)
+                    if (!PhotonNetwork.IsMasterClient)
                     {
-                        if (!PhotonNetwork.IsMasterClient)
-                        {
-                            this.photonView.RPC("PickUpFood", RpcTarget.MasterClient, foodId);
-                        }
-                        else
-                        {
-                            PickUpFood(foodId);
-                        }
-                        foodId = lastFood;
+                        this.photonView.RPC("PickUpFood", RpcTarget.MasterClient, foodId);
+                    }
+                    else
+                    {
+                        PickUpFood(foodId);
                     }
                     foodCollision = false;
                 }
@@ -319,9 +315,14 @@ namespace Com.tuf31404.KeepEating
             }
             else if (collision.gameObject.tag.Equals("Food") && myTeam == 1)
             {
-                foodId = collision.gameObject.GetComponent<PhotonView>().ViewID;
-                Debug.Log("foodId = " + foodId);
-                foodCollision = true;
+                    foodId = collision.gameObject.GetComponent<PhotonView>().ViewID;
+                    Debug.Log("foodId = " + foodId);
+                    foodCollision = true;
+            }
+            else
+            {
+                gunCollision = false;
+                foodCollision = false;
             }
         }
         
@@ -497,9 +498,16 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void PickUpFood(int _foodId)
         {
-            Debug.Log("_foodId = " + _foodId);
-            Debug.Log(PhotonView.Find(_foodId).gameObject.name);
-            gsm.Respawn(PhotonView.Find(_foodId).gameObject);
+            if (photonView.IsMine) {
+                Debug.Log("I am here");
+                Debug.Log("_foodId = " + _foodId);
+                Debug.Log(PhotonView.Find(_foodId).gameObject.name);
+                gsm.Respawn(PhotonView.Find(_foodId).gameObject);
+            }
+            else
+            {
+                Debug.Log("Someone else is accessing this");
+            }
         }
 
         [PunRPC]
