@@ -21,7 +21,7 @@ using Photon.Pun.UtilityScripts;            //needed for the PhotonTeamsManager 
 
 namespace Com.tuf31404.KeepEating
 {
-    public class GameStateManager : MonoBehaviour
+    public class GameStateManager : MonoBehaviourPunCallbacks
     {
         private PhotonTeamsManager teamManager;         //Gives access to team info. Specifically number of players.
         private int eatersDead;
@@ -62,7 +62,6 @@ namespace Com.tuf31404.KeepEating
 
         public void SpawnPlayers()
         {
-            Debug.Log("spawn players gsm");
             players = PhotonNetwork.CurrentRoom.Players;
             eaterIndex = 0;
             enforcerIndex = 0;
@@ -71,13 +70,11 @@ namespace Com.tuf31404.KeepEating
             {
                 if (PhotonTeamExtensions.GetPhotonTeam(players[i + 1]).Code == 1)
                 {
-                    Debug.Log("Eater spawned");
                     pv.RPC("Spawn", RpcTarget.AllBuffered, eaterIndex++, players[i+1].UserId);
                     Debug.Log("UserId = " + players[i + 1].UserId);
                 }
                 else
                 {
-                    Debug.Log("Enforcer spawned");
                     pv.RPC("Spawn", RpcTarget.AllBuffered, enforcerIndex++, players[i + 1].UserId);
                 }
             }
@@ -202,13 +199,12 @@ namespace Com.tuf31404.KeepEating
         {
             if (playerId.Equals(PhotonNetwork.LocalPlayer.UserId))
             {
-                Debug.Log("SpawnRPC");
                 player.Spawn(spawnLoc);
             }
             else
             {
-                Debug.Log("PlayerID error");
-                Debug.Log("player id = " + playerId + " local = " + PhotonNetwork.LocalPlayer.UserId);
+               // Debug.Log("PlayerID error");
+               // Debug.Log("player id = " + playerId + " local = " + PhotonNetwork.LocalPlayer.UserId);
             }
         }
 

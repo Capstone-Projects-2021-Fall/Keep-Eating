@@ -60,6 +60,7 @@ namespace Com.tuf31404.KeepEating
         private bool foodCollision;
         private GameObject tempWeapon;
         private int foodId;
+        private int lastFood;
 
 
         #region Init
@@ -68,7 +69,7 @@ namespace Com.tuf31404.KeepEating
             //PhotonView.IsMine is used so this only runs on your player object.
             //This is needed because other players will also be running this script, but you don't
             //want them to run some of this code - like you only want your character to move when you press a key.
-            if (photonView.IsMine)
+            if (this.photonView.IsMine)
             {
                 PlayerManager.LocalPlayerInstance = this.gameObject;
                 isAlive = true;
@@ -82,16 +83,16 @@ namespace Com.tuf31404.KeepEating
         private void Start()
         {
             //Only the player prefab that you control can call these methods.
-            if (photonView.IsMine)
+            if (this.photonView.IsMine)
             {
-                mySpriteRenderer = this.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-                Debug.Log("PLAYER MANAGER START");
+                mySpriteRenderer = this.gameObject.transform.Find("PlayerSpriteRenderer").gameObject.GetComponent<SpriteRenderer>();
+                Debug.Log(this.gameObject.transform.GetChild(0).gameObject.name);
                 //Camera movement - see CameraMovement script
                 cameraMovement = this.gameObject.GetComponent<CameraMovement>();
 
                 if (cameraMovement != null)
                 {
-                    if (photonView.IsMine)
+                    if (this.photonView.IsMine)
                     {
                         cameraMovement.StartFollowing();
                     }
@@ -102,7 +103,6 @@ namespace Com.tuf31404.KeepEating
                 }
 
                 UpdateTeamMax();
-                Debug.Log("eaters = " + eaterTeamMax + " enforcers = " + enforcerTeamMax);
                 teamsManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
                 //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
@@ -110,10 +110,7 @@ namespace Com.tuf31404.KeepEating
 
                 if (PlayerUiPrefab != null)
                 {
-
-                    Debug.Log("UI not null");
                     GameObject _uiGo = Instantiate(PlayerUiPrefab);
-                    Debug.Log("_uiGo name: " + _uiGo.name);
                     _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
                 }
                 else
@@ -130,6 +127,7 @@ namespace Com.tuf31404.KeepEating
                 weapon = null;
                 gunCollision = false;
                 foodCollision = false;
+                lastFood = 0;
             }
         }
 
@@ -139,14 +137,14 @@ namespace Com.tuf31404.KeepEating
         void Update()
         {
 
-            if (photonView.IsMine && isAlive)
+            if (this.photonView.IsMine && isAlive)
             {
                 ProcessInputs();
                 if (Health <= 0f)
                 {
                     //GameManager.Instance.LeaveRoom();
                     isAlive = false;
-                    photonView.RPC("PlayerDead", RpcTarget.All, photonView.ViewID);
+                    this.photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
                 }
             }
 
@@ -172,7 +170,7 @@ namespace Com.tuf31404.KeepEating
             }
             //Makes a call to all clients that they have joined a team.
             //RpcTarget.AllBuffered ensures that players that join after the call recieve the message.
-            photonView.RPC("SetTeam", RpcTarget.AllBuffered, myTeam, photonView.ViewID);
+            this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, myTeam, this.photonView.ViewID);
             //Changes sprite depending on team.
             if (myTeam == 1)
             {
@@ -238,10 +236,9 @@ namespace Com.tuf31404.KeepEating
             {
                 if (hasWeapon && weapon.CompareTag("Gun"))
                 {
-                    Debug.Log("Shoot attempt");
                     if (!PhotonNetwork.IsMasterClient)
                     {
-                        photonView.RPC("ShootGun", RpcTarget.MasterClient, this.gameObject.transform.GetChild(1).gameObject.GetPhotonView().ViewID);
+                        this.photonView.RPC("ShootGun", RpcTarget.MasterClient, this.gameObject.transform.GetChild(1).gameObject.GetPhotonView().ViewID);
                     }
                     else
                     {
@@ -258,7 +255,7 @@ namespace Com.tuf31404.KeepEating
                     {
                         weapon = tempWeapon;
 
-                        photonView.RPC("PickUpGun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
+                        this.photonView.RPC("PickUpGun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
 
                         hasWeapon = true;
                     }
@@ -268,26 +265,27 @@ namespace Com.tuf31404.KeepEating
 
                 if (foodCollision && myTeam == 1)
                 {
-                    if (foodId != -1)
+                    if (foodId != lastFood)
                     {
                         if (!PhotonNetwork.IsMasterClient)
                         {
-                            photonView.RPC("PickUpFood", RpcTarget.MasterClient, foodId);
+                            this.photonView.RPC("PickUpFood", RpcTarget.MasterClient, foodId);
                         }
                         else
                         {
                             PickUpFood(foodId);
                         }
+                        foodId = lastFood;
                     }
                     foodCollision = false;
-                    foodId = -1;
+                    
                 }
             }
         }
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (!photonView.IsMine)
+            if (!this.photonView.IsMine)
             {
                 return;
             }
@@ -299,27 +297,30 @@ namespace Com.tuf31404.KeepEating
 
             if (PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code == 1)
             {
-                Debug.Log(PhotonNetwork.LocalPlayer.NickName + " health = " + Health);
                 Health -= 0.1f;
-                photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, other.GetComponent<PhotonView>().ViewID);
+                if (Health >= 0)
+                {
+                    this.photonView.RPC("HitByBullet", RpcTarget.All, this.photonView.ViewID, other.GetComponent<PhotonView>().ViewID);
+                }
             }
             
         }
         void OnTriggerStay2D(Collider2D collision)
         {
-            if (!photonView.IsMine)
+            if (!this.photonView.IsMine)
             {
                 return;
             }
 
-            if (collision.gameObject.tag == "Gun" && myTeam == 2)
+            if (collision.gameObject.tag.Equals("Gun") && myTeam == 2)
             {
                 tempWeapon = collision.gameObject;
                 gunCollision = true;
             }
-            else if (collision.gameObject.tag == "Food" && myTeam == 1)
+            else if (collision.gameObject.tag.Equals("Food") && myTeam == 1)
             {
                 foodId = collision.gameObject.GetComponent<PhotonView>().ViewID;
+                Debug.Log("foodId = " + foodId);
                 foodCollision = true;
             }
         }
@@ -351,7 +352,6 @@ namespace Com.tuf31404.KeepEating
 
         private void TryJoinTeam(byte teamNum)
         {
-            Debug.Log("teamNum = " + teamNum);
             if (teamNum == 1)
             {
                 if (teamsManager.GetTeamMembersCount(1) == eaterTeamMax){
@@ -371,7 +371,7 @@ namespace Com.tuf31404.KeepEating
             }
 
             myTeam = teamNum;
-            photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, photonView.ViewID);
+            this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, this.photonView.ViewID);
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
@@ -385,7 +385,6 @@ namespace Com.tuf31404.KeepEating
         public void Spawn(int spawnNum)
         {
 
-            Debug.Log("Spawn player");
             if (myTeam == 1)
             {
                 switch (spawnNum)
@@ -430,9 +429,12 @@ namespace Com.tuf31404.KeepEating
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.Destroy(PhotonView.Find(bulletId).gameObject);
+                if (PhotonView.Find(bulletId) != null)
+                {
+                    PhotonNetwork.Destroy(PhotonView.Find(bulletId).gameObject);
+                }
             }
-            if (viewId != photonView.ViewID)
+            if (viewId != this.photonView.ViewID)
             {
                 PhotonView.Find(viewId).gameObject.GetComponent<PlayerManager>().Health -= 0.1f;
             }
@@ -442,7 +444,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-            if (photonView.ViewID == pvId)
+            if (this.photonView.IsMine && this.photonView.ViewID == pvId)
             {
                 mySpriteRenderer.enabled = false;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -459,7 +461,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerRespawn(int pvId, Vector3 pos)
         {
-            if (photonView.ViewID == pvId)
+            if (this.photonView.IsMine && this.photonView.ViewID == pvId)
             {
                 mySpriteRenderer.enabled = true;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = true;
@@ -495,7 +497,8 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void PickUpFood(int _foodId)
         {
-            Debug.Log(_foodId + " destroyed");
+            Debug.Log("_foodId = " + _foodId);
+            Debug.Log(PhotonView.Find(_foodId).gameObject.name);
             gsm.Respawn(PhotonView.Find(_foodId).gameObject);
         }
 
@@ -514,7 +517,6 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void ShootGun(int gunId)
         {
-            Debug.Log("in shoot rpc");
             PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
         }
         #endregion
@@ -525,7 +527,6 @@ namespace Com.tuf31404.KeepEating
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
             int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
-            Debug.Log(spawnPoint);
             photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
         }
         #region PunCallbacks
@@ -533,8 +534,6 @@ namespace Com.tuf31404.KeepEating
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             UpdateTeamMax();
-
-            Debug.Log("eatersTeam = " + teamsManager.GetTeamMembersCount(1) + " enforcersTeam = " + teamsManager.GetTeamMembersCount(2));
         }
 
         void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
@@ -555,13 +554,12 @@ namespace Com.tuf31404.KeepEating
             _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
 
             cameraMovement.GetCamera();
-            if (photonView.IsMine)
+            if (this.photonView.IsMine)
             {
                 gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
                 gsm.player = this;
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    Debug.Log("hello spawn");
                     gsm.SpawnPlayers();
                     //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
                     gsm.SpawnFood();

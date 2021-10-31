@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7346102485320716756}
   - component: {fileID: 4545307593873734666}
   m_Layer: 6
-  m_Name: SpriteRendererObject
+  m_Name: PlayerSpriteRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
