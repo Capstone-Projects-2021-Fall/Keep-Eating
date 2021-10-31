@@ -12,15 +12,18 @@ public class StatusUpdate : MonoBehaviour
     public Text PlayerInMasterNumber;
     private int counter = 0;
     private int playerCount;
+    private int playerMasterCount;
+
 
     // Update is called once per frame
     private void Update()
     {
         playerCount = PhotonNetwork.CountOfPlayers - 1;
+        playerMasterCount = PhotonNetwork.CountOfPlayersOnMaster - 1;
         PlayerCountNumber.text = playerCount.ToString();
         RoomCountNumber.text = PhotonNetwork.CountOfRooms.ToString();
         PlayerInRoomNumber.text = PhotonNetwork.CountOfPlayersInRooms.ToString();
-        PlayerInMasterNumber.text = PhotonNetwork.CountOfPlayersOnMaster.ToString();
+        PlayerInMasterNumber.text = playerMasterCount.ToString();
         
         counter++;
         if(counter == 300)
