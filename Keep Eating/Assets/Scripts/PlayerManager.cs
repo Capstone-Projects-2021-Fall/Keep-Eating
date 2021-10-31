@@ -48,7 +48,7 @@ namespace Com.tuf31404.KeepEating
         CameraMovement cameraMovement;
         private PhotonTeamsManager teamsManager;
         int eaterTeamMax, enforcerTeamMax;
-        public Sprite eaterSprite, enforcerSprite;
+        public Sprite eaterSprite, enforcerSprite, deadEaterSprite;
         private byte myTeam;
         Button eaterSwitch, enforcerSwitch;
         [SerializeField]
@@ -144,7 +144,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     //GameManager.Instance.LeaveRoom();
                     isAlive = false;
-                    this.photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
+                    this.photonView.RPC("PlayerDead", RpcTarget.All, LocalPlayerInstance.GetPhotonView().ViewID);
                 }
             }
 
@@ -462,17 +462,13 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-            if (this.photonView.ViewID == pvId)
+            if (this.photonView.IsMine)
             {
-                mySpriteRenderer.enabled = false;
+                mySpriteRenderer.sprite = deadEaterSprite;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                this.photonView.RPC("showDeadPlayer", RpcTarget.All, pvId);
                 IEnumerator coroutine = RespawnWaiter(pvId);
                 StartCoroutine(coroutine);
-            }
-            else
-            {
-                PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
             }
         }
         
@@ -481,20 +477,14 @@ namespace Com.tuf31404.KeepEating
         {
             if (this.photonView.ViewID == pvId)
             {
-                mySpriteRenderer.enabled = true;
+                mySpriteRenderer.sprite = eaterSprite;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = true;
                 this.gameObject.transform.position = pos;
                 Health = 1f;
                 isAlive = true;
+                this.photonView.RPC("showAlivePlayer", RpcTarget.All, pvId);
             }
-            else
-            {
-                GameObject obj = PhotonView.Find(pvId).gameObject;
-                obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
-                obj.GetComponent<BoxCollider2D>().enabled = true;
-                obj.transform.position = pos;
-                obj.GetComponent<PlayerManager>().Health = 1f;
-            }
+           
         }
 
         [PunRPC]
@@ -510,6 +500,20 @@ namespace Com.tuf31404.KeepEating
                 playerSprite.sprite = enforcerSprite;
             }
             
+        }
+
+        [PunRPC]
+        void showDeadPlayer(int viewId)
+        {
+            SpriteRenderer playerSprite = PhotonView.Find(viewId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+            playerSprite.sprite = deadEaterSprite;
+        }
+
+        [PunRPC]
+        void showAlivePlayer(int viewId)
+        {
+            SpriteRenderer playerSprite = PhotonView.Find(viewId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+            playerSprite.sprite = eaterSprite;
         }
 
         [PunRPC]

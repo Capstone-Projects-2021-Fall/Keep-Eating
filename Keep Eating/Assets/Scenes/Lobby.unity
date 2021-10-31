@@ -1886,5 +1886,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Team Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 4573149813314661769, guid: 9da4b9d51bc017243aefd820e943bfdc, type: 3}
+      propertyPath: listFoldIsOpen
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9da4b9d51bc017243aefd820e943bfdc, type: 3}
