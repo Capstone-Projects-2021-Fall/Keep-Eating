@@ -275,12 +275,12 @@ namespace Com.tuf31404.KeepEating
 
             if (collision.gameObject.tag == "Gun")
             {
-                weapon = collision.gameObject;
 
                 if (Input.GetKeyDown(KeyCode.F) && myTeam == 2)
                 {
-                 
-                    photonView.RPC("PickUpShotgun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
+                    weapon = collision.gameObject;
+
+                    photonView.RPC("PickUpGun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
 
                     hasWeapon = true;
              
@@ -461,15 +461,15 @@ namespace Com.tuf31404.KeepEating
         }
 
         [PunRPC]
-        void PickUpShotgun(int shotgunId, int playerId)
+        void PickUpGun(int gunId, int playerId)
         {
             PhotonView player = PhotonView.Find(playerId);
-            PhotonView shotgun = PhotonView.Find(shotgunId);
-            GameObject shotgunObj = shotgun.gameObject;
+            PhotonView gun = PhotonView.Find(gunId);
+            GameObject gunObj = gun.gameObject;
             GameObject playerObj = player.gameObject;
-            shotgunObj.transform.parent = playerObj.transform;
-            shotgunObj.transform.position = playerObj.transform.position;
-            shotgunObj.transform.rotation = playerObj.transform.rotation;
+            gunObj.transform.parent = playerObj.transform;
+            gunObj.transform.position = playerObj.transform.position;
+            gunObj.transform.rotation = playerObj.transform.rotation;
         }
 
         [PunRPC]
