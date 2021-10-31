@@ -35,7 +35,7 @@ namespace Com.tuf31404.KeepEating
     public class PlayerManager : MonoBehaviourPunCallbacks
     {
         public float speed;
-        private Vector3 pos, scale;       
+        private Vector3 pos;       
         GameObject weapon;
         bool hasWeapon = false;
         [Tooltip("The current Health of our player")]
@@ -53,6 +53,9 @@ namespace Com.tuf31404.KeepEating
         Button eaterSwitch, enforcerSwitch;
         [SerializeField]
         private GameStateManager gsm;
+        private bool isAlive;
+        private bool facingLeft;
+        
 
 
         #region Init
@@ -64,6 +67,7 @@ namespace Com.tuf31404.KeepEating
             if (photonView.IsMine)
             {
                 PlayerManager.LocalPlayerInstance = this.gameObject;
+                isAlive = true;
             }
            
             //Saves this gameObject instance when the scene is changed.
@@ -117,7 +121,7 @@ namespace Com.tuf31404.KeepEating
 
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
-
+                facingLeft = true;
             }
         }
 
@@ -127,12 +131,14 @@ namespace Com.tuf31404.KeepEating
         void Update()
         {
 
-            if (photonView.IsMine)
+            if (photonView.IsMine && isAlive)
             {
                 ProcessInputs();
                 if (Health <= 0f)
                 {
-                    GameManager.Instance.LeaveRoom();
+                    //GameManager.Instance.LeaveRoom();
+                    isAlive = false;
+                    photonView.RPC("PlayerDead", RpcTarget.All, photonView.ViewID);
                 }
             }
 
@@ -194,16 +200,16 @@ namespace Com.tuf31404.KeepEating
             float angle = Mathf.Atan2(mousepos.y, mousepos.x) * Mathf.Rad2Deg;
 
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
+            
             if (weapon != null)
             {
                 if (mousepos.x < 0)
                 {
-                    weapon.GetComponent<SpriteRenderer>().flipY = true;
+                    weapon.GetComponent<SpriteRenderer>().flipY = false;
                 }
                 else
                 {
-                    weapon.GetComponent<SpriteRenderer>().flipY = false;
+                    weapon.GetComponent<SpriteRenderer>().flipY = true;
                 }
             }
 
@@ -240,6 +246,7 @@ namespace Com.tuf31404.KeepEating
             {
                 PhotonNetwork.Destroy(other.gameObject);
                 Health -= 0.1f;
+                Debug.Log(PhotonNetwork.LocalPlayer.NickName + " health = " + Health);
             }
             
         }
@@ -252,10 +259,9 @@ namespace Com.tuf31404.KeepEating
 
             if (collision.gameObject.tag == "Gun")
             {
-                scale = new Vector3(.22f, .22f, 0f);
                 weapon = collision.gameObject;
 
-                if (Input.GetKeyDown(KeyCode.F))
+                if (Input.GetKeyDown(KeyCode.F) && myTeam == 2)
                 {
                  
                     photonView.RPC("PickUpShotgun", RpcTarget.All, weapon.GetPhotonView().ViewID, LocalPlayerInstance.GetPhotonView().ViewID);
@@ -266,7 +272,7 @@ namespace Com.tuf31404.KeepEating
             }
             else if (collision.gameObject.tag == "Food")
             {
-                if (Input.GetKeyDown(KeyCode.F))
+                if (Input.GetKeyDown(KeyCode.F) && myTeam == 1)
                 {
                     if (!PhotonNetwork.IsMasterClient)
                     {
@@ -381,6 +387,41 @@ namespace Com.tuf31404.KeepEating
 
         #region RPC functions
 
+
+        [PunRPC]
+        public void PlayerDead(int pvId)
+        {
+            if (photonView.ViewID == pvId)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                IEnumerator coroutine = RespawnWaiter(pvId);
+                StartCoroutine(coroutine);
+            }
+            else
+            {
+                PhotonView.Find(pvId).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+        
+        [PunRPC]
+        public void PlayerRespawn(int pvId, Vector3 pos)
+        {
+            if (photonView.ViewID == pvId)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                this.gameObject.transform.position = pos;
+                Health = 1f;
+                isAlive = true;
+            }
+            else
+            {
+                GameObject obj = PhotonView.Find(pvId).gameObject;
+                obj.GetComponent<SpriteRenderer>().enabled = true;
+                obj.transform.position = pos;
+                obj.GetComponent<PlayerManager>().Health = 1f;
+            }
+        }
+
         [PunRPC]
         void SetTeam(byte teamId, int viewId)
         {
@@ -411,6 +452,8 @@ namespace Com.tuf31404.KeepEating
             GameObject shotgunObj = shotgun.gameObject;
             GameObject playerObj = player.gameObject;
             shotgunObj.transform.parent = playerObj.transform;
+            shotgunObj.transform.position = playerObj.transform.position;
+            shotgunObj.transform.rotation = playerObj.transform.rotation;
         }
 
         [PunRPC]
@@ -422,6 +465,14 @@ namespace Com.tuf31404.KeepEating
         #endregion
 
 
+        IEnumerator RespawnWaiter(int pvId)
+        {
+            yield return new WaitForSeconds(10f);
+            GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
+            int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
+            Debug.Log(spawnPoint);
+            photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
+        }
         #region PunCallbacks
 
         public override void OnPlayerEnteredRoom(Player newPlayer)

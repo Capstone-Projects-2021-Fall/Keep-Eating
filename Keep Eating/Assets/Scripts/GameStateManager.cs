@@ -171,34 +171,33 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
-        public void Respawn(GameObject foodObject)
+        public void Respawn(GameObject respawnObject)
         {
-            string foodName = foodObject.name;
-
-            if (foodName.Contains("Food1")){
+            string objectName = respawnObject.name;
+            if (objectName.Contains("Food1")){
                 AddPoints(10);
             }
-            else if (foodName.Contains("Food2")){
+            else if (objectName.Contains("Food2")){
                     AddPoints(20);
             }
             else
             {
                 AddPoints(30);
             }
-            Vector3 foodPos = foodObject.transform.position;
+            Vector3 foodPos = respawnObject.transform.position;
             string food = "Food";
             food += UnityEngine.Random.Range(1, 4);
             IEnumerator coroutine = SpawnWaiter(foodPos, food);
 
             StartCoroutine(coroutine);
-            PhotonNetwork.Destroy(foodObject);
+            PhotonNetwork.Destroy(respawnObject);
         }
 
-        IEnumerator SpawnWaiter(Vector3 pos, string food)
+        IEnumerator SpawnWaiter(Vector3 pos, string prefabName)
         {
             float waitTime = UnityEngine.Random.Range(20, 40);
             yield return new WaitForSeconds(waitTime);
-            PhotonNetwork.Instantiate(food, pos, Quaternion.identity);
+            PhotonNetwork.Instantiate(prefabName, pos, Quaternion.identity);
         }
 
     }

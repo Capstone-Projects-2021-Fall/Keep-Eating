@@ -18,12 +18,12 @@ public class Shoot : MonoBehaviour
     public void ShootGun()
     {
         Debug.Log("in shootgun");
-        if (this.gameObject.name == "Revolver(Clone)")
+        if (this.gameObject.name.Contains("Revolver"))
         {
             //Instantiates one bullet
             PhotonNetwork.Instantiate("RevolverBullet", barrel.position, barrel.rotation);
         }
-        else if (this.gameObject.name == "Shotgun1")
+        else if (this.gameObject.name.Contains("Shotgun"))
         {
             Debug.Log("shooting shotgun");
 
