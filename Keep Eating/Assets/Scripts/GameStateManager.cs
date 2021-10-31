@@ -215,7 +215,7 @@ namespace Com.tuf31404.KeepEating
                 AddPoints(10);
             }
             else if (objectName.Contains("Food2")){
-                    AddPoints(20);
+                 AddPoints(20);
             }
             else
             {

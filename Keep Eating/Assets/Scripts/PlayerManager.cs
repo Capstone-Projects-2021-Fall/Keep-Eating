@@ -278,7 +278,6 @@ namespace Com.tuf31404.KeepEating
                         foodId = lastFood;
                     }
                     foodCollision = false;
-                    
                 }
             }
         }
@@ -305,6 +304,7 @@ namespace Com.tuf31404.KeepEating
             }
             
         }
+        
         void OnTriggerStay2D(Collider2D collision)
         {
             if (!this.photonView.IsMine)
@@ -360,7 +360,7 @@ namespace Com.tuf31404.KeepEating
             }
             else
             {
-                if (teamsManager.GetTeamMembersCount(1) == eaterTeamMax){
+                if (teamsManager.GetTeamMembersCount(2) == enforcerTeamMax){
                     teamNum = 1;
                 }
             }
@@ -411,7 +411,7 @@ namespace Com.tuf31404.KeepEating
                         this.gameObject.transform.position = GameObject.Find("EnforcerSpawn").transform.position;
                         break;
                     case 1:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (1)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn (1)").transform.position;
                         break;
                     default:
                         Debug.Log("Oops enforcer spawn");
@@ -444,7 +444,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-            if (this.photonView.IsMine && this.photonView.ViewID == pvId)
+            if (this.photonView.ViewID == pvId)
             {
                 mySpriteRenderer.enabled = false;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -461,7 +461,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerRespawn(int pvId, Vector3 pos)
         {
-            if (this.photonView.IsMine && this.photonView.ViewID == pvId)
+            if (this.photonView.ViewID == pvId)
             {
                 mySpriteRenderer.enabled = true;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = true;
@@ -565,9 +565,7 @@ namespace Com.tuf31404.KeepEating
                     gsm.SpawnFood();
                     gsm.SpawnWeapons();
                     gsm.eaterCount = 0;
-                }
-
-                
+                }     
             }
         }
 

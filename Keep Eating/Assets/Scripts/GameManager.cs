@@ -92,7 +92,7 @@ namespace Com.tuf31404.KeepEating
          */
         public void StartGame()
         {
-            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(2) > 0)
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(1) > 0 && teamManager.GetTeamMembersCount(2) > 0)
             {
                 Debug.Log("Starting game");
                 //Loads the game map and starts the game.

@@ -6,7 +6,7 @@ using UnityEngine;
 public class RevolverBulletMove : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 50f;
+    private float speed;
     private Vector3 mousePos;
     private Vector3 direction = Vector3.zero;
 
