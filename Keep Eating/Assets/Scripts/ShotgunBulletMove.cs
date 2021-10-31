@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class ShotgunBulletMove : MonoBehaviour
 {
+    [SerializeField]
     private float speed = 100f;
     private Vector3 mousePos;
     private Vector3 direction = Vector3.zero;

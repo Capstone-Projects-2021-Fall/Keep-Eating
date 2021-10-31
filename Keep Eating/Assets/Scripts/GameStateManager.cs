@@ -28,8 +28,11 @@ namespace Com.tuf31404.KeepEating
         private int eaterPoints;
         private int pointsToWin;
         private int eaterIndex, enforcerIndex;
+        public int eaterCount;
         private Vector3[] foodSpawns;
         private Text hudText;                           //The text GameObject that displays the time.
+        private Text eaterScoreText;
+        private Text eatersAliveText;
         Dictionary<int, Player> players;
         public PlayerManager player;
         [SerializeField]
@@ -52,7 +55,9 @@ namespace Com.tuf31404.KeepEating
             pointsToWin = 100;
             teamManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
             hudText = GameObject.Find("Timer").GetComponent<Text>();
-
+            eaterScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
+            eatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
+            eatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
         }
 
         public void SpawnPlayers()
@@ -88,6 +93,28 @@ namespace Com.tuf31404.KeepEating
                 food += rand;
                 PhotonNetwork.Instantiate(food, pos, Quaternion.identity);
                 food = "food";
+            }
+        }
+
+        public void SpawnWeapons()
+        {
+            int rand = UnityEngine.Random.Range(1, 3);
+            if (rand == 1)
+            {
+                PhotonNetwork.Instantiate("Revolver", GameObject.Find("WeaponSpawn").transform.position, Quaternion.identity);
+            }
+            else
+            {
+                PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn").transform.position, Quaternion.identity);
+            }
+            rand = UnityEngine.Random.Range(1, 3);
+            if (rand == 1)
+            {
+                PhotonNetwork.Instantiate("Revolver", GameObject.Find("WeaponSpawn (1)").transform.position, Quaternion.identity);
+            }
+            else
+            {
+                PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn (1)").transform.position, Quaternion.identity);
             }
         }
 
@@ -136,25 +163,39 @@ namespace Com.tuf31404.KeepEating
         }
 
 
-        /*
-            TODO: This whole function. Maybe make a food enum instead of using a string.
-                  Have the eater call this when they eat something.
-        */
-        public void AddPoints(int food)
+        public void AddPoints(int points)
         {
-
+            eaterPoints += points;
+            pv.RPC("UpdateScoreText", RpcTarget.AllBuffered, eaterPoints);
         }
 
         public void Death()
         {
             eatersDead++;
+            pv.RPC("UpdateAliveText", RpcTarget.AllBuffered, 1);
         }
 
         public void PlayerRespawn()
         {
             eatersDead--;
+            pv.RPC("UpdateAliveText", RpcTarget.AllBuffered, -1);
         }
 
+        [PunRPC]
+        public void UpdateScoreText(int newPoints)
+        {
+            eaterPoints = newPoints;
+            string newScoreText = "Eater Score: " + eaterPoints;
+            eaterScoreText.text = newScoreText;
+        }
+
+        [PunRPC]
+        public void UpdateAliveText(int newDeath)
+        {
+            eatersDead += newDeath;
+            string newAliveText = "Eaters Alive: " + (teamManager.GetTeamMembersCount(1) - eatersDead);
+            eatersAliveText.text = newAliveText;
+        }
 
         [PunRPC]
         public void Spawn(int spawnLoc, string playerId)
