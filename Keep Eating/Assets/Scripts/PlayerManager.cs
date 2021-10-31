@@ -55,6 +55,7 @@ namespace Com.tuf31404.KeepEating
         private GameStateManager gsm;
         private bool isAlive;
         private bool facingLeft;
+        private SpriteRenderer mySpriteRenderer;
         
 
 
@@ -80,6 +81,7 @@ namespace Com.tuf31404.KeepEating
             //Only the player prefab that you control can call these methods.
             if (photonView.IsMine)
             {
+                mySpriteRenderer = this.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
                 Debug.Log("PLAYER MANAGER START");
                 //Camera movement - see CameraMovement script
                 cameraMovement = this.gameObject.GetComponent<CameraMovement>();
@@ -122,6 +124,7 @@ namespace Com.tuf31404.KeepEating
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
                 facingLeft = true;
+                weapon = null;
             }
         }
 
@@ -168,11 +171,11 @@ namespace Com.tuf31404.KeepEating
             //Changes sprite depending on team.
             if (myTeam == 1)
             {
-                this.gameObject.GetComponent<SpriteRenderer>().sprite = eaterSprite;
+                mySpriteRenderer.sprite = eaterSprite;
             }
             else
             {
-                this.gameObject.GetComponent<SpriteRenderer>().sprite = enforcerSprite;
+                mySpriteRenderer.sprite = enforcerSprite;
             }
 
         }
@@ -181,6 +184,18 @@ namespace Com.tuf31404.KeepEating
         {
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
+
+            if (facingLeft && h > 0)
+            {
+                mySpriteRenderer.flipX = true;
+                facingLeft = false;
+            }
+            else if (!facingLeft && h < 0)
+            {
+                mySpriteRenderer.flipX = false;
+                facingLeft = true;
+            }
+
 
             //transform.position is the Game Object's position
             pos = transform.position;
@@ -200,16 +215,17 @@ namespace Com.tuf31404.KeepEating
             float angle = Mathf.Atan2(mousepos.y, mousepos.x) * Mathf.Rad2Deg;
 
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            this.gameObject.transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             
             if (weapon != null)
             {
                 if (mousepos.x < 0)
                 {
-                    weapon.GetComponent<SpriteRenderer>().flipY = false;
+                    weapon.transform.GetComponentInChildren<SpriteRenderer>().flipY = false;
                 }
                 else
                 {
-                    weapon.GetComponent<SpriteRenderer>().flipY = true;
+                    weapon.transform.GetComponentInChildren<SpriteRenderer>().flipY = true;
                 }
             }
 
@@ -336,11 +352,11 @@ namespace Com.tuf31404.KeepEating
             photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, photonView.ViewID);
             if (teamNum == 1)
             {
-                this.gameObject.GetComponent<SpriteRenderer>().sprite = eaterSprite;
+                mySpriteRenderer.sprite = eaterSprite;
             }
             else
             {
-                this.gameObject.GetComponent<SpriteRenderer>().sprite = enforcerSprite;
+                mySpriteRenderer.sprite = enforcerSprite;
             }
         }
 
@@ -393,13 +409,13 @@ namespace Com.tuf31404.KeepEating
         {
             if (photonView.ViewID == pvId)
             {
-                this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                mySpriteRenderer.enabled = false;
                 IEnumerator coroutine = RespawnWaiter(pvId);
                 StartCoroutine(coroutine);
             }
             else
             {
-                PhotonView.Find(pvId).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
         
@@ -408,7 +424,7 @@ namespace Com.tuf31404.KeepEating
         {
             if (photonView.ViewID == pvId)
             {
-                this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                mySpriteRenderer.enabled = true;
                 this.gameObject.transform.position = pos;
                 Health = 1f;
                 isAlive = true;
@@ -416,7 +432,7 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 GameObject obj = PhotonView.Find(pvId).gameObject;
-                obj.GetComponent<SpriteRenderer>().enabled = true;
+                obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 obj.transform.position = pos;
                 obj.GetComponent<PlayerManager>().Health = 1f;
             }
@@ -425,7 +441,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void SetTeam(byte teamId, int viewId)
         {
-            SpriteRenderer playerSprite = PhotonView.Find(viewId).gameObject.GetComponent<SpriteRenderer>();
+            SpriteRenderer playerSprite = PhotonView.Find(viewId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
             if (teamId == 1)
             {
                 playerSprite.sprite = eaterSprite;
