@@ -315,13 +315,30 @@ namespace Com.tuf31404.KeepEating
             }
             else if (collision.gameObject.tag.Equals("Food") && myTeam == 1)
             {
+                if (foodId != collision.gameObject.GetComponent<PhotonView>().ViewID){
                     foodId = collision.gameObject.GetComponent<PhotonView>().ViewID;
                     Debug.Log("foodId = " + foodId);
                     foodCollision = true;
+                }
             }
-            else
+
+        }
+
+        void OnTriggerExit2D(Collider2D other)
+        {
+            if (!this.photonView.IsMine)
             {
+                return;
+            }
+
+            if (other.gameObject.tag.Equals("Gun"))
+            {
+                tempWeapon = null;
                 gunCollision = false;
+            }
+            else if (other.gameObject.tag.Equals("Food"))
+            {
+                foodId = -1;
                 foodCollision = false;
             }
         }
