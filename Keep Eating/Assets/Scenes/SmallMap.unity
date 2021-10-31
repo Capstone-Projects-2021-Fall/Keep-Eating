@@ -279,8 +279,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d748422f747197c44a4f9d0b94a2161c, type: 3}
 --- !u!4 &16730055 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7686387433991032847, guid: d748422f747197c44a4f9d0b94a2161c,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 16730054}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &36778974
@@ -1462,7 +1461,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -105541197
-  m_SortingLayer: 3
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2256,7 +2255,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -44025399
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -4378,8 +4377,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9ad7d6ca4baef6e4bb5802345eb707cf, type: 3}
 --- !u!4 &206988548 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 806117610931546320, guid: 9ad7d6ca4baef6e4bb5802345eb707cf,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 206988547}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &214554840
@@ -4794,8 +4792,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9129e0d4ed822f14789ad88df12038b7, type: 3}
 --- !u!4 &230693932 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1904250644200797219, guid: 9129e0d4ed822f14789ad88df12038b7,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 230693931}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &232070703
@@ -6100,8 +6097,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d748422f747197c44a4f9d0b94a2161c, type: 3}
 --- !u!4 &367154444 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7686387433991032847, guid: d748422f747197c44a4f9d0b94a2161c,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 367154443}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &375168477
@@ -6265,7 +6261,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -10659,8 +10655,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d48d4084fa420514ba32a7ead7f507ce, type: 3}
 --- !u!4 &384721963 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8182747774936944020, guid: d48d4084fa420514ba32a7ead7f507ce,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 384721962}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &391280674
@@ -12620,8 +12615,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d48d4084fa420514ba32a7ead7f507ce, type: 3}
 --- !u!4 &554205435 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8182747774936944020, guid: d48d4084fa420514ba32a7ead7f507ce,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 554205434}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &563320245
@@ -14653,8 +14647,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9129e0d4ed822f14789ad88df12038b7, type: 3}
 --- !u!4 &721994076 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1904250644200797219, guid: 9129e0d4ed822f14789ad88df12038b7,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 721994075}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &723443629
@@ -16345,8 +16338,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9ad7d6ca4baef6e4bb5802345eb707cf, type: 3}
 --- !u!4 &882870751 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 806117610931546320, guid: 9ad7d6ca4baef6e4bb5802345eb707cf,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 882870750}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &885005045
@@ -20263,7 +20255,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -44025399
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -22777,7 +22769,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -28091,7 +28083,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -28995,8 +28987,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9ad7d6ca4baef6e4bb5802345eb707cf, type: 3}
 --- !u!4 &1526198351 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 806117610931546320, guid: 9ad7d6ca4baef6e4bb5802345eb707cf,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1526198350}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1529558665
@@ -29160,7 +29151,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -44025399
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -30281,8 +30272,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9129e0d4ed822f14789ad88df12038b7, type: 3}
 --- !u!4 &1616853993 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1904250644200797219, guid: 9129e0d4ed822f14789ad88df12038b7,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1616853992}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1621208460
@@ -32002,7 +31992,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -105541197
-  m_SortingLayer: 3
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -33115,23 +33105,23 @@ Transform:
   m_LocalPosition: {x: 3.489845, y: 16.246456, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3183052664862984900}
-  - {fileID: 1962285981}
+  - {fileID: 16730055}
+  - {fileID: 206988548}
+  - {fileID: 230693932}
+  - {fileID: 367154444}
   - {fileID: 384721963}
   - {fileID: 554205435}
-  - {fileID: 2869392701504147524}
+  - {fileID: 721994076}
   - {fileID: 882870751}
   - {fileID: 1526198351}
-  - {fileID: 206988548}
-  - {fileID: 6496344470456838645}
-  - {fileID: 721994076}
-  - {fileID: 230693932}
   - {fileID: 1616853993}
-  - {fileID: 3014519356863525767}
-  - {fileID: 16730055}
+  - {fileID: 1962285981}
   - {fileID: 2098471149}
-  - {fileID: 367154444}
+  - {fileID: 2869392701504147524}
+  - {fileID: 3014519356863525767}
+  - {fileID: 3183052664862984900}
   - {fileID: 4081576102183527918}
+  - {fileID: 6496344470456838645}
   - {fileID: 1019445143}
   - {fileID: 1176605114}
   - {fileID: 862079305}
@@ -33805,8 +33795,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d48d4084fa420514ba32a7ead7f507ce, type: 3}
 --- !u!4 &1962285981 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8182747774936944020, guid: d48d4084fa420514ba32a7ead7f507ce,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1962285980}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1979578892
@@ -34760,8 +34749,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d748422f747197c44a4f9d0b94a2161c, type: 3}
 --- !u!4 &2098471149 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7686387433991032847, guid: d748422f747197c44a4f9d0b94a2161c,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 2098471148}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2102143623
@@ -35040,7 +35028,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1869315837
-  m_SortingLayer: 1
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -36293,8 +36281,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9ad7d6ca4baef6e4bb5802345eb707cf, type: 3}
 --- !u!4 &2869392701504147524 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 806117610931546320, guid: 9ad7d6ca4baef6e4bb5802345eb707cf,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 2869392701504147523}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2877314784266957408
@@ -36437,8 +36424,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d748422f747197c44a4f9d0b94a2161c, type: 3}
 --- !u!4 &3014519356863525767 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7686387433991032847, guid: d748422f747197c44a4f9d0b94a2161c,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 3014519356863525766}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3183052664862984899
@@ -36512,8 +36498,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: d48d4084fa420514ba32a7ead7f507ce, type: 3}
 --- !u!4 &3183052664862984900 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8182747774936944020, guid: d48d4084fa420514ba32a7ead7f507ce,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 3183052664862984899}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3331498173276343792 stripped
@@ -37116,6 +37101,108 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef67ba864d1ecc042b5f4cf48455c0a6, type: 3}
+--- !u!1 &5628018140380570486 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5628018141983903104, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5628018140380570485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &5628018140380570487
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628018140380570486}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 87e2452fe2c754248926c9a9ab93a467, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &5724624599686979093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37485,8 +37572,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9129e0d4ed822f14789ad88df12038b7, type: 3}
 --- !u!4 &6496344470456838645 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1904250644200797219, guid: 9129e0d4ed822f14789ad88df12038b7,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 6496344470456838644}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6496344470456838646 stripped
