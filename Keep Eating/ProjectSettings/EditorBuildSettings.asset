@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dashboard.unity
     guid: f4b567996bae07a4b8c841ff402cdb3c
+  - enabled: 1
+    path: Assets/Scenes/Logoff.unity
+    guid: c20253f07821b984b9dc0a69a6fa079c
   - enabled: 0
     path: Assets/Scenes/Main Menu.unity
     guid: bf1f5bc7a2b5cb647aaca4ae7a497f3b
