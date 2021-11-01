@@ -11,6 +11,7 @@ public class UserLogin : MonoBehaviour
     public InputField userNameField;
     public InputField passwordField;
     public Button loginButton;
+    public Text Prompt;
 
     // Start is called before the first frame update
     void Start()
@@ -36,11 +37,13 @@ public class UserLogin : MonoBehaviour
         string foundPassword;
         if (staffDetails.TryGetValue(userName, out foundPassword) && (foundPassword == password))
         {
+            Prompt.text = "Logging in...";
             Debug.Log("User authenticated");
             SceneManager.LoadScene("Dashboard");
         }
         else
         {
+            Prompt.text = "Invalid Username or Password";
             Debug.Log("Invalid password");
         }
     }
