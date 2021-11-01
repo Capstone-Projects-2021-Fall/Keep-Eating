@@ -122,7 +122,7 @@ namespace Com.tuf31404.KeepEating
             {
                 GameOver("Death");
             }
-            else if (eaterPoints == pointsToWin)
+            else if (eaterPoints >= pointsToWin)
             {
                 GameOver("Points");
             }
