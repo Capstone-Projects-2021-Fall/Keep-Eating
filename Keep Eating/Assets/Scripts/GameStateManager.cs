@@ -236,14 +236,14 @@ namespace Com.tuf31404.KeepEating
         {
             string objectName = respawnObject.name;
             if (objectName.Contains("Food1")){
-                AddPoints(10);
+                AddPoints(5);
             }
             else if (objectName.Contains("Food2")){
-                 AddPoints(20);
+                 AddPoints(10);
             }
             else
             {
-                AddPoints(30);
+                AddPoints(15);
             }
             Vector3 foodPos = respawnObject.transform.position;
             string food = "Food";
