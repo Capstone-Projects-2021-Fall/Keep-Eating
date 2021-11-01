@@ -115,6 +115,15 @@ namespace Com.tuf31404.KeepEating
             {
                 PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn (1)").transform.position, Quaternion.identity);
             }
+            rand = UnityEngine.Random.Range(1, 3);
+            if (rand == 1)
+            {
+                PhotonNetwork.Instantiate("Revolver", GameObject.Find("WeaponSpawn (2)").transform.position, Quaternion.identity);
+            }
+            else
+            {
+                PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn (2)").transform.position, Quaternion.identity);
+            }
         }
 
         // Checks for win conditions.
