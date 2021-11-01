@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -620,6 +621,7 @@ namespace Com.tuf31404.KeepEating
 
         void CalledOnLevelWasLoaded(int level)
         {
+            
             // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
             if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
             {
@@ -630,18 +632,21 @@ namespace Com.tuf31404.KeepEating
             _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
 
             cameraMovement.GetCamera();
-            if (this.photonView.IsMine)
+            if (!SceneManager.GetActiveScene().name.Equals("Lobby"))
             {
-                gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
-                gsm.player = this;
-                if (PhotonNetwork.IsMasterClient)
+                if (this.photonView.IsMine)
                 {
-                    gsm.SpawnPlayers();
-                    //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
-                    gsm.SpawnFood();
-                    gsm.SpawnWeapons();
-                    gsm.eaterCount = 0;
-                }     
+                    gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
+                    gsm.player = this;
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        gsm.SpawnPlayers();
+                        //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                        gsm.SpawnFood();
+                        gsm.SpawnWeapons();
+                        gsm.eaterCount = 0;
+                    }
+                }
             }
         }
 

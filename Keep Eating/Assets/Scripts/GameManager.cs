@@ -35,6 +35,7 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+
             Instance = this;
             if (playerPrefab == null)
             {
@@ -57,7 +58,7 @@ namespace Com.tuf31404.KeepEating
 
             UnityEngine.UI.Text codeText = GameObject.Find("Lobby Code").GetComponent<UnityEngine.UI.Text>();
             codeText.text = PhotonNetwork.CurrentRoom.Name;         //Lobby code
-            DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
+            //DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
             DontDestroyOnLoad(GameObject.Find("Team Manager"));     //Team Manager object goes to the map
             startButton.onClick.AddListener(() => StartGame());     //Start button listener
         }

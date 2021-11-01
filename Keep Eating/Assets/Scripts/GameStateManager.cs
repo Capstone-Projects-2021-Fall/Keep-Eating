@@ -33,6 +33,7 @@ namespace Com.tuf31404.KeepEating
         private Text hudText;                           //The text GameObject that displays the time.
         private Text eaterScoreText;
         private Text eatersAliveText;
+        private bool isRunning;
         Dictionary<int, Player> players;
         public PlayerManager player;
         [SerializeField]
@@ -58,6 +59,7 @@ namespace Com.tuf31404.KeepEating
             eaterScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
             eatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
             eatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+            isRunning = true;
         }
 
         public void SpawnPlayers()
@@ -118,13 +120,16 @@ namespace Com.tuf31404.KeepEating
         // Checks for win conditions.
         void Update()
         {
-            if (eatersDead == teamManager.GetTeamMembersCount(1))
+            if (isRunning)
             {
-                GameOver("Death");
-            }
-            else if (eaterPoints >= pointsToWin)
-            {
-                GameOver("Points");
+                if (eatersDead == teamManager.GetTeamMembersCount(1))
+                {
+                    GameOver("Death");
+                }
+                else if (eaterPoints >= pointsToWin)
+                {
+                    GameOver("Points");
+                }
             }
         }
 
@@ -137,6 +142,7 @@ namespace Com.tuf31404.KeepEating
         */
         public void GameOver(string cause)
         {
+            isRunning = false;
             switch (cause)
             {
                 case "Death":
@@ -156,9 +162,26 @@ namespace Com.tuf31404.KeepEating
                     break;
             }
 
-
+                PhotonTeamExtensions.LeaveCurrentTeam(PhotonNetwork.LocalPlayer);
+                PhotonNetwork.AutomaticallySyncScene = true;
+                if (PhotonNetwork.IsMasterClient)
+            {
+                StartCoroutine("WaitForLeaveTeam");
+            }
+            
         }
 
+        IEnumerator WaitForLeaveTeam()
+        {
+            while (teamManager.GetTeamMembersCount(1) > 0 && teamManager.GetTeamMembersCount(2) > 0)
+            {
+                yield return null;
+            }
+            teamManager = null;
+            Destroy(GameObject.Find("Team Manager"));
+            Destroy(GameObject.Find("Game Manager"));
+            PhotonNetwork.LoadLevel("Lobby");
+        }
 
         public void AddPoints(int points)
         {
