@@ -202,11 +202,12 @@ namespace Com.tuf31404.KeepEating
 
             //transform.position is the Game Object's position
             pos = transform.position;
-
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
-
             transform.position = pos;
+            
+
+            
 
             
             Vector3 mousepos = Input.mousePosition;
