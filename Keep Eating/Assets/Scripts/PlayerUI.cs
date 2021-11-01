@@ -13,6 +13,7 @@ namespace Com.tuf31404.KeepEating
 {
     public class PlayerUI : MonoBehaviour
     {
+        private PlayerManagerV2 target2;
 
         private PlayerManager target;
 

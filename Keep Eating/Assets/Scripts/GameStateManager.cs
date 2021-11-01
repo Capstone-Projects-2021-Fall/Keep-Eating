@@ -23,6 +23,12 @@ namespace Com.tuf31404.KeepEating
 {
     public class GameStateManager : MonoBehaviourPunCallbacks
     {
+        private GameObject[] eaterSpawns;
+        private GameObject[] enforcerSpawns;
+        private GameObject[] foodSpawn;
+        private GameObject[] weaponSpawns;
+
+
         private PhotonTeamsManager teamManager;         //Gives access to team info. Specifically number of players.
         private int eatersDead;
         private int eaterPoints;
@@ -46,6 +52,8 @@ namespace Com.tuf31404.KeepEating
             foodSpawns[2] = GameObject.Find("FoodSpawn (2)").transform.position;
             foodSpawns[3] = GameObject.Find("FoodSpawn (3)").transform.position;
             foodSpawns[4] = GameObject.Find("FoodSpawn (4)").transform.position;
+
+            InitArrays();
         }
         // Start is called before the first frame update
         void Start()
@@ -60,6 +68,36 @@ namespace Com.tuf31404.KeepEating
             eatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
         }
 
+
+        // TODO make generic for different maps
+        private void InitArrays()
+        {
+            eaterSpawns = new GameObject[3];
+            enforcerSpawns = new GameObject[2];
+            foodSpawn = new GameObject[5];
+            weaponSpawns = new GameObject[2];
+            for (int i = 0; i < 3; i++)
+            {
+                string spName = "EaterSpawn" + i;
+                eaterSpawns[i] = GameObject.Find(spName);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                string spName = "EnforcerSpawn" + i;
+                enforcerSpawns[i] = GameObject.Find(spName);
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                string spName = "FoodSpawn" + i;
+                foodSpawn[i] = GameObject.Find(spName);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                string spName = "WeaponSpawn" + i;
+                weaponSpawns[i] = GameObject.Find(spName);
+            }
+
+        }
         public void SpawnPlayers()
         {
             players = PhotonNetwork.CurrentRoom.Players;

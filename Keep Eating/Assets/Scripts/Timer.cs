@@ -19,6 +19,7 @@ public class Timer : MonoBehaviour
     public Text timerText;
     [SerializeField]
     PhotonView pV;
+    
     void Start()
     {
         //Master Client gets the start time and sends it to the other players.

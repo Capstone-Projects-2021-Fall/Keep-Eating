@@ -22,7 +22,7 @@ namespace Com.tuf31404.KeepEating
     {
 
         public static GameManager Instance;                 //I forget what this is for lol.
-        public GameObject playerPrefab;                     //Player prefab has no sprite until player joins a team.
+        public GameObject playerPrefab;                     //Change to PlayerV2
         private const byte playersNeededToStart = 2;
         [SerializeField]
         private GameSettings gameSettings;                  //Not sure if we need this
