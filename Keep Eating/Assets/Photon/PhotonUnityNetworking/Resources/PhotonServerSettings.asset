@@ -53,6 +53,9 @@ MonoBehaviour:
   - HitByBullet
   - showDeadPlayer
   - showAlivePlayer
+  - callRespawn
+  - Respawn
+  - destroyFood
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

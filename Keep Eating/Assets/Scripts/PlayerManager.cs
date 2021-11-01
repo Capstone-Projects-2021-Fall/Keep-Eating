@@ -268,7 +268,10 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (!PhotonNetwork.IsMasterClient)
                     {
-                        this.photonView.RPC("PickUpFood", RpcTarget.MasterClient, foodId);
+                        PickUpFood(foodId);
+                        PhotonNetwork.Destroy(PhotonView.Find(foodId).gameObject);
+                        this.photonView.RPC("destroyFood", RpcTarget.All, foodId);
+
                     }
                     else
                     {
@@ -518,6 +521,12 @@ namespace Com.tuf31404.KeepEating
         }
 
         [PunRPC]
+        void callRespawn(GameObject gmOb)
+        {
+            gsm.Respawn(gmOb);
+        }
+
+        [PunRPC]
         void PickUpFood(int _foodId)
         {
             if (photonView.IsMine) {
@@ -548,6 +557,43 @@ namespace Com.tuf31404.KeepEating
         void ShootGun(int gunId)
         {
             PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
+        }
+
+        [PunRPC]
+        void destroyFood(int foodId)
+        {
+            PhotonNetwork.Destroy(PhotonView.Find(foodId).gameObject);
+        }
+        [PunRPC]
+        public void Respawn(GameObject respawnObject)
+        {
+            string objectName = respawnObject.name;
+            if (objectName.Contains("Food1"))
+            {
+                gsm.AddPoints(10);
+            }
+            else if (objectName.Contains("Food2"))
+            {
+                gsm.AddPoints(20);
+            }
+            else
+            {
+                gsm.AddPoints(30);
+            }
+            Vector3 foodPos = respawnObject.transform.position;
+            string food = "Food";
+            food += UnityEngine.Random.Range(1, 4);
+            IEnumerator coroutine = SpawnWaiter(foodPos, food);
+
+            StartCoroutine(coroutine);
+            PhotonNetwork.Destroy(respawnObject);
+        }
+
+        IEnumerator SpawnWaiter(Vector3 pos, string prefabName)
+        {
+            float waitTime = UnityEngine.Random.Range(20, 40);
+            yield return new WaitForSeconds(waitTime);
+            PhotonNetwork.Instantiate(prefabName, pos, Quaternion.identity);
         }
         #endregion
 

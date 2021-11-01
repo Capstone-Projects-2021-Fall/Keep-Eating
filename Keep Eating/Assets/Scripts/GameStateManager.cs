@@ -208,6 +208,7 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        [PunRPC]
         public void Respawn(GameObject respawnObject)
         {
             string objectName = respawnObject.name;
