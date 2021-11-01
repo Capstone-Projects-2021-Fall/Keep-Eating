@@ -15,14 +15,18 @@ public class ItemSpawnScript : MonoBehaviour
     [SerializeField]
     private Collider2D myCollider;
 
+    public string ItemType { get; set; }
+
     void Start()
     {
         mySpriteRenderer.enabled = false;
         myCollider.enabled = false;
     }
 
-    public void Spawn(int spriteId)
+    public void Spawn(int spriteId, string item)
     {
+        this.ItemType = item;
+
         switch (spriteId)
         {
             case 1:

@@ -16,7 +16,7 @@ public class BulletScript : MonoBehaviour
     private Vector3 mousePos;
     private Vector3 direction = Vector3.zero;
     private bool hasDirection;
-    public int BulletID {get; set;}
+    public string BulletName {get; set;}
 
     void Awake()
     {
