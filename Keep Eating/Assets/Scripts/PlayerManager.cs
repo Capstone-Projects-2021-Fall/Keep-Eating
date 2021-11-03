@@ -180,7 +180,6 @@ namespace Com.tuf31404.KeepEating
             {
                 mySpriteRenderer.sprite = enforcerSprite;
             }
-
         }
 
         void ProcessInputs()
@@ -408,13 +407,13 @@ namespace Com.tuf31404.KeepEating
                 switch (spawnNum)
                 {
                     case 0:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn0").transform.position;
                         break;
                     case 1:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (1)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn1").transform.position;
                         break;
                     case 2:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (2)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn2").transform.position;
                         break;
                     default:
                         Debug.Log("Oops enforcer spawn");
@@ -426,10 +425,10 @@ namespace Com.tuf31404.KeepEating
                 switch (spawnNum)
                 {
                     case 0:
-                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn0").transform.position;
                         break;
                     case 1:
-                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn (1)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn1").transform.position;
                         break;
                     default:
                         Debug.Log("Oops enforcer spawn");
@@ -582,7 +581,7 @@ namespace Com.tuf31404.KeepEating
             if (this.photonView.IsMine)
             {
                 gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
-                gsm.player = this;
+                //gsm.player = this;
                 if (PhotonNetwork.IsMasterClient)
                 {
                     gsm.SpawnPlayers();

@@ -1750,6 +1750,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3001972704290332362}
     - target: {fileID: 1782843955392005252, guid: 951701b3cf15da14f952d17fb8b7a0e3, type: 3}
+      propertyPath: playerPrefab
+      value: 
+      objectReference: {fileID: 7256038475050025305, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+    - target: {fileID: 1782843955392005252, guid: 951701b3cf15da14f952d17fb8b7a0e3, type: 3}
       propertyPath: teamsManager
       value: 
       objectReference: {fileID: 1823067687}

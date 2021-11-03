@@ -28,7 +28,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   PlayerUiPrefab: {fileID: 2435905971791411649, guid: 243f2f14754f22b4aa038be006425126, type: 3}
-  Health: 1
   eaterSprite: {fileID: 21300000, guid: 48cd8048939cc274dae16a9493829244, type: 3}
   enforcerSprite: {fileID: 21300000, guid: 4836c09be31426e49b52ea966be0a3c8, type: 3}
   shotgunSprite: {fileID: -3695664891932108249, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
@@ -38,6 +37,7 @@ MonoBehaviour:
   shootScript: {fileID: 5156995716958531386}
   muzzleTransform: {fileID: 4356547124849860138}
   bulletPrefab: {fileID: 0}
+  Health: 1
 --- !u!1001 &3386362974971726178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92,6 +92,10 @@ PrefabInstance:
     - target: {fileID: 5353768009470380091, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_Name
       value: PLAYERV2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380091, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -6218141509021814892, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}

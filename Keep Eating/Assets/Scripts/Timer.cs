@@ -9,49 +9,52 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class Timer : MonoBehaviour
-{
-    bool startTimer = false;
-    double timerIncrementValue;
-    double startTime;
-    [SerializeField] 
-    double timer = 20; 
-    public Text timerText;
-    [SerializeField]
-    PhotonView pV;
-    
-    void Start()
+namespace Com.tuf31404.KeepEating {
+    public class Timer : MonoBehaviour
     {
-        //Master Client gets the start time and sends it to the other players.
-        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        bool startTimer = false;
+        double timerIncrementValue;
+        double startTime;
+        [SerializeField]
+        double timer = 20;
+        public Text timerText;
+        [SerializeField]
+        PhotonView pV;
+
+        void Start()
         {
-            startTime = PhotonNetwork.Time;
+            //Master Client gets the start time and sends it to the other players.
+            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                startTime = PhotonNetwork.Time;
+                startTimer = true;
+                
+                pV.RPC("SetTimer", RpcTarget.AllBuffered, startTime);
+            }
+
+            timerText.text = "" + timer;
+        }
+
+        [PunRPC]
+        void SetTimer(double _startTime)
+        {
+            startTime = _startTime;
             startTimer = true;
-            pV.RPC("SetTimer", RpcTarget.Others, startTime);
         }
-        
-        timerText.text = "" + timer;
-    }
 
-    [PunRPC]
-    void SetTimer(double _startTime)
-    {
-        startTime = _startTime;
-        startTimer = true;
-    }
+        void Update()
+        {
+            if (!startTimer) return;
+            timerIncrementValue = PhotonNetwork.Time - startTime;
 
-    void Update()
-    {
-        if (!startTimer) return;
-        timerIncrementValue = PhotonNetwork.Time - startTime;
-        
-        if (timerIncrementValue > timer)
-        {
-            timerText.text = "Game Over";
-        }
-        else
-        {
-            timerText.text = "" + (int)(timer - timerIncrementValue);
+            if (timerIncrementValue > timer)
+            {
+                timerText.text = "Game Over";
+            }
+            else
+            {
+                timerText.text = "" + (int)(timer - timerIncrementValue);
+            }
         }
     }
 }

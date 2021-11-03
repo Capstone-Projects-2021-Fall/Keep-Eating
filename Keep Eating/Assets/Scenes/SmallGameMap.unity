@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2759654943104344653, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_Name
-      value: Food2
+      value: FoodSpawn2
       objectReference: {fileID: 0}
     - target: {fileID: 4995819252602320951, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_RootOrder
@@ -233,7 +233,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3908277276299279961, guid: 8656451cdd3975d4791ba5f31230c506, type: 3}
       propertyPath: m_Name
-      value: Weapon0
+      value: WeaponSpawn0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3908277276299279961, guid: 8656451cdd3975d4791ba5f31230c506, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8656451cdd3975d4791ba5f31230c506, type: 3}
@@ -328,6 +332,7 @@ GameObject:
   - component: {fileID: 287405232}
   - component: {fileID: 287405231}
   - component: {fileID: 287405233}
+  - component: {fileID: 287405234}
   m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
@@ -412,7 +417,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: 500
   timerText: {fileID: 287405231}
-  pV: {fileID: 0}
+  pV: {fileID: 287405234}
+--- !u!114 &287405234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287405229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &325207084
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +728,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2759654943104344653, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_Name
-      value: Food4
+      value: FoodSpawn4
       objectReference: {fileID: 0}
     - target: {fileID: 4995819252602320951, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_RootOrder
@@ -818,7 +845,7 @@ GameObject:
   - component: {fileID: 935941208}
   m_Layer: 0
   m_Name: Game State Manager
-  m_TagString: Untagged
+  m_TagString: GSM
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -835,9 +862,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f418bd78624e6154da9466dc2c7a580c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodPrefab: {fileID: 0}
   eaterCount: 0
   player: {fileID: 0}
-  pv: {fileID: 0}
+  pV: {fileID: 0}
 --- !u!4 &935941209
 Transform:
   m_ObjectHideFlags: 0
@@ -1079,7 +1107,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2759654943104344653, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_Name
-      value: Food0
+      value: FoodSpawn0
       objectReference: {fileID: 0}
     - target: {fileID: 4995819252602320951, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_RootOrder
@@ -1259,7 +1287,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3908277276299279961, guid: 8656451cdd3975d4791ba5f31230c506, type: 3}
       propertyPath: m_Name
-      value: Weapon1
+      value: WeaponSpawn1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3908277276299279961, guid: 8656451cdd3975d4791ba5f31230c506, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8656451cdd3975d4791ba5f31230c506, type: 3}
@@ -1272,7 +1304,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2759654943104344653, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_Name
-      value: Food3
+      value: FoodSpawn3
       objectReference: {fileID: 0}
     - target: {fileID: 4995819252602320951, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_RootOrder
@@ -1329,7 +1361,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2759654943104344653, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_Name
-      value: Food1
+      value: FoodSpawn1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2759654943104344653, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4995819252602320951, guid: 895f09b5fb9ba8b40800ed2885000ce6, type: 3}
       propertyPath: m_RootOrder
