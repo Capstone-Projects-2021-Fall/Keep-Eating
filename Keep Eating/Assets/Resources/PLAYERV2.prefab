@@ -93,6 +93,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380070, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5288826
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Size.y
+      value: 1.5509193
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.000000059604645
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.011018395
+      objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380091, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_Name
       value: PLAYERV2

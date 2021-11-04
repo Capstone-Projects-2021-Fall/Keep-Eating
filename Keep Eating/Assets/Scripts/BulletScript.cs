@@ -44,4 +44,10 @@ public class BulletScript : MonoBehaviour
         direction = _direction;
         hasDirection = true;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision Detected");
+        Destroy(this.gameObject);
+    }
 }

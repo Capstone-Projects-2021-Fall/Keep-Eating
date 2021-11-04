@@ -469,11 +469,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void HitByBullet(int viewId, string bulletName)
         {
-            if (photonView.IsMine)
-            {
-                Destroy(GameObject.Find(bulletName));
-                PhotonView.Find(viewId).gameObject.GetComponent<PlayerManager>().Health -= 0.1f;
-            }
+            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 0.1f;
         }
 
 
