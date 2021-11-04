@@ -476,8 +476,6 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-            if (photonView.IsMine)
-            {
                 if (this.photonView.ViewID == pvId)
                 {
                     mySpriteRenderer.enabled = false;
@@ -490,7 +488,6 @@ namespace Com.tuf31404.KeepEating
                     PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
                     PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 }
-            }
         }
 
         [PunRPC]
@@ -647,7 +644,7 @@ namespace Com.tuf31404.KeepEating
         IEnumerator RespawnWaiter(int pvId)
         {
             yield return new WaitForSeconds(10f);
-            GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
+            GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
             photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
         }

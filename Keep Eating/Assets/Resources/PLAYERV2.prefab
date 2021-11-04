@@ -49,6 +49,30 @@ PrefabInstance:
       propertyPath: observableSearch
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380068, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_RootOrder
       value: 0
