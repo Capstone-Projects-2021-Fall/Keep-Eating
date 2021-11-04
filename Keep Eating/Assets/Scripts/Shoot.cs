@@ -16,7 +16,7 @@ namespace Com.tuf31404.KeepEating
         public Rigidbody2D bullet;
         public Transform muzzle;
 
-        // Update is called once per frame
+        /*
         public void ShootGun()
         {
             Debug.Log("in shootgun");
@@ -36,13 +36,14 @@ namespace Com.tuf31404.KeepEating
                 }
             }
         }
+        */
 
         public Vector3 ShootGun(Items weaponType)
         {
             Vector3 mousePos;
             Vector3 direction = new Vector3(0, 0, 0);
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);         //Gets the position of the mouse 
-            if (weaponType.Equals("Shotgun"))
+            if (weaponType == Items.Shotgun)
             {
                 mousePos += Random.insideUnitSphere * 5;                            //This is where the MAGIC happens.
             }

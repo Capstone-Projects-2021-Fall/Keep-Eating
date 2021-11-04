@@ -242,7 +242,7 @@ namespace Com.tuf31404.KeepEating
                     }
                     else
                     {
-                        gameObject.GetComponentInChildren<Shoot>().ShootGun();
+                       // gameObject.GetComponentInChildren<Shoot>().ShootGun();
                     }
                 }
             }
@@ -542,7 +542,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void ShootGun(int gunId)
         {
-            PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
+            //PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
         }
         #endregion
 

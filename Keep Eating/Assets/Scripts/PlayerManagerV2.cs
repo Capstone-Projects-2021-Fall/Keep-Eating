@@ -276,7 +276,7 @@ namespace Com.tuf31404.KeepEating
             {
                 if (hasGun)
                 {
-                    if (weaponType.Equals("Shotgun"))
+                    if (weaponType == Items.Shotgun)
                     {
                         for (int i = 0; i < 5; i++)
                         {
@@ -301,6 +301,7 @@ namespace Com.tuf31404.KeepEating
                     hasGun = true;
                     weaponType = tempWeaponType;
                     photonView.RPC("PickUpGun", RpcTarget.All, photonView.ViewID, weaponType, tempItemName);
+                    tempWeaponType = Items.NA;
                     gunCollision = false;
                 }
 
@@ -540,10 +541,10 @@ namespace Com.tuf31404.KeepEating
         }
 
         [PunRPC]
-        void PickUpGun(int viewId, string _weaponType, string itemName)
+        void PickUpGun(int viewId, Items _weaponType, string itemName)
         {
                 Sprite tempSprite;
-                if (_weaponType.Equals("Shotgun"))
+                if (_weaponType == Items.Shotgun)
                 {
                     tempSprite = shotgunSprite;
                 }
@@ -566,16 +567,9 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void ShootGun(string name, Vector3 direction, Vector3 position)
         {
-            if (photonView.IsMine)
-            {
                 GameObject newBullet = Instantiate(bulletPrefab, position, Quaternion.identity);
                 newBullet.GetComponent<BulletScript>().BulletName = name;
                 newBullet.GetComponent<BulletScript>().SetDirection(direction);
-            }
-            else
-            {
-                Debug.Log("Shootgun rpc error");
-            }
         }
 
         [PunRPC]
