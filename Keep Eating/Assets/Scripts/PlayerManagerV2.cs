@@ -643,10 +643,12 @@ namespace Com.tuf31404.KeepEating
 
         IEnumerator RespawnWaiter(int pvId)
         {
+            GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().Death();
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
             photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
+            GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().PlayerRespawn();
         }
         #region PunCallbacks
 

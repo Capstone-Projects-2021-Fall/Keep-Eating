@@ -229,13 +229,13 @@ namespace Com.tuf31404.KeepEating
 
         public void Death()
         {
-            this.EatersDead++;
+            //this.EatersDead++;
             pV.RPC("UpdateAliveText", RpcTarget.All, 1);
         }
 
         public void PlayerRespawn()
         {
-            this.EatersDead--;
+            //this.EatersDead--;
             pV.RPC("UpdateAliveText", RpcTarget.All, -1);
         }
 
