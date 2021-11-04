@@ -142,16 +142,6 @@ namespace Com.tuf31404.KeepEating
                 
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
 
-                if (PlayerUiPrefab != null)
-                {
-                    GameObject _uiGo = Instantiate(PlayerUiPrefab);
-                    _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-                }
-                else
-                {
-                    Debug.Log("UI is null");
-                    Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUiPrefab reference on player Prefab.", this);
-                }
                 eaterSwitch = GameObject.Find("Eater Button").GetComponent<Button>();
                 enforcerSwitch = GameObject.Find("Enforcer Button").GetComponent<Button>();
 
@@ -168,6 +158,16 @@ namespace Com.tuf31404.KeepEating
                 //old
                 weapon = null;
                 lastFood = 0;
+            }
+            if (PlayerUiPrefab != null)
+            {
+                GameObject _uiGo = Instantiate(PlayerUiPrefab);
+                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            }
+            else
+            {
+                Debug.Log("UI is null");
+                Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUiPrefab reference on player Prefab.", this);
             }
         }
 
@@ -669,12 +669,13 @@ namespace Com.tuf31404.KeepEating
                 transform.position = new Vector3(0f, 5f, 0f);
             }
 
-            GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
-            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            
 
             cameraMovement.GetCamera();
             if (level == 3)
             {
+                GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
+                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
                 photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
                 //Debug.Log("scene loaded called");
                 gsm = GameObject.FindWithTag("GSM").GetComponent<GameStateManager>();
