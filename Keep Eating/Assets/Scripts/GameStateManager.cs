@@ -37,12 +37,12 @@ namespace Com.tuf31404.KeepEating
         public int eaterCount;
         private Vector3[] foodSpawns;
         private Text hudText;                           //The text GameObject that displays the time.
-       
         Dictionary<int, Player> players;
         public PlayerManagerV2 player;
         [SerializeField]
         PhotonView pV;
 
+        public bool ReturnToLobby { get; set; }
         public Text EatersScoreText { get; set; }
         public Text EatersAliveText { get; set; }
 
@@ -81,11 +81,12 @@ namespace Com.tuf31404.KeepEating
             this.EatersDead = 0;
             this.EaterPoints = 0;
             pointsToWin = 100;
-            teamManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
+            teamManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
             hudText = GameObject.Find("Timer").GetComponent<Text>();
             this.EatersScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
             this.EatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
             this.EatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+            this.ReturnToLobby = false;
         }
 
 
@@ -216,8 +217,13 @@ namespace Com.tuf31404.KeepEating
                     Debug.Log("Oh shit something went wrong");
                     break;
             }
-
-
+            
+            if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
+            {
+                this.ReturnToLobby = true;
+                PhotonNetwork.AutomaticallySyncScene = true;
+                PhotonNetwork.LoadLevel("Lobby");
+            }
         }
 
 

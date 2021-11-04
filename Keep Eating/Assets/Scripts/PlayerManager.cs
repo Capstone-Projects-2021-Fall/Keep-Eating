@@ -104,7 +104,7 @@ namespace Com.tuf31404.KeepEating
                 }
 
                 UpdateTeamMax();
-                teamsManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
+                teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
                 //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;

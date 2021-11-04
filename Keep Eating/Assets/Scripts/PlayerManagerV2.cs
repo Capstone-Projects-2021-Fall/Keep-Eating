@@ -71,6 +71,7 @@ namespace Com.tuf31404.KeepEating
         private bool facingLeft;
         private bool gunCollision;
         private bool foodCollision;
+        private bool inGame;
         //strings
         private Items weaponType;
         private Items tempWeaponType;
@@ -103,7 +104,7 @@ namespace Com.tuf31404.KeepEating
                 //PlayerManager.LocalPlayerInstance = this.gameObject;
                 isAlive = true;
             }
-
+            inGame = false;
             //Saves this gameObject instance when the scene is changed.
             DontDestroyOnLoad(this.gameObject);
         }
@@ -135,7 +136,7 @@ namespace Com.tuf31404.KeepEating
 
                 UpdateTeamMax();
 
-                teamsManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
+                teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
                
                 //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
@@ -180,7 +181,7 @@ namespace Com.tuf31404.KeepEating
             if (this.photonView.IsMine && isAlive)
             {
                 ProcessInputs();
-                if (Health <= 0f)
+                if (Health <= 0f && inGame)
                 {
                     //GameManager.Instance.LeaveRoom();
                     isAlive = false;
@@ -646,9 +647,16 @@ namespace Com.tuf31404.KeepEating
             GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().Death();
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
-            int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
-            photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
-            GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().PlayerRespawn();
+            if (spawns.Length != 0)
+            {
+                int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
+                photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().PlayerRespawn();
+            }
+            else
+            {
+                photonView.RPC("PlayerRespawn", RpcTarget.All, pvId, Vector3.zero);
+            }
         }
         #region PunCallbacks
 
@@ -671,11 +679,28 @@ namespace Com.tuf31404.KeepEating
                 transform.position = new Vector3(0f, 5f, 0f);
             }
 
-            
+            if (level == 2)
+            {
+                inGame = false;
+                hasGun = false;
+                weaponType = Items.NA;
+                weaponSpriteRenderer.sprite = null;
+                GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+                foreach(GameObject player in playerObjects)
+                {
+                    PhotonView.Find(player.GetComponent<PhotonView>().ViewID).gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = null;
+                }
+                eaterSwitch = GameObject.Find("Eater Button").GetComponent<Button>();
+                enforcerSwitch = GameObject.Find("Enforcer Button").GetComponent<Button>();
+
+                eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
+                enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
+            }
 
             cameraMovement.GetCamera();
             if (level == 3)
             {
+                inGame = true;
                 GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
                 _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
                 photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
