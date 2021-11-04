@@ -31,8 +31,6 @@ namespace Com.tuf31404.KeepEating
         private GameObject[] enforcerSpawns;
         private GameObject[] foodSpawn;
         private GameObject[] weaponSpawns;
-
-
         private PhotonTeamsManager teamManager;         //Gives access to team info. Specifically number of players.
         private int pointsToWin;
         private int eaterIndex, enforcerIndex;
@@ -72,6 +70,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     Debug.Log("tempPv = " + tempPv.ViewID);
                     pV = tempPv;
+                    Debug.Log("Owner of photon view " + pV + " is " + pV.Owner.NickName);
                     break;
                 }
             }
@@ -117,7 +116,6 @@ namespace Com.tuf31404.KeepEating
                 string spName = "WeaponSpawn" + i;
                 weaponSpawns[i] = GameObject.Find(spName);
             }
-
         }
 
         public void SpawnPlayers()
@@ -125,18 +123,22 @@ namespace Com.tuf31404.KeepEating
             players = PhotonNetwork.CurrentRoom.Players;
             eaterIndex = 0;
             enforcerIndex = 0;
-
+            Debug.Log("players = " + players);
+            Debug.Log("players count = " + PhotonNetwork.CurrentRoom.PlayerCount);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
+                
                 if (PhotonTeamExtensions.GetPhotonTeam(players[i + 1]).Code == 1)
                 {
-                    pV.RPC("SpawnRpc", RpcTarget.AllBuffered, eaterIndex++, players[i+1].UserId);
-                    Debug.Log("UserId = " + players[i + 1].UserId);
+                    pV.RPC("SpawnRpc", players[i+1], eaterIndex++, players[i+1].UserId);
+                    //Debug.Log("UserId = " + players[i + 1].UserId);
+                    Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an eater");
                 }
                 else
                 {
-                    Debug.Log("player id = " + players[i + 1].UserId);
-                    pV.RPC("SpawnRpc", RpcTarget.AllBuffered, enforcerIndex++, players[i + 1].UserId);
+                    //Debug.Log("player id = " + players[i + 1].UserId);
+                    pV.RPC("SpawnRpc", players[i+1], enforcerIndex++, players[i + 1].UserId);
+                   Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an enforcer");
                 }
             }
         }

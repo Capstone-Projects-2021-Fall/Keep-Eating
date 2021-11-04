@@ -82,6 +82,7 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+            DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
             if (this.photonView.IsMine)
             {

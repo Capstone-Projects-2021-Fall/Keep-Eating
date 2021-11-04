@@ -45,6 +45,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2063921439197384138, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: observableSearch
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380068, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_RootOrder
       value: 0

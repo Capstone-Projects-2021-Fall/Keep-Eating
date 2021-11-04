@@ -55,6 +55,10 @@ namespace Com.tuf31404.KeepEating
         private PhotonTeamsManager teamsManager;
         private GameStateManager gsm;
         private Button eaterSwitch, enforcerSwitch;
+        private GameObject[] enforcerSpawns;
+        private GameObject[] eaterSpawns;
+        private GameObject[] foodSpawns;
+        private GameObject[] weaponSpawns;
         //numbers
         private int eaterTeamMax, enforcerTeamMax;
         private int bulletsShot;
@@ -107,11 +111,13 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+            DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
             if (this.photonView.IsMine)
             {
+                Debug.Log("photon view = " + photonView.ViewID);
                 //mySpriteRenderer = this.gameObject.transform.Find("PlayerSpriteRenderer").gameObject.GetComponent<SpriteRenderer>();
-                Debug.Log(this.gameObject.transform.GetChild(0).gameObject.name);
+                //Debug.Log(this.gameObject.transform.GetChild(0).gameObject.name);
                 //Camera movement - see CameraMovement script
                 cameraMovement = this.gameObject.GetComponent<CameraMovement>();
 
@@ -291,6 +297,7 @@ namespace Com.tuf31404.KeepEating
             {
                 if (gunCollision && myTeam == 2)
                 {
+                    Debug.Log("Picking Up Gun");
                     hasGun = true;
                     weaponType = tempWeaponType;
                     photonView.RPC("PickUpGun", RpcTarget.All, photonView.ViewID, weaponType, tempItemName);
@@ -422,6 +429,7 @@ namespace Com.tuf31404.KeepEating
             }
 
             myTeam = teamNum;
+            Debug.Log("my team on start = " + myTeam);
             this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, this.photonView.ViewID);
             if (teamNum == 1)
             {
@@ -435,39 +443,20 @@ namespace Com.tuf31404.KeepEating
 
         public void Spawn(int spawnNum)
         {
-
+            myTeam = PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code;
+            Debug.Log("my team = " + myTeam);
+            Debug.Log("Owner of photon view " + photonView + " is " + photonView.Owner.NickName);
             if (myTeam == 1)
             {
-                switch (spawnNum)
-                {
-                    case 0:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn0").transform.position;
-                        break;
-                    case 1:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn1").transform.position;
-                        break;
-                    case 2:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn2").transform.position;
-                        break;
-                    default:
-                        Debug.Log("Oops enforcer spawn");
-                        break;
-                }
+                LocalPlayerInstance.transform.position = eaterSpawns[spawnNum].transform.position;
+                Debug.Log("objpos = " + this.gameObject.transform.position);
+                Debug.Log("eaterspawns pos = " + eaterSpawns[spawnNum].transform.position);
             }
             else
             {
-                switch (spawnNum)
-                {
-                    case 0:
-                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn0").transform.position;
-                        break;
-                    case 1:
-                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn1").transform.position;
-                        break;
-                    default:
-                        Debug.Log("Oops enforcer spawn");
-                        break;
-                }
+                LocalPlayerInstance.transform.position = enforcerSpawns[spawnNum].transform.position;
+                Debug.Log("objpos = " + this.gameObject.transform.position);
+                Debug.Log("enforcerspawns pos = " + enforcerSpawns[spawnNum].transform.position);
             }
         }
 
@@ -540,23 +529,19 @@ namespace Com.tuf31404.KeepEating
             {
                 playerSprite.sprite = enforcerSprite;
             }
-
+            
         }
 
         [PunRPC]
         void PickUpFood(string _itemName, Items _foodType)
         {
-                Debug.Log("Not pickupfood rpc error");
                 GameObject.Find(_itemName).GetComponent<ItemSpawnScript>().Despawn();
-
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().AddPoints(_itemName, _foodType);
         }
 
         [PunRPC]
         void PickUpGun(int viewId, string _weaponType, string itemName)
         {
-            if (photonView.IsMine)
-            {
                 Sprite tempSprite;
                 if (_weaponType.Equals("Shotgun"))
                 {
@@ -576,11 +561,6 @@ namespace Com.tuf31404.KeepEating
                     PhotonView.Find(viewId).gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().sprite = tempSprite;
                 }
                 GameObject.Find(itemName).GetComponent<ItemSpawnScript>().Despawn();
-            }
-            else
-            {
-                Debug.Log("PickupGun rpc error");
-            }
         }
 
         [PunRPC]
@@ -622,8 +602,11 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void SpawnRpc(int spawnLoc, string playerId)
         {
+
+            Spawn(spawnLoc);
             if (playerId.Equals(PhotonNetwork.LocalPlayer.UserId))
             {
+                Debug.Log("Spawning " + PhotonNetwork.LocalPlayer.NickName + " in pos " + spawnLoc);
                 Spawn(spawnLoc);
             }
             else
@@ -705,7 +688,8 @@ namespace Com.tuf31404.KeepEating
             cameraMovement.GetCamera();
             if (level == 3)
             {
-                Debug.Log("scene loaded called");
+                photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
+                //Debug.Log("scene loaded called");
                 gsm = GameObject.FindWithTag("GSM").GetComponent<GameStateManager>();
                 Debug.Log(gsm.ToString());
                 gsm.player = this;
@@ -720,6 +704,12 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        [PunRPC]
+        private void InitSpawnArrays()
+        {
+            enforcerSpawns = GameObject.FindGameObjectsWithTag("EnforcerSpawn");
+            eaterSpawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
+        }
         public override void OnDisable()
         {
             // Always call the base to remove callbacks

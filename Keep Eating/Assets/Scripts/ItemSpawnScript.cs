@@ -48,8 +48,8 @@ namespace Com.tuf31404.KeepEating
                     break;
             }
 
-            Debug.Log("Spawning " + this.gameObject.name);
-            Debug.Log("SpriteRenderer enabled = " + mySpriteRenderer.enabled);
+            //Debug.Log("Spawning " + this.gameObject.name);
+            //Debug.Log("SpriteRenderer enabled = " + mySpriteRenderer.enabled);
         }
 
         public void Despawn()

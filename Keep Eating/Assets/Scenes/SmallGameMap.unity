@@ -517,6 +517,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnforcerSpawn0
       objectReference: {fileID: 0}
+    - target: {fileID: 2673729170856328406, guid: b74910cc2dd09fb479742967ad729191, type: 3}
+      propertyPath: m_TagString
+      value: EnforcerSpawn
+      objectReference: {fileID: 0}
     - target: {fileID: 4910430034588385117, guid: b74910cc2dd09fb479742967ad729191, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -672,6 +676,10 @@ PrefabInstance:
     - target: {fileID: 2673729170856328406, guid: b74910cc2dd09fb479742967ad729191, type: 3}
       propertyPath: m_Name
       value: EnforcerSpawn1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2673729170856328406, guid: b74910cc2dd09fb479742967ad729191, type: 3}
+      propertyPath: m_TagString
+      value: EnforcerSpawn
       objectReference: {fileID: 0}
     - target: {fileID: 4910430034588385117, guid: b74910cc2dd09fb479742967ad729191, type: 3}
       propertyPath: m_RootOrder
@@ -830,6 +838,10 @@ PrefabInstance:
     - target: {fileID: 7996880126494723124, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
       propertyPath: m_Name
       value: EaterSpawn0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996880126494723124, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
+      propertyPath: m_TagString
+      value: EaterSpawn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
@@ -1095,6 +1107,10 @@ PrefabInstance:
     - target: {fileID: 7996880126494723124, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
       propertyPath: m_Name
       value: EaterSpawn2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996880126494723124, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
+      propertyPath: m_TagString
+      value: EaterSpawn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
@@ -1666,6 +1682,10 @@ PrefabInstance:
     - target: {fileID: 7996880126494723124, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
       propertyPath: m_Name
       value: EaterSpawn1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996880126494723124, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
+      propertyPath: m_TagString
+      value: EaterSpawn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 493ca4de94d071c4398c7c128159d440, type: 3}
