@@ -530,8 +530,24 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void PickUpFood(string _itemName, Items _foodType)
         {
-                GameObject.Find(_itemName).GetComponent<ItemSpawnScript>().Despawn();
+                GameObject food = GameObject.Find(_itemName);
+                food.GetComponent<ItemSpawnScript>().Despawn();
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().AddPoints(_itemName, _foodType);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                IEnumerator coroutine = FoodRespawnWaiter(food);
+                StartCoroutine(coroutine);
+                }
+        }
+
+        IEnumerator FoodRespawnWaiter(GameObject food)
+        {
+            float waitTime = UnityEngine.Random.Range(20, 40);
+            yield return new WaitForSeconds(waitTime);
+            if (food != null)
+            {
+                photonView.RPC("SpawnFoodRpc", RpcTarget.All, food.name, UnityEngine.Random.Range(1, 4));
+            }
         }
 
         [PunRPC]
@@ -621,23 +637,22 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void UpdateScoreText(int newPoints)
         {
-            if (photonView.IsMine)
-            {
-                gsm.EaterPoints = newPoints;
-                string newScoreText = "Eater Score: " + gsm.EaterPoints;
-                gsm.EatersScoreText.text = newScoreText;
-            }
+
+                Debug.Log("Updating score");
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints = newPoints;
+                string newScoreText = "Eater Score: " + GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints;
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersScoreText.text = newScoreText;
+            
         }
 
         [PunRPC]
         public void UpdateAliveText(int newDeath)
         {
-            if (photonView.IsMine)
-            {
-                gsm.EatersDead += newDeath;
-                string newAliveText = "Eaters Alive: " + (teamsManager.GetTeamMembersCount(1) - gsm.EatersDead);
-                gsm.EatersAliveText.text = newAliveText;
-            }
+
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersDead += newDeath;
+                string newAliveText = "Eaters Alive: " + (teamsManager.GetTeamMembersCount(1) - GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersDead);
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAliveText.text = newAliveText;
+           
         }
         #endregion
 

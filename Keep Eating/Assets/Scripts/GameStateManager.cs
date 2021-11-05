@@ -184,7 +184,7 @@ namespace Com.tuf31404.KeepEating
             {
                 GameOver("Death");
             }
-            else if (this.EaterPoints == pointsToWin)
+            else if (this.EaterPoints >= pointsToWin)
             {
                 GameOver("Points");
             }
