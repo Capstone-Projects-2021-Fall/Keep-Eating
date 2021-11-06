@@ -21,12 +21,12 @@ using Photon.Pun.UtilityScripts;            //needed for the PhotonTeamsManager 
 
 namespace Com.tuf31404.KeepEating
 {
-    public enum Items {Fist = 0, Shotgun = 1, Revolver = 2, Noodle = 10,  Egg = 20, Meat = 30, NA = -1}
+    public enum Items {Fist = 0, Shotgun = 1, Revolver = 2, Taser = 3, Noodle = 10,  Egg = 20, Meat = 30, NA = -1}
     public class GameStateManager : MonoBehaviourPunCallbacks
     {
         [SerializeField]
         private GameObject foodPrefab;
-
+        private GameObject Taser;
         private GameObject[] eaterSpawns;
         private GameObject[] enforcerSpawns;
         private GameObject[] foodSpawn;

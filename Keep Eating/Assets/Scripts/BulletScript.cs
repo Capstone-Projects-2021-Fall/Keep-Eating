@@ -1,7 +1,4 @@
-/*
-        THIS SCRIPT IS  P E R F E C T. 
-        D O  N O T  T O U C H.
- */
+
 
 using System.Collections;
 using System.Collections.Generic;

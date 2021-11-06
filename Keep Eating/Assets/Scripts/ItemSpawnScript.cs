@@ -25,6 +25,14 @@ namespace Com.tuf31404.KeepEating
             myCollider.enabled = false;
         }
 
+        private void Start()
+        {
+            if (this.gameObject.name.Contains("Taser"))
+            {
+                mySpriteRenderer.enabled = true;
+                myCollider.enabled = true;
+            }
+        }
         public void Spawn(int spriteId, Items item)
         {
             this.ItemType = item;

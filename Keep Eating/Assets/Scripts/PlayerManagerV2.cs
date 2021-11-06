@@ -10,13 +10,6 @@
         but with the tag [Pun RPC] above it. 
     A photon view is necessary to send an RPC message. 
     The message call and the [Pun RPC] must be in the same class. 
-
-
-    TODO: Add if statements to control what the player can do depending on their team.
-          Revolver pickup.
-          Stop the player from moving if they are dead or stunned.
-          Add fists.
-          Maybe change weapon and food prefab tags and names.
  */
 
 
@@ -41,9 +34,9 @@ namespace Com.tuf31404.KeepEating
         [SerializeField]
         private GameObject PlayerUiPrefab;
         [SerializeField]
-        private Sprite eaterSprite, enforcerSprite, shotgunSprite, revolverSprite;
+        private Sprite eaterSprite, enforcerSprite, shotgunSprite, revolverSprite, taserSprite;
         [SerializeField]
-        private SpriteRenderer mySpriteRenderer, weaponSpriteRenderer;
+        private SpriteRenderer mySpriteRenderer, weaponSpriteRenderer, taserSpriteRenderer;
         [SerializeField]
         private Shoot shootScript;
         [SerializeField]
@@ -71,6 +64,7 @@ namespace Com.tuf31404.KeepEating
         private bool facingLeft;
         private bool gunCollision;
         private bool foodCollision;
+        private bool taserCollision;
         private bool inGame;
         //strings
         private Items weaponType;
@@ -91,6 +85,10 @@ namespace Com.tuf31404.KeepEating
         private int foodId;
         private int lastFood;
         #endregion
+
+        public bool HasTaser { get; set; }
+        public bool FiringTaser{ get; set; }
+
 
         #region Init
         void Awake()
@@ -141,6 +139,7 @@ namespace Com.tuf31404.KeepEating
                 //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
                 
+                //Calls OnSceneLoaded()
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
 
                 eaterSwitch = GameObject.Find("Eater Button").GetComponent<Button>();
@@ -149,6 +148,8 @@ namespace Com.tuf31404.KeepEating
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
 
+                this.HasTaser = false;
+                this.FiringTaser = false;
                 facingLeft = true;
                 hasGun = false;
                 gunCollision = false;
@@ -156,6 +157,7 @@ namespace Com.tuf31404.KeepEating
                 weaponType = Items.Fist;
                 bulletsShot = 0;
                 myPoints = 0;
+
                 //old
                 weapon = null;
                 lastFood = 0;
@@ -292,6 +294,17 @@ namespace Com.tuf31404.KeepEating
                     }
                 }
             }
+            else if (Input.GetButtonDown("Fire1") && myTeam == 1)
+            {
+                if (this.HasTaser)
+                {
+                    this.FiringTaser = true;
+                }
+            }
+            else
+            {
+                this.FiringTaser = false;
+            }
 
 
             if (Input.GetKeyDown(KeyCode.F))
@@ -314,6 +327,13 @@ namespace Com.tuf31404.KeepEating
                     tempFoodType = Items.NA;
                     foodCollision = false;
                 }
+
+                if (taserCollision && myTeam == 1)
+                {
+                    this.HasTaser = true;
+                    weaponType = Items.Taser;
+                    photonView.RPC("PickUpGun", RpcTarget.All, photonView.ViewID, Items.Taser, tempItemName);
+                }
             }
         }
 
@@ -323,17 +343,6 @@ namespace Com.tuf31404.KeepEating
             {
                 return;
             }
-
-            /*
-            if (PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code == 1)
-            {
-                Health -= 0.1f;
-                if (Health >= 0)
-                {
-                    this.photonView.RPC("HitByBullet", RpcTarget.All, this.photonView.ViewID, other.GetComponent<PhotonView>().ViewID);
-                }
-            }
-            */
 
             if (other.gameObject.name.Contains("Weapon"))
             {
@@ -348,6 +357,13 @@ namespace Com.tuf31404.KeepEating
                 tempFoodType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
                 foodCollision = true;
             }
+
+            if (other.gameObject.name.Contains("Taser"))
+            {
+                Debug.Log("Taser trigger");
+                tempItemName = other.gameObject.name;
+                taserCollision = true;
+            }
         }
 
         void OnCollisionEnter2D(Collision2D collision)
@@ -357,7 +373,7 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-            if (collision.gameObject.tag.Equals("Bullet")){
+            if (collision.gameObject.tag.Equals("Bullet") && myTeam == 1){
                 photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
         }
@@ -558,9 +574,13 @@ namespace Com.tuf31404.KeepEating
                 {
                     tempSprite = shotgunSprite;
                 }
-                else
+                else if (_weaponType == Items.Revolver)
                 {
                     tempSprite = revolverSprite;
+                }
+                else
+                {
+                    tempSprite = taserSprite;
                 }
 
                 if (photonView.ViewID == viewId)
