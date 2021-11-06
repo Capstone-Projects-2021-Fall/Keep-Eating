@@ -56,6 +56,8 @@ MonoBehaviour:
   - SpawnFoodRpc
   - SpawnWeaponRpc
   - InitSpawnArrays
+  - InGameTrue
+  - StopMovement
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

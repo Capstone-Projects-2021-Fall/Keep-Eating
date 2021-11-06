@@ -217,7 +217,9 @@ namespace Com.tuf31404.KeepEating
                     Debug.Log("Oh shit something went wrong");
                     break;
             }
-            
+
+            PhotonNetwork.IsMessageQueueRunning = false;
+            player.InGame = false;
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
                 this.ReturnToLobby = true;
