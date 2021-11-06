@@ -760,6 +760,7 @@ namespace Com.tuf31404.KeepEating
             enforcerSpawns = GameObject.FindGameObjectsWithTag("EnforcerSpawn");
             eaterSpawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
         }
+
         public override void OnDisable()
         {
             // Always call the base to remove callbacks

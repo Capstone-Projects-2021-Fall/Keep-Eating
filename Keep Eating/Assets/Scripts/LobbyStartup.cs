@@ -7,6 +7,7 @@ public class LobbyStartup : MonoBehaviour
 
     [SerializeField]
     private GameObject GameManagerPrefab, TeamManagerPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
