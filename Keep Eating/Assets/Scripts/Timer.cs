@@ -13,27 +13,13 @@ namespace Com.tuf31404.KeepEating {
     public class Timer : MonoBehaviour
     {
         bool startTimer = false;
-        //bool startGameTimer = false;
         double timerIncrementValue;
         double startTime;
-        double startGameTimer = 10;
         [SerializeField]
         double timer = 20;
         public Text timerText;
         [SerializeField]
         PhotonView pV;
-
-        public bool StartGameTime { get; set; }
-
-        void Awake()
-        {
-            //Master Client gets the start time and sends it to the other players.
-            if (PhotonNetwork.LocalPlayer.IsMasterClient)
-            {
-                Debug.Log("Timer Awake");
-                this.StartGameTime = true;
-            }
-        }
 
         void Start()
         {
@@ -41,67 +27,34 @@ namespace Com.tuf31404.KeepEating {
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
             {
                 startTime = PhotonNetwork.Time;
-                pV.RPC("SetTimer", RpcTarget.AllBuffered, startTime, true);
-                Debug.Log("Timer start -- startTime = " + startTime + " startGameTimer = " + startGameTimer);
+                startTimer = true;
+                
+                pV.RPC("SetTimer", RpcTarget.AllBuffered, startTime);
             }
 
-            timerText.text = "" + startGameTimer;
+            timerText.text = "" + timer;
         }
 
         [PunRPC]
-        void SetTimer(double _startTime, bool startGame)
+        void SetTimer(double _startTime)
         {
             startTime = _startTime;
-            if (startGame)
-            {
-                this.StartGameTime = true;
-            }
-            else
-            {
-                startTimer = true;
-                this.StartGameTime = false;
-            }
+            startTimer = true;
         }
 
         void Update()
         {
-            
-            
-            if (startTimer)
+            if (!startTimer) return;
+            timerIncrementValue = PhotonNetwork.Time - startTime;
+
+            if (timerIncrementValue > timer)
             {
-                timerIncrementValue = PhotonNetwork.Time - startTime;
-                if (timerIncrementValue > timer)
-                {
-                    timerText.text = "Game Over";
-                }
-                else
-                {
-                    timerText.text = "" + (int)(timer - timerIncrementValue);
-                }
+                timerText.text = "Game Over";
             }
             else
             {
-                timerIncrementValue = PhotonNetwork.Time - startTime;
-                //Debug.Log("in update -- timer incr = " + timerIncrementValue);
-                if (timerIncrementValue > startGameTimer)
-                {
-                    timerText.text = "Game Start!";
-                    StartCoroutine("StartGame");
-                }
-                else if (this.StartGameTime)
-                {
-                    timerText.text = "" + (int)(startGameTimer - timerIncrementValue);
-                }
+                timerText.text = "" + (int)(timer - timerIncrementValue);
             }
-        }
-
-        IEnumerator StartGame()
-        {
-            yield return new WaitForSeconds(2f);
-            startTime = PhotonNetwork.Time;
-            startTimer = true;
-            timerText.text = "" + startTime;
-            pV.RPC("SetTimer", RpcTarget.AllBuffered, startTime, false);
         }
     }
 }
