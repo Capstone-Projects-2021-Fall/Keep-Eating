@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: us
     Server: 
     Port: 0
     ProxyServer: 
@@ -51,11 +51,11 @@ MonoBehaviour:
   - UpdateAliveText
   - UpdateScoreText
   - HitByBullet
-  - showDeadPlayer
-  - showAlivePlayer
-  - callRespawn
-  - Respawn
-  - destroyFood
+  - SetBulletDirection
+  - SpawnRpc
+  - SpawnFoodRpc
+  - SpawnWeaponRpc
+  - InitSpawnArrays
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

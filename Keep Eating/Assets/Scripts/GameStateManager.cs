@@ -21,45 +21,103 @@ using Photon.Pun.UtilityScripts;            //needed for the PhotonTeamsManager 
 
 namespace Com.tuf31404.KeepEating
 {
+    public enum Items {Fist = 0, Shotgun = 1, Revolver = 2, Taser = 3, Noodle = 10,  Egg = 20, Meat = 30, NA = -1}
     public class GameStateManager : MonoBehaviourPunCallbacks
     {
+        [SerializeField]
+        private GameObject foodPrefab;
+        private GameObject Taser;
+        private GameObject[] eaterSpawns;
+        private GameObject[] enforcerSpawns;
+        private GameObject[] foodSpawn;
+        private GameObject[] weaponSpawns;
         private PhotonTeamsManager teamManager;         //Gives access to team info. Specifically number of players.
-        private int eatersDead;
-        private int eaterPoints;
         private int pointsToWin;
         private int eaterIndex, enforcerIndex;
         public int eaterCount;
         private Vector3[] foodSpawns;
         private Text hudText;                           //The text GameObject that displays the time.
-        private Text eaterScoreText;
-        private Text eatersAliveText;
-        private bool isRunning;
         Dictionary<int, Player> players;
-        public PlayerManager player;
+        public PlayerManagerV2 player;
         [SerializeField]
-        PhotonView pv;
+        PhotonView pV;
+
+        public bool ReturnToLobby { get; set; }
+        public Text EatersScoreText { get; set; }
+        public Text EatersAliveText { get; set; }
+
+        public int EatersDead { get; set; }
+
+        public int EaterPoints { get; set; }
 
         private void Awake()
         {
+            /*
             foodSpawns = new Vector3[5];
             foodSpawns[0] = GameObject.Find("FoodSpawn").transform.position;
             foodSpawns[1] = GameObject.Find("FoodSpawn (1)").transform.position;
             foodSpawns[2] = GameObject.Find("FoodSpawn (2)").transform.position;
             foodSpawns[3] = GameObject.Find("FoodSpawn (3)").transform.position;
             foodSpawns[4] = GameObject.Find("FoodSpawn (4)").transform.position;
+            */
+            InitArrays();
+
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in players)
+            {
+                PhotonView tempPv = player.GetPhotonView();
+                if (tempPv != null)
+                {
+                    Debug.Log("tempPv = " + tempPv.ViewID);
+                    pV = tempPv;
+                    Debug.Log("Owner of photon view " + pV + " is " + pV.Owner.NickName);
+                    break;
+                }
+            }
         }
         // Start is called before the first frame update
         void Start()
         {
-            eatersDead = 0;
-            eaterPoints = 0;
+            DontDestroyOnLoad(this.gameObject);
+            this.EatersDead = 0;
+            this.EaterPoints = 0;
             pointsToWin = 100;
-            teamManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
+            teamManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
             hudText = GameObject.Find("Timer").GetComponent<Text>();
-            eaterScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
-            eatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
-            eatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
-            isRunning = true;
+            this.EatersScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
+            this.EatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
+            this.EatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+            this.ReturnToLobby = false;
+        }
+
+
+        // TODO make generic for different maps
+        private void InitArrays()
+        {
+            eaterSpawns = new GameObject[3];
+            enforcerSpawns = new GameObject[2];
+            foodSpawn = new GameObject[5];
+            weaponSpawns = new GameObject[2];
+            for (int i = 0; i < 3; i++)
+            {
+                string spName = "EaterSpawn" + i;
+                eaterSpawns[i] = GameObject.Find(spName);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                string spName = "EnforcerSpawn" + i;
+                enforcerSpawns[i] = GameObject.Find(spName);
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                string spName = "FoodSpawn" + i;
+                foodSpawn[i] = GameObject.Find(spName);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                string spName = "WeaponSpawn" + i;
+                weaponSpawns[i] = GameObject.Find(spName);
+            }
         }
 
         public void SpawnPlayers()
@@ -67,17 +125,22 @@ namespace Com.tuf31404.KeepEating
             players = PhotonNetwork.CurrentRoom.Players;
             eaterIndex = 0;
             enforcerIndex = 0;
-
+            Debug.Log("players = " + players);
+            Debug.Log("players count = " + PhotonNetwork.CurrentRoom.PlayerCount);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
+                
                 if (PhotonTeamExtensions.GetPhotonTeam(players[i + 1]).Code == 1)
                 {
-                    pv.RPC("Spawn", RpcTarget.AllBuffered, eaterIndex++, players[i+1].UserId);
-                    Debug.Log("UserId = " + players[i + 1].UserId);
+                    pV.RPC("SpawnRpc", players[i+1], eaterIndex++, players[i+1].UserId);
+                    //Debug.Log("UserId = " + players[i + 1].UserId);
+                    Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an eater");
                 }
                 else
                 {
-                    pv.RPC("Spawn", RpcTarget.AllBuffered, enforcerIndex++, players[i + 1].UserId);
+                    //Debug.Log("player id = " + players[i + 1].UserId);
+                    pV.RPC("SpawnRpc", players[i+1], enforcerIndex++, players[i + 1].UserId);
+                   Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an enforcer");
                 }
             }
         }
@@ -86,12 +149,10 @@ namespace Com.tuf31404.KeepEating
         {
             string food = "Food";
             int rand;
-            foreach(Vector3 pos in foodSpawns)
+            foreach(GameObject spawn in foodSpawn)
             {
                 rand = UnityEngine.Random.Range(1, 4);
-                food += rand;
-                PhotonNetwork.Instantiate(food, pos, Quaternion.identity);
-                food = "food";
+                pV.RPC("SpawnFoodRpc", RpcTarget.AllBuffered, spawn.name, rand);
             }
         }
 
@@ -100,20 +161,20 @@ namespace Com.tuf31404.KeepEating
             int rand = UnityEngine.Random.Range(1, 3);
             if (rand == 1)
             {
-                PhotonNetwork.Instantiate("Revolver", GameObject.Find("WeaponSpawn").transform.position, Quaternion.identity);
+                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn0", 1);
             }
             else
             {
-                PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn").transform.position, Quaternion.identity);
+                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn0", 2);
             }
             rand = UnityEngine.Random.Range(1, 3);
             if (rand == 1)
             {
-                PhotonNetwork.Instantiate("Revolver", GameObject.Find("WeaponSpawn (1)").transform.position, Quaternion.identity);
+                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 1);
             }
             else
             {
-                PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn (1)").transform.position, Quaternion.identity);
+                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 2);
             }
             rand = UnityEngine.Random.Range(1, 3);
             if (rand == 1)
@@ -129,7 +190,11 @@ namespace Com.tuf31404.KeepEating
         // Checks for win conditions.
         void Update()
         {
-            if (isRunning)
+            if (this.EatersDead == teamManager.GetTeamMembersCount(1))
+            {
+                GameOver("Death");
+            }
+            else if (this.EaterPoints >= pointsToWin)
             {
                 if (eatersDead == teamManager.GetTeamMembersCount(1))
                 {
@@ -170,14 +235,14 @@ namespace Com.tuf31404.KeepEating
                     Debug.Log("Oh shit something went wrong");
                     break;
             }
-
-                PhotonTeamExtensions.LeaveCurrentTeam(PhotonNetwork.LocalPlayer);
-                PhotonNetwork.AutomaticallySyncScene = true;
-                if (PhotonNetwork.IsMasterClient)
-            {
-                StartCoroutine("WaitForLeaveTeam");
-            }
             
+            if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
+            {
+                Debug.Log("Master Client returning to lobby");
+                this.ReturnToLobby = true;
+                PhotonNetwork.AutomaticallySyncScene = true;
+                PhotonNetwork.LoadLevel("Lobby");
+            }
         }
 
         IEnumerator WaitForLeaveTeam()
@@ -192,51 +257,30 @@ namespace Com.tuf31404.KeepEating
             PhotonNetwork.LoadLevel("Lobby");
         }
 
-        public void AddPoints(int points)
+        public void AddPoints(string itemName, Items foodType)
         {
-            eaterPoints += points;
-            pv.RPC("UpdateScoreText", RpcTarget.AllBuffered, eaterPoints);
+            this.EaterPoints += (int)foodType;
+            pV.RPC("UpdateScoreText", RpcTarget.All, this.EaterPoints);
         }
 
         public void Death()
         {
-            eatersDead++;
-            pv.RPC("UpdateAliveText", RpcTarget.AllBuffered, 1);
+            if (pV.IsMine)
+            {
+                this.EatersDead++;
+                if (this.EatersDead + 1 - teamManager.GetTeamMembersCount(1) != 0)
+                {
+                    pV.RPC("UpdateAliveText", RpcTarget.All, 1);
+                }
+            }
         }
 
         public void PlayerRespawn()
         {
-            eatersDead--;
-            pv.RPC("UpdateAliveText", RpcTarget.AllBuffered, -1);
-        }
-
-        [PunRPC]
-        public void UpdateScoreText(int newPoints)
-        {
-            eaterPoints = newPoints;
-            string newScoreText = "Eater Score: " + eaterPoints;
-            eaterScoreText.text = newScoreText;
-        }
-
-        [PunRPC]
-        public void UpdateAliveText(int newDeath)
-        {
-            eatersDead += newDeath;
-            string newAliveText = "Eaters Alive: " + (teamManager.GetTeamMembersCount(1) - eatersDead);
-            eatersAliveText.text = newAliveText;
-        }
-
-        [PunRPC]
-        public void Spawn(int spawnLoc, string playerId)
-        {
-            if (playerId.Equals(PhotonNetwork.LocalPlayer.UserId))
+            if (pV.IsMine)
             {
-                player.Spawn(spawnLoc);
-            }
-            else
-            {
-               // Debug.Log("PlayerID error");
-               // Debug.Log("player id = " + playerId + " local = " + PhotonNetwork.LocalPlayer.UserId);
+                this.EatersDead--;
+                pV.RPC("UpdateAliveText", RpcTarget.All, -1);
             }
         }
 
@@ -244,8 +288,9 @@ namespace Com.tuf31404.KeepEating
         public void Respawn(GameObject respawnObject)
         {
             string objectName = respawnObject.name;
+            /*
             if (objectName.Contains("Food1")){
-                AddPoints(5);
+                AddPoints(Items.Noodle);
             }
             else if (objectName.Contains("Food2")){
                  AddPoints(10);
@@ -254,6 +299,7 @@ namespace Com.tuf31404.KeepEating
             {
                 AddPoints(15);
             }
+            */
             Vector3 foodPos = respawnObject.transform.position;
             string food = "Food";
             food += UnityEngine.Random.Range(1, 4);

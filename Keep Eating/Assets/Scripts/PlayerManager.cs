@@ -83,6 +83,7 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+            DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
             if (this.photonView.IsMine)
             {
@@ -104,7 +105,7 @@ namespace Com.tuf31404.KeepEating
                 }
 
                 UpdateTeamMax();
-                teamsManager = GameObject.Find("Team Manager").GetComponent<PhotonTeamsManager>();
+                teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
                 //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
@@ -181,7 +182,6 @@ namespace Com.tuf31404.KeepEating
             {
                 mySpriteRenderer.sprite = enforcerSprite;
             }
-
         }
 
         void ProcessInputs()
@@ -244,7 +244,7 @@ namespace Com.tuf31404.KeepEating
                     }
                     else
                     {
-                        gameObject.GetComponentInChildren<Shoot>().ShootGun();
+                       // gameObject.GetComponentInChildren<Shoot>().ShootGun();
                     }
                 }
             }
@@ -413,13 +413,13 @@ namespace Com.tuf31404.KeepEating
                 switch (spawnNum)
                 {
                     case 0:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn0").transform.position;
                         break;
                     case 1:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (1)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn1").transform.position;
                         break;
                     case 2:
-                        this.gameObject.transform.position = GameObject.Find("EaterSpawn (2)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EaterSpawn2").transform.position;
                         break;
                     default:
                         Debug.Log("Oops enforcer spawn");
@@ -431,10 +431,10 @@ namespace Com.tuf31404.KeepEating
                 switch (spawnNum)
                 {
                     case 0:
-                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn0").transform.position;
                         break;
                     case 1:
-                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn (1)").transform.position;
+                        this.gameObject.transform.position = GameObject.Find("EnforcerSpawn1").transform.position;
                         break;
                     default:
                         Debug.Log("Oops enforcer spawn");
@@ -557,7 +557,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void ShootGun(int gunId)
         {
-            PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
+            //PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
         }
 
         [PunRPC]
@@ -634,7 +634,9 @@ namespace Com.tuf31404.KeepEating
             cameraMovement.GetCamera();
             if (!SceneManager.GetActiveScene().name.Equals("Lobby"))
             {
-                if (this.photonView.IsMine)
+                gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
+                //gsm.player = this;
+                if (PhotonNetwork.IsMasterClient)
                 {
                     gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
                     gsm.player = this;

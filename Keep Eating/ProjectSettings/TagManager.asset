@@ -15,6 +15,9 @@ TagManager:
   - WeaponSpawn
   - Spawn
   - PlayerSpawn
+  - GSM
+  - Weapon
+  - Taser
   layers:
   - Default
   - TransparentFX
