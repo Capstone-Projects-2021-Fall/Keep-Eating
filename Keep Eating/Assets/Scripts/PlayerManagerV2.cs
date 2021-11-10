@@ -135,7 +135,11 @@ namespace Com.tuf31404.KeepEating
                 UpdateTeamMax();
 
                 teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
-               
+                
+                if (teamsManager == null)
+                {
+                    Debug.Log("wtf???");
+                }
                 //Trying to join a team (randomly) when you get in the lobby.
                 TryJoinTeam((byte)UnityEngine.Random.Range(1, 3));
                 
@@ -486,7 +490,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void HitByBullet(int viewId, string bulletName)
         {
-            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 0.1f;
+            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 1f;
         }
 
 
@@ -505,6 +509,7 @@ namespace Com.tuf31404.KeepEating
                     PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
                     PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 }
+            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().Death();
         }
 
         [PunRPC]
@@ -657,7 +662,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void UpdateScoreText(int newPoints)
         {
-
+           
                 Debug.Log("Updating score");
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints = newPoints;
                 string newScoreText = "Eater Score: " + GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints;
@@ -666,13 +671,33 @@ namespace Com.tuf31404.KeepEating
         }
 
         [PunRPC]
-        public void UpdateAliveText(int newDeath)
+        public void UpdateAliveText(int newDeath) 
         {
+            if (photonView.IsMine)
+            {
 
-                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersDead += newDeath;
-                string newAliveText = "Eaters Alive: " + (teamsManager.GetTeamMembersCount(1) - GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersDead);
-                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAliveText.text = newAliveText;
-           
+                try
+                {
+                    
+                    string newAliveText = "Eaters Alive: " + (teamsManager.GetTeamMembersCount(1) - GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersDead);
+                    GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAliveText.text = newAliveText;
+                }
+                catch (System.NullReferenceException e)
+                {
+                    if (teamsManager == null)
+                    {
+                        Debug.Log("teamsmanager null");
+                    }
+                    else if (GameObject.FindWithTag("GSM").GetComponent<GameStateManager>() == null)
+                    {
+                        Debug.Log("gsm null");
+                    }
+                    else
+                    {
+                        Debug.Log("???");
+                    }
+                }
+            }
         }
         #endregion
 
@@ -713,9 +738,13 @@ namespace Com.tuf31404.KeepEating
             {
                 transform.position = new Vector3(0f, 5f, 0f);
             }
-
+            PhotonNetwork.AutomaticallySyncScene = true;
             if (level == 2)
             {
+                if (GameObject.FindGameObjectWithTag("GSM") != null)
+                {
+                    Destroy(GameObject.FindGameObjectWithTag("GSM"));
+                }
                 inGame = false;
                 hasGun = false;
                 weaponType = Items.NA;

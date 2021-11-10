@@ -78,6 +78,7 @@ namespace Com.tuf31404.KeepEating
         // Start is called before the first frame update
         void Start()
         {
+            DontDestroyOnLoad(this.gameObject);
             this.EatersDead = 0;
             this.EaterPoints = 0;
             pointsToWin = 100;
@@ -220,6 +221,7 @@ namespace Com.tuf31404.KeepEating
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
+                Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;
                 PhotonNetwork.AutomaticallySyncScene = true;
                 PhotonNetwork.LoadLevel("Lobby");
@@ -235,14 +237,23 @@ namespace Com.tuf31404.KeepEating
 
         public void Death()
         {
-            //this.EatersDead++;
-            pV.RPC("UpdateAliveText", RpcTarget.All, 1);
+            if (pV.IsMine)
+            {
+                this.EatersDead++;
+                if (this.EatersDead + 1 - teamManager.GetTeamMembersCount(1) != 0)
+                {
+                    pV.RPC("UpdateAliveText", RpcTarget.All, 1);
+                }
+            }
         }
 
         public void PlayerRespawn()
         {
-            //this.EatersDead--;
-            pV.RPC("UpdateAliveText", RpcTarget.All, -1);
+            if (pV.IsMine)
+            {
+                this.EatersDead--;
+                pV.RPC("UpdateAliveText", RpcTarget.All, -1);
+            }
         }
 
         public void Respawn(GameObject respawnObject)

@@ -13,7 +13,7 @@ public class LobbyStartup : MonoBehaviour
     {
         if (GameObject.Find("Team Manager(Clone)") == null)
         {
-            Instantiate(TeamManagerPrefab);
+            DontDestroyOnLoad(Instantiate(TeamManagerPrefab));
         }
         if (GameObject.Find("Game Manager(Clone)") == null)
         {
