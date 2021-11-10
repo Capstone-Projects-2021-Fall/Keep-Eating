@@ -51,17 +51,16 @@ In order to complete this project, all team members need:
     
 -   An understanding of C#
     
--   Photon Unity Plugin
+-   AWS Cloud Computing Service
 
 ## User Story 
-### Bob hears from Alice about how much fun they’re having. He wants to join in with the fun too.
-- Bob launches Keep Eating and goes to the Join Server menu. The list of available servers is shown, allowing him to join. 
-- Bob wants to play with Alice’s group specifically, though. Since Alice and Bob are such good friends, he already knows the lobby code and enters it.
-- Unfortunately for Bob, Alice’s lobby is full! The game displays an error message informing him of this fact. 
-- Alice realizes Bob can’t play. Deciding that she had enough fun, she decides to leave her friends for the night. By hitting a series of buttons from a pause menu, Alice exits the game.
-- When the host leaves, a new host is randomly selected. They are now given the privilege of deciding rules and match start.
-- Now that a spot has opened up, Bob can finally join Unfortunately, Alice seems to be missing…
-
+### Ji wants a fun way to pass the time
+- Ji downloads the app from the Google Play Store
+- Upon the start of the app, he is prompted to create an account and personalize his profile/character
+- After creating his account, he is directed to the main menu where he selects “join a game”
+- Ji joins a random server and waits in the lobby for it to be filled with enough players to start the game
+- After the host starts the game, all of the players are randomized into two teams to compete against each other
+- The winning team is decided by the team that survived the longest and/or optimized the most points by eating the food generated across the map
 
 ### Darnell wants to play a multiplayer game with his friends:
 - Darnell wants to play a multiplayer game with his friends:

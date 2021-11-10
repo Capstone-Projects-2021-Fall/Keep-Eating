@@ -176,15 +176,6 @@ namespace Com.tuf31404.KeepEating
             {
                 pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 2);
             }
-            rand = UnityEngine.Random.Range(1, 3);
-            if (rand == 1)
-            {
-                PhotonNetwork.Instantiate("Revolver", GameObject.Find("WeaponSpawn (2)").transform.position, Quaternion.identity);
-            }
-            else
-            {
-                PhotonNetwork.Instantiate("Shotgun", GameObject.Find("WeaponSpawn (2)").transform.position, Quaternion.identity);
-            }
         }
 
         // Checks for win conditions.
@@ -196,14 +187,7 @@ namespace Com.tuf31404.KeepEating
             }
             else if (this.EaterPoints >= pointsToWin)
             {
-                if (eatersDead == teamManager.GetTeamMembersCount(1))
-                {
-                    GameOver("Death");
-                }
-                else if (eaterPoints >= pointsToWin)
-                {
-                    GameOver("Points");
-                }
+                GameOver("Points");
             }
         }
 
@@ -216,7 +200,6 @@ namespace Com.tuf31404.KeepEating
         */
         public void GameOver(string cause)
         {
-            isRunning = false;
             switch (cause)
             {
                 case "Death":
@@ -245,17 +228,6 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
-        IEnumerator WaitForLeaveTeam()
-        {
-            while (teamManager.GetTeamMembersCount(1) > 0 && teamManager.GetTeamMembersCount(2) > 0)
-            {
-                yield return null;
-            }
-            teamManager = null;
-            Destroy(GameObject.Find("Team Manager"));
-            Destroy(GameObject.Find("Game Manager"));
-            PhotonNetwork.LoadLevel("Lobby");
-        }
 
         public void AddPoints(string itemName, Items foodType)
         {
@@ -284,7 +256,6 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
-        [PunRPC]
         public void Respawn(GameObject respawnObject)
         {
             string objectName = respawnObject.name;
@@ -293,11 +264,11 @@ namespace Com.tuf31404.KeepEating
                 AddPoints(Items.Noodle);
             }
             else if (objectName.Contains("Food2")){
-                 AddPoints(10);
+                 AddPoints(20);
             }
             else
             {
-                AddPoints(15);
+                AddPoints(30);
             }
             */
             Vector3 foodPos = respawnObject.transform.position;
