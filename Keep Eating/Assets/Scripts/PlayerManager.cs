@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -49,7 +48,7 @@ namespace Com.tuf31404.KeepEating
         CameraMovement cameraMovement;
         private PhotonTeamsManager teamsManager;
         int eaterTeamMax, enforcerTeamMax;
-        public Sprite eaterSprite, enforcerSprite, deadEaterSprite;
+        public Sprite eaterSprite, enforcerSprite;
         private byte myTeam;
         Button eaterSwitch, enforcerSwitch;
         [SerializeField]
@@ -146,7 +145,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     //GameManager.Instance.LeaveRoom();
                     isAlive = false;
-                    this.photonView.RPC("PlayerDead", RpcTarget.All, LocalPlayerInstance.GetPhotonView().ViewID);
+                    this.photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
                 }
             }
 
@@ -203,12 +202,11 @@ namespace Com.tuf31404.KeepEating
 
             //transform.position is the Game Object's position
             pos = transform.position;
+
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
-            transform.position = pos;
-            
 
-            
+            transform.position = pos;
 
             
             Vector3 mousepos = Input.mousePosition;
@@ -269,10 +267,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (!PhotonNetwork.IsMasterClient)
                     {
-                        PickUpFood(foodId);
-                        PhotonNetwork.Destroy(PhotonView.Find(foodId).gameObject);
-                        this.photonView.RPC("destroyFood", RpcTarget.All, foodId);
-
+                        this.photonView.RPC("PickUpFood", RpcTarget.MasterClient, foodId);
                     }
                     else
                     {
@@ -467,13 +462,17 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-            if (this.photonView.IsMine)
+            if (this.photonView.ViewID == pvId)
             {
-                mySpriteRenderer.sprite = deadEaterSprite;
+                mySpriteRenderer.enabled = false;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                this.photonView.RPC("showDeadPlayer", RpcTarget.All, pvId);
                 IEnumerator coroutine = RespawnWaiter(pvId);
                 StartCoroutine(coroutine);
+            }
+            else
+            {
+                PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
             }
         }
         
@@ -482,14 +481,20 @@ namespace Com.tuf31404.KeepEating
         {
             if (this.photonView.ViewID == pvId)
             {
-                mySpriteRenderer.sprite = eaterSprite;
+                mySpriteRenderer.enabled = true;
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = true;
                 this.gameObject.transform.position = pos;
                 Health = 1f;
                 isAlive = true;
-                this.photonView.RPC("showAlivePlayer", RpcTarget.All, pvId);
             }
-           
+            else
+            {
+                GameObject obj = PhotonView.Find(pvId).gameObject;
+                obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                obj.GetComponent<BoxCollider2D>().enabled = true;
+                obj.transform.position = pos;
+                obj.GetComponent<PlayerManager>().Health = 1f;
+            }
         }
 
         [PunRPC]
@@ -505,26 +510,6 @@ namespace Com.tuf31404.KeepEating
                 playerSprite.sprite = enforcerSprite;
             }
             
-        }
-
-        [PunRPC]
-        void showDeadPlayer(int viewId)
-        {
-            SpriteRenderer playerSprite = PhotonView.Find(viewId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-            playerSprite.sprite = deadEaterSprite;
-        }
-
-        [PunRPC]
-        void showAlivePlayer(int viewId)
-        {
-            SpriteRenderer playerSprite = PhotonView.Find(viewId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-            playerSprite.sprite = eaterSprite;
-        }
-
-        [PunRPC]
-        void callRespawn(GameObject gmOb)
-        {
-            gsm.Respawn(gmOb);
         }
 
         [PunRPC]
@@ -559,43 +544,6 @@ namespace Com.tuf31404.KeepEating
         {
             //PhotonView.Find(gunId).gameObject.GetComponent<Shoot>().ShootGun();
         }
-
-        [PunRPC]
-        void destroyFood(int foodId)
-        {
-            PhotonNetwork.Destroy(PhotonView.Find(foodId).gameObject);
-        }
-        [PunRPC]
-        public void Respawn(GameObject respawnObject)
-        {
-            string objectName = respawnObject.name;
-            if (objectName.Contains("Food1"))
-            {
-                gsm.AddPoints(10);
-            }
-            else if (objectName.Contains("Food2"))
-            {
-                gsm.AddPoints(20);
-            }
-            else
-            {
-                gsm.AddPoints(30);
-            }
-            Vector3 foodPos = respawnObject.transform.position;
-            string food = "Food";
-            food += UnityEngine.Random.Range(1, 4);
-            IEnumerator coroutine = SpawnWaiter(foodPos, food);
-
-            StartCoroutine(coroutine);
-            PhotonNetwork.Destroy(respawnObject);
-        }
-
-        IEnumerator SpawnWaiter(Vector3 pos, string prefabName)
-        {
-            float waitTime = UnityEngine.Random.Range(20, 40);
-            yield return new WaitForSeconds(waitTime);
-            PhotonNetwork.Instantiate(prefabName, pos, Quaternion.identity);
-        }
         #endregion
 
 
@@ -621,7 +569,6 @@ namespace Com.tuf31404.KeepEating
 
         void CalledOnLevelWasLoaded(int level)
         {
-            
             // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
             if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
             {
@@ -632,23 +579,18 @@ namespace Com.tuf31404.KeepEating
             _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
 
             cameraMovement.GetCamera();
-            if (!SceneManager.GetActiveScene().name.Equals("Lobby"))
+            if (this.photonView.IsMine)
             {
                 gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
                 //gsm.player = this;
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    gsm = GameObject.Find("Game State Manager").GetComponent<GameStateManager>();
-                    gsm.player = this;
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        gsm.SpawnPlayers();
-                        //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
-                        gsm.SpawnFood();
-                        gsm.SpawnWeapons();
-                        gsm.eaterCount = 0;
-                    }
-                }
+                    gsm.SpawnPlayers();
+                    //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
+                    gsm.SpawnFood();
+                    gsm.SpawnWeapons();
+                    gsm.eaterCount = 0;
+                }     
             }
         }
 
