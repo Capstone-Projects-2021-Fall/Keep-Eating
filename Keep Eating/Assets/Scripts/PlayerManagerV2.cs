@@ -529,7 +529,7 @@ namespace Com.tuf31404.KeepEating
                 obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 obj.GetComponent<BoxCollider2D>().enabled = true;
                 obj.transform.position = pos;
-                obj.GetComponent<PlayerManager>().Health = 1f;
+                obj.GetComponent<PlayerManagerV2>().Health = 1f;
             }
         }
 
