@@ -112,11 +112,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: EaterAI
       objectReference: {fileID: 0}
+    - target: {fileID: 7256038475050025305, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+      propertyPath: m_TagString
+      value: EaterAI
+      objectReference: {fileID: 0}
     - target: {fileID: 7482071354437681898, guid: ce7e58eeef3428243804db33f032217c, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7482071354437681898, guid: ce7e58eeef3428243804db33f032217c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ce7e58eeef3428243804db33f032217c, type: 3}
 --- !u!1 &2482984694372524326 stripped
 GameObject:

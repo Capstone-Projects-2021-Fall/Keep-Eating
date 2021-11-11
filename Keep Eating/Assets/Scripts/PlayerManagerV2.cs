@@ -764,6 +764,7 @@ namespace Com.tuf31404.KeepEating
 
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
+                Debug.Log("Owner = " + photonView.Owner);
             }
 
             cameraMovement.GetCamera();
