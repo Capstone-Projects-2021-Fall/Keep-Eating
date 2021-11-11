@@ -26,6 +26,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7986858786739329354, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
   Health: 1
   myTransform: {fileID: 1701145188349005432}
+  thisPV: {fileID: 4716197586251352982}
 --- !u!1001 &8298179205779476286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101,6 +102,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7256038475050025286, guid: ce7e58eeef3428243804db33f032217c, type: 3}
   m_PrefabInstance: {fileID: 8298179205779476286}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4716197586251352982 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+  m_PrefabInstance: {fileID: 8298179205779476286}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701145188349005415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &4230723736554968497 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5305102746383866511, guid: ce7e58eeef3428243804db33f032217c, type: 3}

@@ -67,6 +67,10 @@ namespace Com.tuf31404.KeepEating
         private GameObject[] itemTargets;
         [SerializeField]
         private Transform myTransform;
+        [SerializeField]
+        private PhotonView thisPV;
+
+        public PhotonView PV { get; set; }
 
 
         private void Start()
@@ -180,5 +184,21 @@ namespace Com.tuf31404.KeepEating
             return Mathf.Sqrt(Mathf.Pow(targetPos.x - myTransform.position.x, 2) + Mathf.Pow(targetPos.y - myTransform.position.y, 2));
         }
 
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.name.Contains("Weapon") && !hasGun && !isEater)
+            {
+                tempItemName = other.gameObject.name;
+                weaponType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
+                hasGun = true;
+                this.PV.RPC("PickUpGun", RpcTarget.All, thisPV.ViewID, weaponType, tempItemName);
+            }
+            else if (other.name.Contains("Food") && isEater)
+            {
+                tempItemName = other.gameObject.name;
+                tempFoodType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
+                this.PV.RPC("PickUpFood", RpcTarget.All, tempItemName, tempFoodType);
+            }
+        }
     }
 }

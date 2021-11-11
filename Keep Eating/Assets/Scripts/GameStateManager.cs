@@ -262,8 +262,8 @@ namespace Com.tuf31404.KeepEating
 
         public void SpawnAI()
         {
-            PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[2].transform.position, Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[1].transform.position, Quaternion.identity);
+            PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[2].transform.position, Quaternion.identity).GetComponent<AIScript>().PV = pV;
+            PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[1].transform.position, Quaternion.identity).GetComponent<AIScript>().PV = pV;
         }
         public void Respawn(GameObject respawnObject)
         {
