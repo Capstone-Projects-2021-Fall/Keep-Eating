@@ -10,7 +10,7 @@ public class consoleUpdate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Populate();
+        
     }
 
     // Update is called once per frame
@@ -21,15 +21,6 @@ public class consoleUpdate : MonoBehaviour
 
     void Populate()
     {
-        GameObject newObj; // Create GameObject instance
 
-        for (int i = 0; i < numberToCreate; i++)
-        {
-            // Create new instances of our prefab until we've created as many as we specified
-            newObj = (GameObject) Instantiate(prefab, transform);
-
-            // Randomize the color of our image
-            newObj.GetComponent().color = Random.ColorHSV();
-        }
     }
 }
