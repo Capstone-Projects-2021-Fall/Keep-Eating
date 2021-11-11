@@ -87,9 +87,19 @@ namespace Com.tuf31404.KeepEating
             {
                 target = GetTarget();
             }
-            else if (!target.GetComponent<SpriteRenderer>().enabled)
+            else 
             {
-                target = GetTarget();
+                if (target.tag.Equals("Player"))
+                {
+                    if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                    {
+                        target = GetTarget();
+                    }
+                }
+                else if (!target.GetComponent<SpriteRenderer>().enabled)
+                {
+                    target = GetTarget();
+                }
             }
 
             if (target != null)
@@ -139,9 +149,10 @@ namespace Com.tuf31404.KeepEating
                 }
                 else
                 {
+                    Debug.Log("Getting enemy target");
                     foreach (GameObject item in enemyTargets)
                     {
-                        if (item != null && item.GetComponent<SpriteRenderer>().enabled)
+                        if (item != null && item.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
                         {
                             tempDistance = TargetDistance(item.transform.position);
                             if (tempDistance < targetDistance)
@@ -173,6 +184,8 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (player.GetComponent<PlayerManagerV2>().MyTeam == 1)
                     {
+
+                        Debug.Log("Adding Enemy targets");
                         enemyTargets[index++] = player;
                     }
                 }
