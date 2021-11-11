@@ -110,10 +110,6 @@ namespace Com.tuf31404.KeepEating
             {
                 float step = speed * Time.deltaTime;
                 myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
-                if (target.tag.Equals("Player"))
-                {
-                    Debug.Log("Target distance = " + TargetDistance(target.transform.position));
-                }
                 if (target.tag.Equals("Player") && hasGun)
                 {
                     if (TargetDistance(target.transform.position) <= shootDistance && canShoot)

@@ -50,7 +50,7 @@ namespace Com.tuf31404.KeepEating
 
         public int EaterPoints { get; set; }
 
-        private GameObject[] EaterAI, EnforcerAI;
+        private GameObject[] eaterAI, enforcerAI;
         private int eaterAiCount, enforcerAiCount;
 
         private void Awake()
@@ -77,6 +77,8 @@ namespace Com.tuf31404.KeepEating
                     break;
                 }
             }
+            eaterAI = new GameObject[1];
+            enforcerAI = new GameObject[1];
         }
         // Start is called before the first frame update
         void Start()
@@ -224,6 +226,8 @@ namespace Com.tuf31404.KeepEating
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
+                PhotonNetwork.Destroy(eaterAI[0]);
+                PhotonNetwork.Destroy(enforcerAI[0]);
                 Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;
                 PhotonNetwork.AutomaticallySyncScene = true;
@@ -262,8 +266,10 @@ namespace Com.tuf31404.KeepEating
 
         public void SpawnAI()
         {
-            PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[2].transform.position, Quaternion.identity).GetComponent<AIScript>().PV = pV;
-            PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[1].transform.position, Quaternion.identity).GetComponent<AIScript>().PV = pV;
+            eaterAI[0] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[2].transform.position, Quaternion.identity);
+            enforcerAI[0] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[1].transform.position, Quaternion.identity);
+            eaterAI[0].GetComponent<AIScript>().PV = pV;
+            enforcerAI[0].GetComponent<AIScript>().PV = pV;
         }
         public void Respawn(GameObject respawnObject)
         {

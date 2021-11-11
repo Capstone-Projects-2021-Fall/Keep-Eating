@@ -662,12 +662,17 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void UpdateScoreText(int newPoints)
         {
-           
+            try
+            {
                 Debug.Log("Updating score");
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints = newPoints;
                 string newScoreText = "Eater Score: " + GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints;
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersScoreText.text = newScoreText;
-            
+            }
+            catch (System.NullReferenceException e)
+            {
+                Debug.Log("gsm null");
+            }
         }
 
         [PunRPC]
