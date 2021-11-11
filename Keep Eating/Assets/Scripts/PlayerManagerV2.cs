@@ -86,6 +86,7 @@ namespace Com.tuf31404.KeepEating
         private int lastFood;
         #endregion
 
+        public byte MyTeam { get; set; }
         public bool HasTaser { get; set; }
         public bool FiringTaser{ get; set; }
 
@@ -200,26 +201,26 @@ namespace Com.tuf31404.KeepEating
 
         public void SwitchTeams(byte teamNum)
         {
-            if (teamNum == myTeam)
+            if (teamNum == this.MyTeam)
             {
                 return;
             }
 
             Debug.Log("switching teams");
             PhotonTeamExtensions.SwitchTeam(PhotonNetwork.LocalPlayer, teamNum);
-            if (myTeam == 1)
+            if (this.MyTeam == 1)
             {
-                myTeam = 2;
+                this.MyTeam = 2;
             }
             else
             {
-                myTeam = 1;
+                this.MyTeam = 1;
             }
             //Makes a call to all clients that they have joined a team.
             //RpcTarget.AllBuffered ensures that players that join after the call recieve the message.
-            this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, myTeam, this.photonView.ViewID);
+            this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, this.MyTeam, this.photonView.ViewID);
             //Changes sprite depending on team.
-            if (myTeam == 1)
+            if (this.MyTeam == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
             }
@@ -279,7 +280,7 @@ namespace Com.tuf31404.KeepEating
                 }
             }
 
-            if (Input.GetButtonDown("Fire1") && myTeam == 2)
+            if (Input.GetButtonDown("Fire1") && this.MyTeam == 2)
             {
                 if (hasGun)
                 {
@@ -298,7 +299,7 @@ namespace Com.tuf31404.KeepEating
                     }
                 }
             }
-            else if (Input.GetButtonDown("Fire1") && myTeam == 1)
+            else if (Input.GetButtonDown("Fire1") && this.MyTeam == 1)
             {
                 if (this.HasTaser)
                 {
@@ -313,7 +314,7 @@ namespace Com.tuf31404.KeepEating
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if (gunCollision && myTeam == 2)
+                if (gunCollision && this.MyTeam == 2)
                 {
                     Debug.Log("Picking Up Gun");
                     hasGun = true;
@@ -323,7 +324,7 @@ namespace Com.tuf31404.KeepEating
                     gunCollision = false;
                 }
 
-                if (foodCollision && myTeam == 1)
+                if (foodCollision && this.MyTeam == 1)
                 {
                     //myPoints += foodType points
                     photonView.RPC("PickUpFood", RpcTarget.All, tempItemName, tempFoodType);
@@ -332,7 +333,7 @@ namespace Com.tuf31404.KeepEating
                     foodCollision = false;
                 }
 
-                if (taserCollision && myTeam == 1)
+                if (taserCollision && this.MyTeam == 1)
                 {
                     this.HasTaser = true;
                     weaponType = Items.Taser;
@@ -377,7 +378,7 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-            if (collision.gameObject.tag.Equals("Bullet") && myTeam == 1){
+            if (collision.gameObject.tag.Equals("Bullet") && this.MyTeam == 1){
                 photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
         }
@@ -450,8 +451,8 @@ namespace Com.tuf31404.KeepEating
                 Debug.Log("Join Team fail");
             }
 
-            myTeam = teamNum;
-            Debug.Log("my team on start = " + myTeam);
+            this.MyTeam = teamNum;
+            Debug.Log("my team on start = " + this.MyTeam);
             this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, this.photonView.ViewID);
             if (teamNum == 1)
             {
@@ -465,10 +466,10 @@ namespace Com.tuf31404.KeepEating
 
         public void Spawn(int spawnNum)
         {
-            myTeam = PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code;
-            Debug.Log("my team = " + myTeam);
+            this.MyTeam = PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code;
+            Debug.Log("my team = " + this.MyTeam);
             Debug.Log("Owner of photon view " + photonView + " is " + photonView.Owner.NickName);
-            if (myTeam == 1)
+            if (this.MyTeam == 1)
             {
                 LocalPlayerInstance.transform.position = eaterSpawns[spawnNum].transform.position;
                 Debug.Log("objpos = " + this.gameObject.transform.position);
@@ -778,6 +779,7 @@ namespace Com.tuf31404.KeepEating
                     //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
                     gsm.SpawnFood();
                     gsm.SpawnWeapons();
+                    gsm.SpawnAI();
                     gsm.eaterCount = 0;
                 }
             }

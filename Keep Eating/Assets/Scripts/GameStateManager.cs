@@ -25,7 +25,7 @@ namespace Com.tuf31404.KeepEating
     public class GameStateManager : MonoBehaviourPunCallbacks
     {
         [SerializeField]
-        private GameObject foodPrefab;
+        private GameObject foodPrefab, eaterAiPrefab, enforcerAiPrefab;
         private GameObject Taser;
         private GameObject[] eaterSpawns;
         private GameObject[] enforcerSpawns;
@@ -256,6 +256,12 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+
+        public void SpawnAI()
+        {
+            PhotonNetwork.Instantiate("EaterAI", eaterSpawns[2].transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate("EnforcerAI", enforcerSpawns[1].transform.position, Quaternion.identity);
+        }
         public void Respawn(GameObject respawnObject)
         {
             string objectName = respawnObject.name;
