@@ -69,6 +69,8 @@ namespace Com.tuf31404.KeepEating
         private Transform myTransform;
         [SerializeField]
         private PhotonView thisPV;
+        private int shootDistance;
+        private bool canShoot;
 
         public PhotonView PV { get; set; }
 
@@ -77,6 +79,8 @@ namespace Com.tuf31404.KeepEating
         {
             teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
             SetTargets();
+            shootDistance = 0;
+            canShoot = true;
         }
 
 
@@ -106,7 +110,32 @@ namespace Com.tuf31404.KeepEating
             {
                 float step = speed * Time.deltaTime;
                 myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
+                if (target.tag.Equals("Player"))
+                {
+                    Debug.Log("Target distance = " + TargetDistance(target.transform.position));
+                }
+                if (target.tag.Equals("Player") && hasGun)
+                {
+                    if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
+                    {
+                        if (weaponType == Items.Shotgun)
+                        {
+                            for (int i = 0; i < 5; i++)
+                            {
+                                bulletsShot++;
+                                this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
+                            }
+                        }
+                        else
+                        {
+                            bulletsShot++;
+                            this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
+                        }
+                        StartCoroutine("ShootWaiter");
+                    }
+                }
             }
+
         }
 
         GameObject GetTarget()
@@ -205,6 +234,14 @@ namespace Com.tuf31404.KeepEating
                 weaponType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
                 hasGun = true;
                 this.PV.RPC("PickUpGun", RpcTarget.All, thisPV.ViewID, weaponType, tempItemName);
+                if (weaponType == Items.Shotgun)
+                {
+                    shootDistance = 60;
+                }
+                else
+                {
+                    shootDistance = 90;
+                }
             }
             else if (other.name.Contains("Food") && isEater)
             {
@@ -212,6 +249,13 @@ namespace Com.tuf31404.KeepEating
                 tempFoodType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
                 this.PV.RPC("PickUpFood", RpcTarget.All, tempItemName, tempFoodType);
             }
+        }
+
+        IEnumerator ShootWaiter()
+        {
+            canShoot = false;
+            yield return new WaitForSeconds(1);
+            canShoot = true;
         }
     }
 }

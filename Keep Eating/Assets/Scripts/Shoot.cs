@@ -52,6 +52,19 @@ namespace Com.tuf31404.KeepEating
             direction = Quaternion.Euler(0, -45, 0) * direction;
             return direction;
         }
+
+        public Vector3 ShootGun(Items weaponType, Vector3 targetPos)
+        {
+            Vector3 direction = new Vector3(0, 0, 0);
+            if (weaponType == Items.Shotgun)
+            {
+                targetPos += Random.insideUnitSphere * 5;                            //This is where the MAGIC happens.
+            }
+            targetPos.z = 0;                                                         // z is set to 0 so the camera can see it
+            direction = (targetPos - transform.position).normalized;
+            direction = Quaternion.Euler(0, -45, 0) * direction;
+            return direction;
+        }
     }
 }
 
