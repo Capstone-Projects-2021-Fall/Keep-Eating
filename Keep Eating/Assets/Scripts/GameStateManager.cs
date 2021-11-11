@@ -50,6 +50,9 @@ namespace Com.tuf31404.KeepEating
 
         public int EaterPoints { get; set; }
 
+        private GameObject[] EaterAI, EnforcerAI;
+        private int eaterAiCount, enforcerAiCount;
+
         private void Awake()
         {
             /*

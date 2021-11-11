@@ -90,7 +90,6 @@ namespace Com.tuf31404.KeepEating
         public bool HasTaser { get; set; }
         public bool FiringTaser{ get; set; }
 
-
         #region Init
         void Awake()
         {

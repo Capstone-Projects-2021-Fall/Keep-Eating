@@ -83,14 +83,16 @@ namespace Com.tuf31404.KeepEating
             {
                 target = GetTarget();
             }
-
-            if (!target.GetComponent<SpriteRenderer>().enabled)
+            else if (!target.GetComponent<SpriteRenderer>().enabled)
             {
                 target = GetTarget();
             }
 
-            float step = speed * Time.deltaTime;
-            myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
+            if (target != null)
+            {
+                float step = speed * Time.deltaTime;
+                myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
+            }
         }
 
         GameObject GetTarget()
@@ -103,19 +105,7 @@ namespace Com.tuf31404.KeepEating
             {
                 foreach (GameObject item in itemTargets)
                 {
-                    tempDistance = TargetDistance(item.transform.position);
-                    if (tempDistance < targetDistance)
-                    {
-                        targetDistance = tempDistance;
-                        retTarget = item;
-                    }
-                }
-            }
-            else
-            {
-                if (!this.hasGun)
-                {
-                    foreach (GameObject item in itemTargets)
+                    if (item != null && item.GetComponent<SpriteRenderer>().enabled)
                     {
                         tempDistance = TargetDistance(item.transform.position);
                         if (tempDistance < targetDistance)
@@ -125,15 +115,36 @@ namespace Com.tuf31404.KeepEating
                         }
                     }
                 }
+            }
+            else
+            {
+                if (!this.hasGun)
+                {
+                    foreach (GameObject item in itemTargets)
+                    {
+                        if (item != null && item.GetComponent<SpriteRenderer>().enabled)
+                        {
+                            tempDistance = TargetDistance(item.transform.position);
+                            if (tempDistance < targetDistance)
+                            {
+                                targetDistance = tempDistance;
+                                retTarget = item;
+                            }
+                        }
+                    }
+                }
                 else
                 {
                     foreach (GameObject item in enemyTargets)
                     {
-                        tempDistance = TargetDistance(item.transform.position);
-                        if (tempDistance < targetDistance)
+                        if (item != null && item.GetComponent<SpriteRenderer>().enabled)
                         {
-                            targetDistance = tempDistance;
-                            retTarget = item;
+                            tempDistance = TargetDistance(item.transform.position);
+                            if (tempDistance < targetDistance)
+                            {
+                                targetDistance = tempDistance;
+                                retTarget = item;
+                            }
                         }
                     }
                 }
