@@ -222,10 +222,12 @@ namespace Com.tuf31404.KeepEating
             if (myTeam == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
+                speed = 30;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
+                speed = 20;
             }
 
         }
@@ -456,10 +458,13 @@ namespace Com.tuf31404.KeepEating
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
+                speed = 30;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
+                speed = 20;
+                
             }
         }
 
