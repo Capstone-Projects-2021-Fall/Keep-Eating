@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b63c115dc3f1f9b4198834e9afeaf489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 5353768009470380091, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
-  eaterPrefab: {fileID: 1433564120937361195, guid: 5c61ac2679f61464c926a52bdd7edbc5, type: 3}
-  enforcerPrefab: {fileID: 3997087809330069820, guid: 32dade0617e8efa4eadbd07a1004b0a8, type: 3}
+  playerPrefab: {fileID: 7256038475050025305, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+  gameSettings: {fileID: 0}
+  teamManager: {fileID: 0}
+  startButton: {fileID: 0}

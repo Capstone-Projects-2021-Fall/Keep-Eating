@@ -22,7 +22,7 @@ namespace Com.tuf31404.KeepEating
     {
 
         public static GameManager Instance;                 //I forget what this is for lol.
-        public GameObject playerPrefab;                     //Player prefab has no sprite until player joins a team.
+        public GameObject playerPrefab;                     //Change to PlayerV2
         private const byte playersNeededToStart = 2;
         [SerializeField]
         private GameSettings gameSettings;                  //Not sure if we need this
@@ -35,6 +35,8 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+            teamManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
+            startButton = GameObject.Find("Start Button").GetComponent<Button>();
             Instance = this;
             if (playerPrefab == null)
             {
@@ -42,7 +44,7 @@ namespace Com.tuf31404.KeepEating
             }
             else
             {
-                if (PlayerManager.LocalPlayerInstance == null)
+                if (PlayerManagerV2.LocalPlayerInstance == null)
                 {
                     Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene());
                     // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
@@ -57,8 +59,8 @@ namespace Com.tuf31404.KeepEating
 
             UnityEngine.UI.Text codeText = GameObject.Find("Lobby Code").GetComponent<UnityEngine.UI.Text>();
             codeText.text = PhotonNetwork.CurrentRoom.Name;         //Lobby code
-            DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
-            DontDestroyOnLoad(GameObject.Find("Team Manager"));     //Team Manager object goes to the map
+            //DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
+            //DontDestroyOnLoad(GameObject.Find("Team Manager(Clone)"));     //Team Manager object goes to the map
             startButton.onClick.AddListener(() => StartGame());     //Start button listener
         }
 
@@ -92,7 +94,7 @@ namespace Com.tuf31404.KeepEating
          */
         public void StartGame()
         {
-            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(2) > 0)
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(1) > 0 && teamManager.GetTeamMembersCount(2) > 0)
             {
                 Debug.Log("Starting game");
                 //Loads the game map and starts the game.
@@ -133,6 +135,21 @@ namespace Com.tuf31404.KeepEating
                 Debug.LogFormat("OnPlayerLeftRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
 
                 //LoadArena();
+            }
+        }
+
+        void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
+        {
+            this.CalledOnLevelWasLoaded(scene.buildIndex);
+
+        }
+
+        void CalledOnLevelWasLoaded(int sceneNum)
+        {
+            if (startButton == null)
+            {
+                startButton = GameObject.Find("Start Button").GetComponent<Button>();
+                startButton.onClick.AddListener(() => StartGame());
             }
         }
 

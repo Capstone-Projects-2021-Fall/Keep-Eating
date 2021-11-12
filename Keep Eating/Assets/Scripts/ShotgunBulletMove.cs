@@ -6,9 +6,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class ShotgunBulletMove : MonoBehaviour
 {
+    [SerializeField]
     private float speed = 100f;
     private Vector3 mousePos;
     private Vector3 direction = Vector3.zero;
@@ -20,8 +22,12 @@ public class ShotgunBulletMove : MonoBehaviour
         mousePos += Random.insideUnitSphere * 5;                                //This is where the MAGIC happens.
         mousePos.z = 0;                                                         // z is set to 0 so the camera can see it
         direction = (mousePos - transform.position).normalized ;
-        Destroy(gameObject, 0.5f);                                              //Destroys after 1/2 second so it doesnt go far like a real shotgun!!!
+        //Destroy(gameObject, 0.5f);                                              Destroys after 1/2 second so it doesnt go far like a real shotgun!!!
         direction = Quaternion.Euler(0, -45, 0) * direction;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine("DestroyAfterSeconds");
+        }
     }
 
     // Update is called once per frame
@@ -29,5 +35,11 @@ public class ShotgunBulletMove : MonoBehaviour
     {
         float step = speed * Time.deltaTime;
         transform.position += direction * step;
+    }
+
+    IEnumerator DestroyAfterSeconds()
+    {
+        yield return new WaitForSeconds(0.5f);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }

@@ -13,8 +13,9 @@ namespace Com.tuf31404.KeepEating
 {
     public class PlayerUI : MonoBehaviour
     {
+        //private PlayerManagerV2 target2;
 
-        private PlayerManager target;
+        private PlayerManagerV2 target;
 
         [Tooltip("UI Text to display Player's Name")]
         [SerializeField]
@@ -37,7 +38,7 @@ namespace Com.tuf31404.KeepEating
         CanvasGroup _canvasGroup;
         Vector3 targetPosition;
 
-        public void SetTarget(PlayerManager _target)
+        public void SetTarget(PlayerManagerV2 _target)
         {
             if (_target == null)
             {
