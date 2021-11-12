@@ -403,6 +403,12 @@ namespace Com.tuf31404.KeepEating
                 tempFoodType = Items.NA;
                 foodCollision = false;
             }
+            else 
+            {
+                tempItemName = "";
+                taserCollision = false;
+            }
+            
         }
 
 
