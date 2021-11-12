@@ -48,7 +48,7 @@ namespace Com.tuf31404.KeepEating
 
         public override void OnJoinedLobby()
         {
-            SceneManager.LoadScene("Main Menu");
+            SceneManager.LoadScene("LoginPage");
             Debug.Log("Join Lobby");
         }
     }
