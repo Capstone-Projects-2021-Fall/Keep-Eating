@@ -100,6 +100,7 @@ namespace Com.tuf31404.KeepEating
             newWander = true;
             wanderTarget = Vector3.zero;
             gameStart = false;
+            target = null;
             minX = -150;
             maxX = 152;
             minY = -108;
@@ -113,6 +114,11 @@ namespace Com.tuf31404.KeepEating
         {
             if (gameStart)
             {
+
+                if (!isEater)
+                {
+                    Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
+                }
                 if (!hasTarget)
                 {
                     target = GetTarget();
@@ -233,7 +239,6 @@ namespace Com.tuf31404.KeepEating
                 }
                 else
                 {
-                    Debug.Log("Getting enemy target");
                     foreach (GameObject item in enemyTargets)
                     {
                         if (item != null && item.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
@@ -268,6 +273,7 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 itemTargets = GameObject.FindGameObjectsWithTag("Weapon");
+                Debug.Log("weapons size = " + itemTargets.Length);
                 enemyTargets = new GameObject[teamsManager.GetTeamMembersCount(1)];
                 GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
                 int index = 0;
@@ -312,6 +318,8 @@ namespace Com.tuf31404.KeepEating
                 {
                     shootDistance = 90;
                 }
+                hasTarget = false;
+                target = null;
             }
             else if (other.name.Contains("Food") && isEater)
             {

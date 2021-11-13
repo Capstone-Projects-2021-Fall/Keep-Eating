@@ -54,8 +54,8 @@ MonoBehaviour:
   Health: 1
   myTransform: {fileID: 1701145188349005432}
   thisPV: {fileID: 4716197586251352982}
-  fieldOfVisionX: 0
-  fieldOfVisionY: 0
+  fieldOfVisionX: 122
+  fieldOfVisionY: 50
 --- !u!1001 &8298179205779476286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65,12 +65,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
       propertyPath: ObservedComponents.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
       propertyPath: ObservedComponents.Array.data[1]
       value: 
-      objectReference: {fileID: 5860546503587542328}
+      objectReference: {fileID: -890954567731825294}
     - target: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
       propertyPath: ObservedComponents.Array.data[2]
       value: 
@@ -161,17 +161,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5860546503587542328 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -6737989794527512058, guid: ce7e58eeef3428243804db33f032217c, type: 3}
-  m_PrefabInstance: {fileID: 8298179205779476286}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1701145188349005415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &4230723736554968497 stripped
