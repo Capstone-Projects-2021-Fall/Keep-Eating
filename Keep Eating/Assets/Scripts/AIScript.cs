@@ -125,14 +125,21 @@ namespace Com.tuf31404.KeepEating
                 }
                 else
                 {
-                    if (target.tag.Equals("Player"))
+                    if (TargetInView(target.transform.position))
                     {
-                        if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                        if (target.tag.Equals("Player"))
+                        {
+                            if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                            {
+                                target = GetTarget();
+                            }
+                        }
+                        else if (!target.GetComponent<SpriteRenderer>().enabled)
                         {
                             target = GetTarget();
                         }
                     }
-                    else if (!target.GetComponent<SpriteRenderer>().enabled)
+                    else
                     {
                         target = GetTarget();
                     }
@@ -291,16 +298,29 @@ namespace Com.tuf31404.KeepEating
 
         float TargetDistance(Vector3 targetPos)
         {
-            float distX = Mathf.Abs(targetPos.x - myTransform.position.x);
-            float distY = Mathf.Abs(targetPos.y - myTransform.position.y);
-            if (distX < fieldOfVisionX && distY < fieldOfVisionY){
-                return Mathf.Sqrt(Mathf.Pow(distX, 2) + Mathf.Pow(distY, 2));
+            if (TargetInView(targetPos)){
+                return Mathf.Sqrt(Mathf.Pow(targetPos.x - myTransform.position.x, 2) + Mathf.Pow(targetPos.y - myTransform.position.y, 2));
             }
             else
             {
                 return 10001f;
             }
         }
+
+        bool TargetInView(Vector3 targetPos)
+        {
+            float distX = Mathf.Abs(targetPos.x - myTransform.position.x);
+            float distY = Mathf.Abs(targetPos.y - myTransform.position.y);
+            if (distX < fieldOfVisionX && distY < fieldOfVisionY)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         private void OnTriggerEnter2D(Collider2D other)
         {
