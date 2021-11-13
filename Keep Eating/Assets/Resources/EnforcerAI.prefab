@@ -27,7 +27,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEater: 0
-  speed: 30
+  speed: 20
   PlayerUiPrefab: {fileID: 0}
   shotgunSprite: {fileID: -3695664891932108249, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
   revolverSprite: {fileID: -4855807490512174151, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
@@ -41,6 +41,8 @@ MonoBehaviour:
   Health: 1
   myTransform: {fileID: 1701145188349005432}
   thisPV: {fileID: 4716197586251352982}
+  fieldOfVisionX: 0
+  fieldOfVisionY: 0
 --- !u!1001 &8298179205779476286
 PrefabInstance:
   m_ObjectHideFlags: 0

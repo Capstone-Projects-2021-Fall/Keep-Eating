@@ -1,4 +1,11 @@
-
+/********************************************************************
+ * 
+ * Script to control the AI
+ * 
+ * Clamp Values: minX, maxX, minY, maxY
+ *    Small Map; -150,  152, -108,  82
+ * 
+ ********************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,6 +78,13 @@ namespace Com.tuf31404.KeepEating
         private PhotonView thisPV;
         private int shootDistance;
         private bool canShoot;
+        [SerializeField]
+        private int fieldOfVisionX, fieldOfVisionY;
+        private float minX, maxX, minY, maxY;
+        private bool wandering;
+        private Vector3 wanderTarget;
+        private bool hasTarget, newWander;
+        private bool gameStart;
 
         public PhotonView PV { get; set; }
 
@@ -81,63 +95,103 @@ namespace Com.tuf31404.KeepEating
             SetTargets();
             shootDistance = 0;
             canShoot = true;
+            wandering = false;
+            hasTarget = false;
+            newWander = true;
+            wanderTarget = Vector3.zero;
+            gameStart = false;
+            minX = -150;
+            maxX = 152;
+            minY = -108;
+            maxY = 82;
+            StartCoroutine("StartWaiter");
         }
 
 
         // Update is called once per frame
         void Update()
         {
-            if (target == null)
+            if (gameStart)
             {
-                target = GetTarget();
-            }
-            else 
-            {
-                if (target.tag.Equals("Player"))
+                if (!hasTarget)
                 {
-                    if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                    target = GetTarget();
+                }
+                else
+                {
+                    if (target.tag.Equals("Player"))
+                    {
+                        if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                        {
+                            target = GetTarget();
+                        }
+                    }
+                    else if (!target.GetComponent<SpriteRenderer>().enabled)
                     {
                         target = GetTarget();
                     }
                 }
-                else if (!target.GetComponent<SpriteRenderer>().enabled)
-                {
-                    target = GetTarget();
-                }
-            }
 
-            if (target != null)
-            {
-                float step = speed * Time.deltaTime;
-                myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
-                if (target.tag.Equals("Player") && hasGun)
+                if (target != null)
                 {
-                    if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
+                    hasTarget = true;
+                    wandering = false;
+                    if (target.tag.Equals("Player") && hasGun)
                     {
-                        if (weaponType == Items.Shotgun)
+                        if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
                         {
-                            for (int i = 0; i < 5; i++)
+                            if (weaponType == Items.Shotgun)
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    bulletsShot++;
+                                    this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
+                                }
+                            }
+                            else
                             {
                                 bulletsShot++;
                                 this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
                             }
+                            StartCoroutine("ShootWaiter");
                         }
-                        else
-                        {
-                            bulletsShot++;
-                            this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
-                        }
-                        StartCoroutine("ShootWaiter");
                     }
                 }
+                else
+                {
+                    hasTarget = false;
+                    if (newWander || myTransform.position == wanderTarget)
+                    {
+                        wanderTarget = Wander();
+                    }
+                    wandering = true;
+                }
+                Move(wandering);
+            }
+        }
+        
+        void Move(bool _isWandering)
+        {
+            float step = speed * Time.deltaTime;
+            if (_isWandering)
+            {
+                myTransform.position = Vector3.MoveTowards(myTransform.position, wanderTarget, step);
+            }
+            else
+            {
+                myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
             }
 
+            myTransform.position = new Vector3(
+                    Mathf.Clamp(myTransform.position.x, minX, maxX),
+                    Mathf.Clamp(myTransform.position.y, minY, maxY),
+                    0.0f);
         }
 
         GameObject GetTarget()
         {
             GameObject retTarget = null;
-            float targetDistance = 100000f;
+            float targetDistance = 10000f;
             float tempDistance = 0;
 
             if (isEater)
@@ -192,7 +246,14 @@ namespace Com.tuf31404.KeepEating
 
             return retTarget;
         }
-
+        
+        Vector3 Wander()
+        {
+            float xPos = UnityEngine.Random.Range(-150, 152);
+            float yPos = UnityEngine.Random.Range(-108, 82);
+            StartCoroutine("WanderWaiter");
+            return new Vector3(xPos, yPos, 0f);
+        }
         void SetTargets()
         {
             if (isEater)
@@ -219,7 +280,15 @@ namespace Com.tuf31404.KeepEating
 
         float TargetDistance(Vector3 targetPos)
         {
-            return Mathf.Sqrt(Mathf.Pow(targetPos.x - myTransform.position.x, 2) + Mathf.Pow(targetPos.y - myTransform.position.y, 2));
+            float distX = Mathf.Abs(targetPos.x - myTransform.position.x);
+            float distY = Mathf.Abs(targetPos.y - myTransform.position.y);
+            if (distX < fieldOfVisionX && distY < fieldOfVisionY){
+                return Mathf.Sqrt(Mathf.Pow(distX, 2) + Mathf.Pow(distY, 2));
+            }
+            else
+            {
+                return 10001f;
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -252,6 +321,20 @@ namespace Com.tuf31404.KeepEating
             canShoot = false;
             yield return new WaitForSeconds(1);
             canShoot = true;
+        }
+
+        IEnumerator StartWaiter()
+        {
+            yield return new WaitForSeconds(3);
+            gameStart = true;
+        }
+
+        IEnumerator WanderWaiter()
+        {
+            newWander = false;
+            float waitTime = UnityEngine.Random.Range(0, 5);
+            yield return new WaitForSeconds(waitTime);
+            newWander = true;
         }
     }
 }

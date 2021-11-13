@@ -10,6 +10,11 @@
         but with the tag [Pun RPC] above it. 
     A photon view is necessary to send an RPC message. 
     The message call and the [Pun RPC] must be in the same class. 
+
+
+
+    Clamp Values: minX, maxX, minY, maxY
+       Small Map; -150, 152,  -108, 82
  */
 
 
@@ -56,6 +61,7 @@ namespace Com.tuf31404.KeepEating
         private int eaterTeamMax, enforcerTeamMax;
         private int bulletsShot;
         private int myPoints;
+        private float minX, maxX, minY, maxY;
         //vectors
         private Vector3 pos;
         //booleans
@@ -74,8 +80,6 @@ namespace Com.tuf31404.KeepEating
         //public variables
         [Tooltip("The Player's UI GameObject Prefab")]
         public static GameObject LocalPlayerInstance;
-        [Tooltip("The current Health of our player")]
-        public float Health = 1f;
 
         //Old Variables, will probably remove
         GameObject weapon;
@@ -89,6 +93,8 @@ namespace Com.tuf31404.KeepEating
         public byte MyTeam { get; set; }
         public bool HasTaser { get; set; }
         public bool FiringTaser{ get; set; }
+
+        public float Health { get; set; }
 
         #region Init
         void Awake()
@@ -110,6 +116,8 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
+            this.Health = 10000f;
+            Debug.Log("STARTING PLAYER STARTING PLAYER");
             DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
             if (this.photonView.IsMine)
@@ -161,6 +169,10 @@ namespace Com.tuf31404.KeepEating
                 weaponType = Items.Fist;
                 bulletsShot = 0;
                 myPoints = 0;
+                minX = -150f;
+                maxX = 152f;
+                minY = -108f;
+                maxY = 82f;
 
                 //old
                 weapon = null;
@@ -170,6 +182,7 @@ namespace Com.tuf31404.KeepEating
             {
                 GameObject _uiGo = Instantiate(PlayerUiPrefab);
                 _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+                DontDestroyOnLoad(_uiGo);
             }
             else
             {
@@ -253,6 +266,10 @@ namespace Com.tuf31404.KeepEating
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
 
+            pos = new Vector3(
+                        Mathf.Clamp(pos.x, minX, maxX),
+                        Mathf.Clamp(pos.y, minY, maxY),
+                        0.0f);
             transform.position = pos;
 
 
@@ -403,6 +420,23 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            if (!photonView.IsMine)
+            {
+                return;
+            }
+
+            if (collision.gameObject.tag.Equals("Player"))
+            {
+                if (this.MyTeam == 1 && collision.gameObject.GetComponent<PlayerManagerV2>().MyTeam == 1)
+                {
+                    Debug.Log("Healing");
+                    photonView.RPC("Healing", RpcTarget.Others, photonView.ViewID);
+                    this.Health += 0.1f;
+                }
+            }
+        }
 
         //This method is to enssure there is always about a 75/25 eater/enforcer ratio.
         private void UpdateTeamMax()
@@ -490,9 +524,20 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void HitByBullet(int viewId, string bulletName)
         {
-            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 1f;
+            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 0.1f;
         }
 
+        [PunRPC]
+        public void Healing(int viewId)
+        {
+            Debug.Log("Healing rpc");
+            if (PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health < 1)
+            {
+                PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health += 0.1f;
+                Debug.Log("Adding health");
+            }
+            Debug.Log("My health = " + this.Health);
+        }
 
         [PunRPC]
         public void PlayerDead(int pvId)
@@ -743,6 +788,13 @@ namespace Com.tuf31404.KeepEating
             {
                 transform.position = new Vector3(0f, 5f, 0f);
             }
+
+            if (PlayerUiPrefab != null)
+            {
+                GameObject _uiGo = Instantiate(PlayerUiPrefab);
+                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            }
+
             PhotonNetwork.AutomaticallySyncScene = true;
             if (level == 2)
             {
@@ -771,8 +823,6 @@ namespace Com.tuf31404.KeepEating
             if (level == 3)
             {
                 inGame = true;
-                GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
-                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
                 photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
                 //Debug.Log("scene loaded called");
                 gsm = GameObject.FindWithTag("GSM").GetComponent<GameStateManager>();
@@ -784,7 +834,7 @@ namespace Com.tuf31404.KeepEating
                     //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
                     gsm.SpawnFood();
                     gsm.SpawnWeapons();
-                    gsm.SpawnAI();
+                    //gsm.SpawnAI();
                     gsm.eaterCount = 0;
                 }
             }

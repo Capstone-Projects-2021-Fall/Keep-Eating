@@ -39,7 +39,6 @@ MonoBehaviour:
   shootScript: {fileID: 5156995716958531386}
   muzzleTransform: {fileID: 4356547124849860138}
   bulletPrefab: {fileID: 7986858786739329354, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
-  Health: 1
 --- !u!1001 &3386362974971726178
 PrefabInstance:
   m_ObjectHideFlags: 0

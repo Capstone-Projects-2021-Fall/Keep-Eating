@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 namespace Com.tuf31404.KeepEating
 {
@@ -38,8 +39,11 @@ namespace Com.tuf31404.KeepEating
         CanvasGroup _canvasGroup;
         Vector3 targetPosition;
 
+        float lastHealth;
+
         public void SetTarget(PlayerManagerV2 _target)
         {
+            Debug.Log("Setting target");
             if (_target == null)
             {
                 Debug.LogError("<Color=Red><a>Missing</a></Color> PlayMakerManager target for PlayerUI.SetTarget.", this);
@@ -60,7 +64,7 @@ namespace Com.tuf31404.KeepEating
 
         void Awake()
         {
-            this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
+            this.transform.SetParent(GameObject.Find("PlayerUICanvas").GetComponent<Transform>(), false);
 
             _canvasGroup = this.GetComponent<CanvasGroup>();
 

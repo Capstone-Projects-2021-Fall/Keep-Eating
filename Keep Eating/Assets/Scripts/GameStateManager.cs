@@ -32,6 +32,7 @@ namespace Com.tuf31404.KeepEating
         private GameObject[] foodSpawn;
         private GameObject[] weaponSpawns;
         private PhotonTeamsManager teamManager;         //Gives access to team info. Specifically number of players.
+        [SerializeField]
         private int pointsToWin;
         private int eaterIndex, enforcerIndex;
         public int eaterCount;
@@ -55,14 +56,6 @@ namespace Com.tuf31404.KeepEating
 
         private void Awake()
         {
-            /*
-            foodSpawns = new Vector3[5];
-            foodSpawns[0] = GameObject.Find("FoodSpawn").transform.position;
-            foodSpawns[1] = GameObject.Find("FoodSpawn (1)").transform.position;
-            foodSpawns[2] = GameObject.Find("FoodSpawn (2)").transform.position;
-            foodSpawns[3] = GameObject.Find("FoodSpawn (3)").transform.position;
-            foodSpawns[4] = GameObject.Find("FoodSpawn (4)").transform.position;
-            */
             InitArrays();
 
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -77,8 +70,11 @@ namespace Com.tuf31404.KeepEating
                     break;
                 }
             }
-            eaterAI = new GameObject[1];
-            enforcerAI = new GameObject[1];
+            teamManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
+            eaterAiCount = eaterSpawns.Length - teamManager.GetTeamMembersCount(1);
+            enforcerAiCount = enforcerSpawns.Length - teamManager.GetTeamMembersCount(2);
+            eaterAI = new GameObject[eaterAiCount];
+            enforcerAI = new GameObject[enforcerAiCount];
         }
         // Start is called before the first frame update
         void Start()
@@ -86,12 +82,11 @@ namespace Com.tuf31404.KeepEating
             DontDestroyOnLoad(this.gameObject);
             this.EatersDead = 0;
             this.EaterPoints = 0;
-            pointsToWin = 100;
-            teamManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
+            pointsToWin = 1000;
             hudText = GameObject.Find("Timer").GetComponent<Text>();
             this.EatersScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
             this.EatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
-            this.EatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+            this.EatersAliveText.text = "Eaters Alive: " + eaterSpawns.Length;
             this.ReturnToLobby = false;
         }
 
@@ -148,11 +143,22 @@ namespace Com.tuf31404.KeepEating
                    Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an enforcer");
                 }
             }
+            
+            for (int i = 0; i < eaterAiCount; i++)
+            {
+                eaterAI[i] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
+                eaterAI[i].GetComponent<AIScript>().PV = pV;
+            }
+            for (int i = 0; i < enforcerAiCount; i++)
+            {
+                enforcerAI[i] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[enforcerIndex++].transform.position, Quaternion.identity);
+                enforcerAI[i].GetComponent<AIScript>().PV = pV;
+            }
+            
         }
 
         public void SpawnFood()
         {
-            string food = "Food";
             int rand;
             foreach(GameObject spawn in foodSpawn)
             {
@@ -186,7 +192,7 @@ namespace Com.tuf31404.KeepEating
         // Checks for win conditions.
         void Update()
         {
-            if (this.EatersDead == teamManager.GetTeamMembersCount(1))
+            if (this.EatersDead == eaterSpawns.Length)
             {
                 GameOver("Death");
             }
@@ -247,7 +253,7 @@ namespace Com.tuf31404.KeepEating
             if (pV.IsMine)
             {
                 this.EatersDead++;
-                if (this.EatersDead + 1 - teamManager.GetTeamMembersCount(1) != 0)
+                if (this.EatersDead + 1 - eaterSpawns.Length != 0)
                 {
                     pV.RPC("UpdateAliveText", RpcTarget.All, 1);
                 }
@@ -261,45 +267,6 @@ namespace Com.tuf31404.KeepEating
                 this.EatersDead--;
                 pV.RPC("UpdateAliveText", RpcTarget.All, -1);
             }
-        }
-
-
-        public void SpawnAI()
-        {
-            eaterAI[0] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[2].transform.position, Quaternion.identity);
-            enforcerAI[0] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[1].transform.position, Quaternion.identity);
-            eaterAI[0].GetComponent<AIScript>().PV = pV;
-            enforcerAI[0].GetComponent<AIScript>().PV = pV;
-        }
-        public void Respawn(GameObject respawnObject)
-        {
-            string objectName = respawnObject.name;
-            /*
-            if (objectName.Contains("Food1")){
-                AddPoints(Items.Noodle);
-            }
-            else if (objectName.Contains("Food2")){
-                 AddPoints(20);
-            }
-            else
-            {
-                AddPoints(30);
-            }
-            */
-            Vector3 foodPos = respawnObject.transform.position;
-            string food = "Food";
-            food += UnityEngine.Random.Range(1, 4);
-            IEnumerator coroutine = SpawnWaiter(foodPos, food);
-
-            StartCoroutine(coroutine);
-            PhotonNetwork.Destroy(respawnObject);
-        }
-
-        IEnumerator SpawnWaiter(Vector3 pos, string prefabName)
-        {
-            float waitTime = UnityEngine.Random.Range(20, 40);
-            yield return new WaitForSeconds(waitTime);
-            PhotonNetwork.Instantiate(prefabName, pos, Quaternion.identity);
         }
 
     }
