@@ -677,7 +677,7 @@ namespace Com.tuf31404.KeepEating
         public void SpawnRpc(int spawnLoc, string playerId)
         {
 
-            Spawn(spawnLoc);
+            //Spawn(spawnLoc);
             if (playerId.Equals(PhotonNetwork.LocalPlayer.UserId))
             {
                 Debug.Log("Spawning " + PhotonNetwork.LocalPlayer.NickName + " in pos " + spawnLoc);

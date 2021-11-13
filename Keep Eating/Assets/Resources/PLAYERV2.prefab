@@ -46,9 +46,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7914678325390154641, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_PositionModel.TeleportEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7914678325390154641, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_PositionModel.ExtrapolateOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7914678325390154641, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_PositionModel.InterpolateOption
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -7914678325390154641, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_RotationModel.InterpolateOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7914678325390154641, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_PositionModel.InterpolateLerpSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2063921439197384138, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: observableSearch
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2063921439197384138, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2063921439197384138, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4242541197964432229, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_Sprite

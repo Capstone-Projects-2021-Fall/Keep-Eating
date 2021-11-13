@@ -134,6 +134,11 @@ namespace Com.tuf31404.KeepEating
 
                 if (target != null)
                 {
+
+                    if (!isEater)
+                    {
+                        Debug.Log("Target name = " + target.name);
+                    }
                     hasTarget = true;
                     wandering = false;
                     if (target.tag.Equals("Player") && hasGun)
@@ -332,7 +337,7 @@ namespace Com.tuf31404.KeepEating
         IEnumerator WanderWaiter()
         {
             newWander = false;
-            float waitTime = UnityEngine.Random.Range(0, 5);
+            float waitTime = UnityEngine.Random.Range(0, 10);
             yield return new WaitForSeconds(waitTime);
             newWander = true;
         }

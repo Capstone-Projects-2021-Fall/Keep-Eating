@@ -143,7 +143,7 @@ namespace Com.tuf31404.KeepEating
                    Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an enforcer");
                 }
             }
-            
+
             for (int i = 0; i < eaterAiCount; i++)
             {
                 eaterAI[i] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
