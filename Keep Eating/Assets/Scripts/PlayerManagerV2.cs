@@ -806,5 +806,20 @@ namespace Com.tuf31404.KeepEating
             }
             else return null;
         }
+
+
+        public void Freeze()
+        {
+            //Starts the FreezeRoutine method
+            StartCoroutine(FreezeRoutine());
+        }
+
+        private IEnumerator FreezeRoutine()
+        {
+            //Constrains players movement in any direction for 5 seconds before allowing movement to resume
+            LocalPlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+            yield return new WaitForSeconds(5);
+            LocalPlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
     }
 }
