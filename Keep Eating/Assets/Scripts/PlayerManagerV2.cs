@@ -240,10 +240,12 @@ namespace Com.tuf31404.KeepEating
             if (this.MyTeam == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
+                speed = 30;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
+                speed = 20;
             }
 
         }
@@ -423,6 +425,12 @@ namespace Com.tuf31404.KeepEating
                 tempFoodType = Items.NA;
                 foodCollision = false;
             }
+            else 
+            {
+                tempItemName = "";
+                taserCollision = false;
+            }
+            
         }
 
         private void OnCollisionStay2D(Collision2D collision)
@@ -495,10 +503,13 @@ namespace Com.tuf31404.KeepEating
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
+                speed = 30;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
+                speed = 20;
+                
             }
         }
 
