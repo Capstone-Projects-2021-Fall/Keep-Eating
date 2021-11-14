@@ -20,5 +20,4 @@ public class LobbyStartup : MonoBehaviour
             Instantiate(GameManagerPrefab);
         }
     }
-
 }

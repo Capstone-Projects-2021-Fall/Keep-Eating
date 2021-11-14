@@ -111,6 +111,11 @@ namespace Com.tuf31404.KeepEating
             inGame = false;
             //Saves this gameObject instance when the scene is changed.
             DontDestroyOnLoad(this.gameObject);
+            if (PhotonNetwork.IsMasterClient && !StaticSettings.FreshRoom)
+            {
+                StaticSettings.FreshRoom = true;
+                StaticSettings.SetVars();
+            }
         }
 
 

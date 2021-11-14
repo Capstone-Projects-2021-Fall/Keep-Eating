@@ -10,21 +10,17 @@ public class GameSettings : MonoBehaviour
     [SerializeField]
     private Canvas settingsCanvas;
     [SerializeField]
-    private Button bigMap, smallMap, makePrivate, exit;
+    private Button bigMap, smallMap, toggleBots, makePrivate, exit;
     [SerializeField]
     private InputField maxPlayersInput;
 
-    private bool isPrivate;
-
-    public string Map { get; set; }
-    public int MaxPlayers { get; set; }
-
     private void Start()
     {
-        this.Map = "";
-        this.MaxPlayers = 0;
-        isPrivate = false;
+        ChangeMap("SmallGameMap");
+        maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
+        TogglePrivate();
     }
+
     public void OpenSettingsMenu()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -43,7 +39,7 @@ public class GameSettings : MonoBehaviour
 
     public void ChangeMap(string chosenMap)
     {
-        this.Map = chosenMap;
+        StaticSettings.Map = chosenMap;
         if (chosenMap.Equals("SmallGameMap"))
         {
             smallMap.GetComponent<Image>().color = Color.red;
@@ -62,39 +58,55 @@ public class GameSettings : MonoBehaviour
         if (!int.TryParse(maxPlayersInput.text, out num))
         {
             Debug.LogError("Input a number!!!!!!!!!");
-            maxPlayersInput.text = "" + this.MaxPlayers;
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         }
 
         if (num < 1 || num > 14)
         {
             Debug.LogError("Bad Number !!!!!!!!!!");
-            maxPlayersInput.text = "" + this.MaxPlayers;
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         }
 
-        if (this.Map.Equals("SmallGameMap") && num > 5)
+        if (StaticSettings.Map.Equals("SmallGameMap") && num > 5)
         {
-            this.MaxPlayers = 5;
-            maxPlayersInput.text = "" + this.MaxPlayers;
+            StaticSettings.MaxPlayers = 5;
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         }
         else
         {
-            this.MaxPlayers = num;
+            StaticSettings.MaxPlayers = num;
         }
+
+        PhotonNetwork.CurrentRoom.MaxPlayers = (byte)StaticSettings.MaxPlayers;
     }
 
     public void TogglePrivate()
     {
-        if (isPrivate)
+        if (StaticSettings.IsPrivate)
         {
             PhotonNetwork.CurrentRoom.IsOpen = true;
-            isPrivate = false;
+            StaticSettings.IsPrivate = false;
             makePrivate.GetComponent<Image>().color = Color.white;
         }        
         else
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            isPrivate = true;
+            StaticSettings.IsPrivate = true;
             makePrivate.GetComponent<Image>().color = Color.red;
+        }
+    }
+
+    public void ToggleBots()
+    {
+        if (StaticSettings.Bots)
+        {
+            StaticSettings.Bots = false;
+            toggleBots.GetComponent<Image>().color = Color.white;
+        }
+        else
+        {
+            StaticSettings.Bots = true;
+            toggleBots.GetComponent<Image>().color = Color.red;
         }
     }
 }

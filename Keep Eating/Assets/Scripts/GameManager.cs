@@ -32,11 +32,12 @@ namespace Com.tuf31404.KeepEating
         private Button startButton;
 
 
-
         private void Start()
         {
             teamManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
             startButton = GameObject.Find("Start Button").GetComponent<Button>();
+            gameSettings = GameObject.FindGameObjectWithTag("SettingsButton").GetComponent<GameSettings>();
+
             Instance = this;
             if (playerPrefab == null)
             {
@@ -63,6 +64,7 @@ namespace Com.tuf31404.KeepEating
             //DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
             //DontDestroyOnLoad(GameObject.Find("Team Manager(Clone)"));     //Team Manager object goes to the map
             startButton.onClick.AddListener(() => StartGame());     //Start button listener
+
         }
 
 
@@ -85,7 +87,10 @@ namespace Com.tuf31404.KeepEating
             {
                 Debug.LogError("Only Master can load the arena.....");
             }
-            PhotonNetwork.LoadLevel("SmallGameMap");
+            if (!StaticSettings.Map.Equals(""))
+            {
+                PhotonNetwork.LoadLevel(StaticSettings.Map);
+            }
         }
 
         /*
@@ -115,14 +120,7 @@ namespace Com.tuf31404.KeepEating
 
             if (PhotonNetwork.IsMasterClient)
             {
-                /*
-                Debug.LogFormat("OnPlayerEnteredRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart)
-                {
-                    Debug.Log("Starting game");
-                    LoadArena();
-                }
-                */
+                //StaticSettings.FreshRoom = true;
             }
         }
 

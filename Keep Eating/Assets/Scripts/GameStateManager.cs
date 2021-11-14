@@ -144,15 +144,18 @@ namespace Com.tuf31404.KeepEating
                 }
             }
 
-            for (int i = 0; i < eaterAiCount; i++)
+            if (StaticSettings.Bots)
             {
-                eaterAI[i] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
-                eaterAI[i].GetComponent<AIScript>().PV = pV;
-            }
-            for (int i = 0; i < enforcerAiCount; i++)
-            {
-                enforcerAI[i] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[enforcerIndex++].transform.position, Quaternion.identity);
-                enforcerAI[i].GetComponent<AIScript>().PV = pV;
+                for (int i = 0; i < eaterAiCount; i++)
+                {
+                    eaterAI[i] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
+                    eaterAI[i].GetComponent<AIScript>().PV = pV;
+                }
+                for (int i = 0; i < enforcerAiCount; i++)
+                {
+                    enforcerAI[i] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[enforcerIndex++].transform.position, Quaternion.identity);
+                    enforcerAI[i].GetComponent<AIScript>().PV = pV;
+                }
             }
             
         }
