@@ -18,6 +18,9 @@ TagManager:
   - GSM
   - Weapon
   - Taser
+  - EaterAI
+  - EnforcerAI
+  - SettingsButton
   layers:
   - Default
   - TransparentFX

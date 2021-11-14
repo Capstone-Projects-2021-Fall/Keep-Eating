@@ -10,6 +10,11 @@
         but with the tag [Pun RPC] above it. 
     A photon view is necessary to send an RPC message. 
     The message call and the [Pun RPC] must be in the same class. 
+
+
+
+    Clamp Values: minX, maxX, minY, maxY
+       Small Map; -150, 152,  -108, 82
  */
 
 
@@ -56,6 +61,7 @@ namespace Com.tuf31404.KeepEating
         private int eaterTeamMax, enforcerTeamMax;
         private int bulletsShot;
         private int myPoints;
+        private float minX, maxX, minY, maxY;
         //vectors
         private Vector3 pos;
         //booleans
@@ -74,8 +80,6 @@ namespace Com.tuf31404.KeepEating
         //public variables
         [Tooltip("The Player's UI GameObject Prefab")]
         public static GameObject LocalPlayerInstance;
-        [Tooltip("The current Health of our player")]
-        public float Health = 1f;
 
         //Old Variables, will probably remove
         GameObject weapon;
@@ -86,9 +90,11 @@ namespace Com.tuf31404.KeepEating
         private int lastFood;
         #endregion
 
+        public byte MyTeam { get; set; }
         public bool HasTaser { get; set; }
         public bool FiringTaser{ get; set; }
 
+        public float Health { get; set; }
 
         #region Init
         void Awake()
@@ -105,11 +111,18 @@ namespace Com.tuf31404.KeepEating
             inGame = false;
             //Saves this gameObject instance when the scene is changed.
             DontDestroyOnLoad(this.gameObject);
+            if (PhotonNetwork.IsMasterClient && !StaticSettings.FreshRoom)
+            {
+                StaticSettings.FreshRoom = true;
+                StaticSettings.SetVars();
+            }
         }
 
 
         private void Start()
         {
+            this.Health = 10000f;
+            Debug.Log("STARTING PLAYER STARTING PLAYER");
             DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
             if (this.photonView.IsMine)
@@ -161,6 +174,10 @@ namespace Com.tuf31404.KeepEating
                 weaponType = Items.Fist;
                 bulletsShot = 0;
                 myPoints = 0;
+                minX = -150f;
+                maxX = 152f;
+                minY = -108f;
+                maxY = 82f;
 
                 //old
                 weapon = null;
@@ -170,6 +187,7 @@ namespace Com.tuf31404.KeepEating
             {
                 GameObject _uiGo = Instantiate(PlayerUiPrefab);
                 _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+                DontDestroyOnLoad(_uiGo);
             }
             else
             {
@@ -200,26 +218,26 @@ namespace Com.tuf31404.KeepEating
 
         public void SwitchTeams(byte teamNum)
         {
-            if (teamNum == myTeam)
+            if (teamNum == this.MyTeam)
             {
                 return;
             }
 
             Debug.Log("switching teams");
             PhotonTeamExtensions.SwitchTeam(PhotonNetwork.LocalPlayer, teamNum);
-            if (myTeam == 1)
+            if (this.MyTeam == 1)
             {
-                myTeam = 2;
+                this.MyTeam = 2;
             }
             else
             {
-                myTeam = 1;
+                this.MyTeam = 1;
             }
             //Makes a call to all clients that they have joined a team.
             //RpcTarget.AllBuffered ensures that players that join after the call recieve the message.
-            this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, myTeam, this.photonView.ViewID);
+            this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, this.MyTeam, this.photonView.ViewID);
             //Changes sprite depending on team.
-            if (myTeam == 1)
+            if (this.MyTeam == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
             }
@@ -253,6 +271,10 @@ namespace Com.tuf31404.KeepEating
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
 
+            pos = new Vector3(
+                        Mathf.Clamp(pos.x, minX, maxX),
+                        Mathf.Clamp(pos.y, minY, maxY),
+                        0.0f);
             transform.position = pos;
 
 
@@ -279,7 +301,7 @@ namespace Com.tuf31404.KeepEating
                 }
             }
 
-            if (Input.GetButtonDown("Fire1") && myTeam == 2)
+            if (Input.GetButtonDown("Fire1") && this.MyTeam == 2)
             {
                 if (hasGun)
                 {
@@ -298,7 +320,7 @@ namespace Com.tuf31404.KeepEating
                     }
                 }
             }
-            else if (Input.GetButtonDown("Fire1") && myTeam == 1)
+            else if (Input.GetButtonDown("Fire1") && this.MyTeam == 1)
             {
                 if (this.HasTaser)
                 {
@@ -313,7 +335,7 @@ namespace Com.tuf31404.KeepEating
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if (gunCollision && myTeam == 2)
+                if (gunCollision && this.MyTeam == 2)
                 {
                     Debug.Log("Picking Up Gun");
                     hasGun = true;
@@ -323,7 +345,7 @@ namespace Com.tuf31404.KeepEating
                     gunCollision = false;
                 }
 
-                if (foodCollision && myTeam == 1)
+                if (foodCollision && this.MyTeam == 1)
                 {
                     //myPoints += foodType points
                     photonView.RPC("PickUpFood", RpcTarget.All, tempItemName, tempFoodType);
@@ -332,7 +354,7 @@ namespace Com.tuf31404.KeepEating
                     foodCollision = false;
                 }
 
-                if (taserCollision && myTeam == 1)
+                if (taserCollision && this.MyTeam == 1)
                 {
                     this.HasTaser = true;
                     weaponType = Items.Taser;
@@ -377,7 +399,7 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-            if (collision.gameObject.tag.Equals("Bullet") && myTeam == 1){
+            if (collision.gameObject.tag.Equals("Bullet") && this.MyTeam == 1){
                 photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
         }
@@ -403,6 +425,23 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            if (!photonView.IsMine)
+            {
+                return;
+            }
+
+            if (collision.gameObject.tag.Equals("Player"))
+            {
+                if (this.MyTeam == 1 && collision.gameObject.GetComponent<PlayerManagerV2>().MyTeam == 1)
+                {
+                    Debug.Log("Healing");
+                    photonView.RPC("Healing", RpcTarget.Others, photonView.ViewID);
+                    this.Health += 0.1f;
+                }
+            }
+        }
 
         //This method is to enssure there is always about a 75/25 eater/enforcer ratio.
         private void UpdateTeamMax()
@@ -450,8 +489,8 @@ namespace Com.tuf31404.KeepEating
                 Debug.Log("Join Team fail");
             }
 
-            myTeam = teamNum;
-            Debug.Log("my team on start = " + myTeam);
+            this.MyTeam = teamNum;
+            Debug.Log("my team on start = " + this.MyTeam);
             this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, this.photonView.ViewID);
             if (teamNum == 1)
             {
@@ -465,10 +504,10 @@ namespace Com.tuf31404.KeepEating
 
         public void Spawn(int spawnNum)
         {
-            myTeam = PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code;
-            Debug.Log("my team = " + myTeam);
+            this.MyTeam = PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code;
+            Debug.Log("my team = " + this.MyTeam);
             Debug.Log("Owner of photon view " + photonView + " is " + photonView.Owner.NickName);
-            if (myTeam == 1)
+            if (this.MyTeam == 1)
             {
                 LocalPlayerInstance.transform.position = eaterSpawns[spawnNum].transform.position;
                 Debug.Log("objpos = " + this.gameObject.transform.position);
@@ -490,9 +529,20 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void HitByBullet(int viewId, string bulletName)
         {
-            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 1f;
+            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 0.1f;
         }
 
+        [PunRPC]
+        public void Healing(int viewId)
+        {
+            Debug.Log("Healing rpc");
+            if (PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health < 1)
+            {
+                PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health += 0.1f;
+                Debug.Log("Adding health");
+            }
+            Debug.Log("My health = " + this.Health);
+        }
 
         [PunRPC]
         public void PlayerDead(int pvId)
@@ -632,7 +682,7 @@ namespace Com.tuf31404.KeepEating
         public void SpawnRpc(int spawnLoc, string playerId)
         {
 
-            Spawn(spawnLoc);
+            //Spawn(spawnLoc);
             if (playerId.Equals(PhotonNetwork.LocalPlayer.UserId))
             {
                 Debug.Log("Spawning " + PhotonNetwork.LocalPlayer.NickName + " in pos " + spawnLoc);
@@ -662,12 +712,17 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void UpdateScoreText(int newPoints)
         {
-           
+            try
+            {
                 Debug.Log("Updating score");
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints = newPoints;
                 string newScoreText = "Eater Score: " + GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EaterPoints;
                 GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersScoreText.text = newScoreText;
-            
+            }
+            catch (System.NullReferenceException e)
+            {
+                Debug.Log("gsm null");
+            }
         }
 
         [PunRPC]
@@ -738,6 +793,13 @@ namespace Com.tuf31404.KeepEating
             {
                 transform.position = new Vector3(0f, 5f, 0f);
             }
+
+            if (PlayerUiPrefab != null)
+            {
+                GameObject _uiGo = Instantiate(PlayerUiPrefab);
+                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            }
+
             PhotonNetwork.AutomaticallySyncScene = true;
             if (level == 2)
             {
@@ -759,14 +821,13 @@ namespace Com.tuf31404.KeepEating
 
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
+                Debug.Log("Owner = " + photonView.Owner);
             }
 
             cameraMovement.GetCamera();
             if (level == 3)
             {
                 inGame = true;
-                GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
-                _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
                 photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
                 //Debug.Log("scene loaded called");
                 gsm = GameObject.FindWithTag("GSM").GetComponent<GameStateManager>();
@@ -774,10 +835,12 @@ namespace Com.tuf31404.KeepEating
                 gsm.player = this;
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
                     gsm.SpawnPlayers();
                     //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
                     gsm.SpawnFood();
                     gsm.SpawnWeapons();
+                    //gsm.SpawnAI();
                     gsm.eaterCount = 0;
                 }
             }
