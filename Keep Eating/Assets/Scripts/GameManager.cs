@@ -147,6 +147,7 @@ namespace Com.tuf31404.KeepEating
 
         void CalledOnLevelWasLoaded(int sceneNum)
         {
+            PhotonNetwork.CurrentRoom.IsOpen = true;
             if (startButton == null)
             {
                 startButton = GameObject.Find("Start Button").GetComponent<Button>();

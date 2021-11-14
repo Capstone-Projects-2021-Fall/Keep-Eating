@@ -830,6 +830,7 @@ namespace Com.tuf31404.KeepEating
                 gsm.player = this;
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
                     gsm.SpawnPlayers();
                     //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
                     gsm.SpawnFood();
