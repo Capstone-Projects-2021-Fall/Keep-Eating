@@ -72,6 +72,7 @@ namespace Com.tuf31404.KeepEating
         private bool foodCollision;
         private bool taserCollision;
         private bool inGame;
+        private bool wallCollision;
         //strings
         private Items weaponType;
         private Items tempWeaponType;
@@ -95,6 +96,7 @@ namespace Com.tuf31404.KeepEating
         public bool FiringTaser{ get; set; }
 
         public float Health { get; set; }
+
 
         #region Init
         void Awake()
@@ -179,6 +181,8 @@ namespace Com.tuf31404.KeepEating
                 minY = -108f;
                 maxY = 82f;
 
+                
+
                 //old
                 weapon = null;
                 lastFood = 0;
@@ -240,12 +244,12 @@ namespace Com.tuf31404.KeepEating
             if (this.MyTeam == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
-                speed = 30;
+                speed = 20;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
-                speed = 20;
+                speed = 15;
             }
 
         }
@@ -272,6 +276,23 @@ namespace Com.tuf31404.KeepEating
 
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
+
+            if (StaticSettings.Map.Equals("SmallGameMap"))
+            {
+                minX = -150f;
+                maxX = 152f;
+                minY = -108f;
+                maxY = 82f;
+                photonView.RPC("setPositionClamps", RpcTarget.All, 0);
+            }
+            else if (StaticSettings.Map.Equals("BigGameMap"))
+            {
+                minX = -250f;
+                maxX = 250f;
+                minY = -235f;
+                maxY = 235f;
+                photonView.RPC("setPositionClamps", RpcTarget.All, 1);
+            }
 
             pos = new Vector3(
                         Mathf.Clamp(pos.x, minX, maxX),
@@ -392,6 +413,11 @@ namespace Com.tuf31404.KeepEating
                 tempItemName = other.gameObject.name;
                 taserCollision = true;
             }
+
+            if (other.gameObject.name.Contains("Wall"))
+            {
+                wallCollision = true;
+            }
         }
 
         void OnCollisionEnter2D(Collision2D collision)
@@ -425,10 +451,14 @@ namespace Com.tuf31404.KeepEating
                 tempFoodType = Items.NA;
                 foodCollision = false;
             }
-            else 
+            else if (other.gameObject.tag.Equals("Taser"))
             {
                 tempItemName = "";
                 taserCollision = false;
+            } else
+            {
+                tempItemName = "";
+                wallCollision = false;
             }
             
         }
@@ -503,12 +533,12 @@ namespace Com.tuf31404.KeepEating
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
-                speed = 30;
+                speed = 20;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
-                speed = 20;
+                speed = 15;
                 
             }
         }
@@ -605,6 +635,25 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 playerSprite.sprite = enforcerSprite;
+            }
+            
+        }
+
+        [PunRPC]
+        void setPositionClamps(int flag)
+        {
+            if (flag == 0)
+            {
+                minX = -150f;
+                maxX = 152f;
+                minY = -108f;
+                maxY = 82f;
+            } else if (flag == 1)
+            {
+                minX = -250f;
+                maxX = 250f;
+                minY = -235f;
+                maxY = 235f;
             }
             
         }

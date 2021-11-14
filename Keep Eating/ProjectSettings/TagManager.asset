@@ -21,6 +21,7 @@ TagManager:
   - EaterAI
   - EnforcerAI
   - SettingsButton
+  - Wall
   layers:
   - Default
   - TransparentFX
