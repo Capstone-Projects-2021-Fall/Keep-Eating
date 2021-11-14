@@ -189,6 +189,8 @@ namespace Com.tuf31404.KeepEating
             {
                 GameOver("Points");
             }
+
+
         }
 
 
@@ -246,6 +248,21 @@ namespace Com.tuf31404.KeepEating
                 }
             }
         }
+
+        public void Freeze()
+        {
+            StartCouroutine(FreezeRoutine());    
+        }
+
+        private IEnumerator FreezeRoutine()
+        {
+            forzen = true;
+
+            yield return new WaitForSeconds(5);
+
+            frozen = false;
+        }
+                
 
         public void PlayerRespawn()
         {
