@@ -181,6 +181,8 @@ namespace Com.tuf31404.KeepEating
                 minY = -108f;
                 maxY = 82f;
 
+                
+
                 //old
                 weapon = null;
                 lastFood = 0;
@@ -242,12 +244,12 @@ namespace Com.tuf31404.KeepEating
             if (this.MyTeam == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
-                speed = 30;
+                speed = 20;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
-                speed = 20;
+                speed = 15;
             }
 
         }
@@ -275,19 +277,21 @@ namespace Com.tuf31404.KeepEating
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
 
-
             if (StaticSettings.Map.Equals("SmallGameMap"))
             {
                 minX = -150f;
                 maxX = 152f;
                 minY = -108f;
                 maxY = 82f;
-            } else if (StaticSettings.Map.Equals("BigGameMap"))
+                photonView.RPC("setPositionClamps", RpcTarget.All, 0);
+            }
+            else if (StaticSettings.Map.Equals("BigGameMap"))
             {
                 minX = -250f;
                 maxX = 250f;
                 minY = -235f;
                 maxY = 235f;
+                photonView.RPC("setPositionClamps", RpcTarget.All, 1);
             }
 
             pos = new Vector3(
@@ -529,12 +533,12 @@ namespace Com.tuf31404.KeepEating
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
-                speed = 30;
+                speed = 20;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
-                speed = 20;
+                speed = 15;
                 
             }
         }
@@ -631,6 +635,25 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 playerSprite.sprite = enforcerSprite;
+            }
+            
+        }
+
+        [PunRPC]
+        void setPositionClamps(int flag)
+        {
+            if (flag == 0)
+            {
+                minX = -150f;
+                maxX = 152f;
+                minY = -108f;
+                maxY = 82f;
+            } else if (flag == 1)
+            {
+                minX = -250f;
+                maxX = 250f;
+                minY = -235f;
+                maxY = 235f;
             }
             
         }
