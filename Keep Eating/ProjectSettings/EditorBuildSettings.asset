@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SmallGameMap.unity
     guid: 1127b4415422bbf48aad56ca5ecf8973
+  - enabled: 1
+    path: Assets/Scenes/BigGameMap.unity
+    guid: 3ffc0c8d9b5c6924b8886dcadb9a31b8
   m_configObjects: {}

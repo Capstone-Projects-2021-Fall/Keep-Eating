@@ -72,6 +72,7 @@ namespace Com.tuf31404.KeepEating
         private bool foodCollision;
         private bool taserCollision;
         private bool inGame;
+        private bool wallCollision;
         //strings
         private Items weaponType;
         private Items tempWeaponType;
@@ -95,6 +96,7 @@ namespace Com.tuf31404.KeepEating
         public bool FiringTaser{ get; set; }
 
         public float Health { get; set; }
+
 
         #region Init
         void Awake()
@@ -407,6 +409,11 @@ namespace Com.tuf31404.KeepEating
                 tempItemName = other.gameObject.name;
                 taserCollision = true;
             }
+
+            if (other.gameObject.name.Contains("Wall"))
+            {
+                wallCollision = true;
+            }
         }
 
         void OnCollisionEnter2D(Collision2D collision)
@@ -440,10 +447,14 @@ namespace Com.tuf31404.KeepEating
                 tempFoodType = Items.NA;
                 foodCollision = false;
             }
-            else 
+            else if (other.gameObject.tag.Equals("Taser"))
             {
                 tempItemName = "";
                 taserCollision = false;
+            } else
+            {
+                tempItemName = "";
+                wallCollision = false;
             }
             
         }
