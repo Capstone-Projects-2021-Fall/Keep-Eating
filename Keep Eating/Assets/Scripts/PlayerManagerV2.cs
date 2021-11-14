@@ -273,6 +273,7 @@ namespace Com.tuf31404.KeepEating
             pos.x += h * speed * Time.deltaTime;
             pos.y += v * speed * Time.deltaTime;
 
+
             if (StaticSettings.Map.Equals("SmallGameMap"))
             {
                 minX = -150f;

@@ -21,6 +21,10 @@ namespace Com.tuf31404.KeepEating
         {
             //Debug.Log("camera movement start");
             GetCamera();
+            float camHeight, camWidth;
+            camHeight = 2 * Camera.main.orthographicSize;
+            camWidth = camHeight * Camera.main.aspect;
+            Debug.Log("camera height = " + camHeight + " cam width = " + camWidth);
         }
 
         public void GetCamera()

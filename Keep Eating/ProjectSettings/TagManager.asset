@@ -20,6 +20,7 @@ TagManager:
   - Taser
   - EaterAI
   - EnforcerAI
+  - SettingsButton
   layers:
   - Default
   - TransparentFX
