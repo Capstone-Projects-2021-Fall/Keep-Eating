@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-890954567731825294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701145188349005415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SmoothingDelay: 5
 --- !u!114 &2744821492715974044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27,7 +40,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEater: 0
-  speed: 30
+  speed: 20
   PlayerUiPrefab: {fileID: 0}
   shotgunSprite: {fileID: -3695664891932108249, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
   revolverSprite: {fileID: -4855807490512174151, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
@@ -41,6 +54,8 @@ MonoBehaviour:
   Health: 1
   myTransform: {fileID: 1701145188349005432}
   thisPV: {fileID: 4716197586251352982}
+  fieldOfVisionX: 122
+  fieldOfVisionY: 50
 --- !u!1001 &8298179205779476286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48,6 +63,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
+      objectReference: {fileID: -890954567731825294}
+    - target: {fileID: 3628285783012918440, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+      propertyPath: ObservedComponents.Array.data[2]
+      value: 
+      objectReference: {fileID: -890954567731825294}
+    - target: {fileID: 4384164971519110413, guid: ce7e58eeef3428243804db33f032217c, type: 3}
+      propertyPath: m_RotationModel.InterpolateOption
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5305102746383866511, guid: ce7e58eeef3428243804db33f032217c, type: 3}
       propertyPath: m_Sprite
       value: 
