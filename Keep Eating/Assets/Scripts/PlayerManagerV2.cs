@@ -564,19 +564,23 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-                if (photonView.ViewID == pvId)
-                {
-                    mySpriteRenderer.enabled = false;
-                    this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                    IEnumerator coroutine = RespawnWaiter(pvId);
-                    StartCoroutine(coroutine);
-                }
-                else
-                {
-                    PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                    PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                }
-            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().Death();
+            if (photonView.ViewID == pvId)
+            {
+                mySpriteRenderer.enabled = false;
+                this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                IEnumerator coroutine = RespawnWaiter(pvId);
+                StartCoroutine(coroutine);
+            }
+            else
+            {
+                PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            
+            if (photonView.IsMine)
+            {
+                GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().Death();
+            }
         }
 
         [PunRPC]

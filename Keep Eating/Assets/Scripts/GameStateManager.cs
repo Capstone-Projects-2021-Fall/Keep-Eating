@@ -224,8 +224,11 @@ namespace Com.tuf31404.KeepEating
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
-                PhotonNetwork.Destroy(eaterAI[0]);
-                PhotonNetwork.Destroy(enforcerAI[0]);
+                if (StaticSettings.Bots)
+                {
+                    PhotonNetwork.Destroy(eaterAI[0]);
+                    PhotonNetwork.Destroy(enforcerAI[0]);
+                }
                 Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;
                 PhotonNetwork.AutomaticallySyncScene = true;
@@ -244,6 +247,7 @@ namespace Com.tuf31404.KeepEating
         {
             if (pV.IsMine)
             {
+                Debug.Log("Death pv = " + pV.ViewID);
                 this.EatersAlive--;
                 if (this.EatersAlive > 0)
                 {

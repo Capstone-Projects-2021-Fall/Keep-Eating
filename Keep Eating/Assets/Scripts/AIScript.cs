@@ -413,7 +413,6 @@ namespace Com.tuf31404.KeepEating
 
         IEnumerator RespawnWaiter(int pvId)
         {
-            GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().Death();
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             if (spawns.Length != 0)
