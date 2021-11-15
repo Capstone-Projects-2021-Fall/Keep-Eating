@@ -86,4 +86,6 @@ Keep Eating is an online multiplayer game, powered by the Unity engine and Photo
 
 The matchmaking, which is handled by PUN, is done by creating lobbies. Either a player can join a lobby or create their own. Players within a lobby can choose which team they want to be a part of, Eaters or Enforcers.   The Eaters team objective is to win the match by reaching their score goal. They gain points by eating "food" that spawns all over the map. The Enforcers team objective is to prevent the Eaters from scoring points by shooting them with weapons. If an Eater's health is depleted by the attacks from the Enforcers, they respawn on the map with a new full bar of health. The Enforcers win by preventing the Eaters from reaching the winning score as time runs out. 
 
+## QA Testing
+[Use the following document for QA testing](https://github.com/Capstone-Projects-2021-Fall/Keep-Eating/blob/Updated-ReadMe-for-pre-release/Keep%20Eating%20Acceptance%20QA%20Testing%20doc.xlsx)
 
