@@ -27,6 +27,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 3960797689889636146, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
   muzzle: {fileID: 5718619910400643348}
+  player: {fileID: 0}
 --- !u!114 &5467432437853476618
 MonoBehaviour:
   m_ObjectHideFlags: 0

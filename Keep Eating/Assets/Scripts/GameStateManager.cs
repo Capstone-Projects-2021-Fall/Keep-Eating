@@ -82,11 +82,18 @@ namespace Com.tuf31404.KeepEating
             DontDestroyOnLoad(this.gameObject);
             this.EatersDead = 0;
             this.EaterPoints = 0;
-            pointsToWin = 1000;
+            pointsToWin = 300;
             hudText = GameObject.Find("Timer").GetComponent<Text>();
             this.EatersScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
             this.EatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
-            this.EatersAliveText.text = "Eaters Alive: " + eaterSpawns.Length;
+            if (StaticSettings.Bots)
+            {
+                this.EatersAliveText.text = "Eaters Alive: " + eaterSpawns.Length;
+            }
+            else
+            {
+                this.EatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+            }
             this.ReturnToLobby = false;
         }
 

@@ -54,7 +54,6 @@ namespace Com.tuf31404.KeepEating
         private Vector3 pos;
         //booleans
         private bool hasGun = false;                                //change to hasWeapon
-        private bool isAlive;
         private bool facingLeft;
         private bool gunCollision;
         private bool foodCollision;
@@ -91,7 +90,7 @@ namespace Com.tuf31404.KeepEating
         private bool gameStart;
         private BotMap botMap;
         public PhotonView PV { get; set; }
-
+        public bool IsAlive { get; set; }
         private void Start()
         {
             teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
@@ -104,6 +103,7 @@ namespace Com.tuf31404.KeepEating
             wanderTarget = Vector3.zero;
             gameStart = false;
             target = null;
+            IsAlive = true;
             if (StaticSettings.Map.Equals("SmallGameMap"))
             {
                 minX = -150;
@@ -120,6 +120,8 @@ namespace Com.tuf31404.KeepEating
             }
             Debug.Log("Nodes.Length = " + nodes.Length);
             botMap = new BotMap(nodes.Length);
+            //SetBotMap();
+            botMap.PrintMap();
             StartCoroutine("WaitSetBotMap");
             StartCoroutine("StartWaiter");
         }
@@ -128,7 +130,7 @@ namespace Com.tuf31404.KeepEating
         // Update is called once per frame
         void Update()
         {
-            if (gameStart)
+            if (gameStart && IsAlive)
             {
 
                 if (!isEater)
@@ -201,6 +203,14 @@ namespace Com.tuf31404.KeepEating
                     wandering = true;
                 }
                 Move(wandering);
+            }
+            if (Health <= 0f && IsAlive)
+            {
+                //GameManager.Instance.LeaveRoom();
+                IsAlive = false;
+                PV.RPC("PlayerDead", RpcTarget.All, thisPV.ViewID);
+                IEnumerator coroutine = RespawnWaiter(thisPV.ViewID);
+                StartCoroutine(coroutine);
             }
         }
         
@@ -366,6 +376,13 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Bullet") && isEater)
+            {
+                Health -= 0.3f;
+            }
+        }
         IEnumerator ShootWaiter()
         {
             canShoot = false;
@@ -392,6 +409,23 @@ namespace Com.tuf31404.KeepEating
             SetBotMap();
             Debug.Log("Bot Map Set");
             yield return null; 
+        }
+
+        IEnumerator RespawnWaiter(int pvId)
+        {
+            GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().Death();
+            yield return new WaitForSeconds(10f);
+            GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
+            if (spawns.Length != 0)
+            {
+                int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
+                PV.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().PlayerRespawn();
+            }
+            else
+            {
+                PV.RPC("PlayerRespawn", RpcTarget.All, pvId, Vector3.zero);
+            }
         }
 
         private void SetBotMap()

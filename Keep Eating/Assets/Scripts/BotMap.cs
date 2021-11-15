@@ -10,6 +10,7 @@ namespace Com.tuf31404.KeepEating
 
         public float[,] AdjMatrix { get; }
         private int dimensions;
+
         public BotMap(int _dimensions)
         {
             dimensions = _dimensions;

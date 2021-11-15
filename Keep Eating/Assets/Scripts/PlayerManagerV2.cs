@@ -128,7 +128,7 @@ namespace Com.tuf31404.KeepEating
 
         private void Start()
         {
-            this.Health = 10000f;
+            this.Health = 1f;
             Debug.Log("STARTING PLAYER STARTING PLAYER");
             DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
@@ -201,14 +201,14 @@ namespace Com.tuf31404.KeepEating
         void Update()
         {
 
-            if (this.photonView.IsMine && isAlive)
+            if (photonView.IsMine && isAlive)
             {
                 ProcessInputs();
                 if (Health <= 0f && inGame)
                 {
                     //GameManager.Instance.LeaveRoom();
                     isAlive = false;
-                    this.photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
+                    photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
                 }
             }
 
@@ -546,7 +546,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void HitByBullet(int viewId, string bulletName)
         {
-            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 0.1f;
+            PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health -= 0.3f;
         }
 
         [PunRPC]
@@ -564,7 +564,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-                if (this.photonView.ViewID == pvId)
+                if (photonView.ViewID == pvId)
                 {
                     mySpriteRenderer.enabled = false;
                     this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -596,7 +596,15 @@ namespace Com.tuf31404.KeepEating
                 obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 obj.GetComponent<BoxCollider2D>().enabled = true;
                 obj.transform.position = pos;
-                obj.GetComponent<PlayerManagerV2>().Health = 1f;
+                if (obj.CompareTag("Player"))
+                {
+                    obj.GetComponent<PlayerManagerV2>().Health = 1f;
+                }
+                else
+                {
+                    obj.GetComponent<AIScript>().Health = 1f;
+                    obj.GetComponent<AIScript>().IsAlive = true;
+                }
             }
         }
 
