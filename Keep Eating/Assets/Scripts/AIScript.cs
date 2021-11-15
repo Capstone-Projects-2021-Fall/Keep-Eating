@@ -14,6 +14,9 @@ using UnityEngine.EventSystems;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+
+
+
 namespace Com.tuf31404.KeepEating
 {
     public class AIScript : MonoBehaviour
@@ -72,6 +75,7 @@ namespace Com.tuf31404.KeepEating
         private GameObject target;
         private GameObject[] enemyTargets;
         private GameObject[] itemTargets;
+        private GameObject[] nodes;
         [SerializeField]
         private Transform myTransform;
         [SerializeField]
@@ -85,9 +89,8 @@ namespace Com.tuf31404.KeepEating
         private Vector3 wanderTarget;
         private bool hasTarget, newWander;
         private bool gameStart;
-
+        private BotMap botMap;
         public PhotonView PV { get; set; }
-
 
         private void Start()
         {
@@ -101,10 +104,23 @@ namespace Com.tuf31404.KeepEating
             wanderTarget = Vector3.zero;
             gameStart = false;
             target = null;
-            minX = -150;
-            maxX = 152;
-            minY = -108;
-            maxY = 82;
+            if (StaticSettings.Map.Equals("SmallGameMap"))
+            {
+                minX = -150;
+                maxX = 152;
+                minY = -108;
+                maxY = 82;
+            }
+            else
+            {
+                minX = -250f;
+                maxX = 250f;
+                minY = -235f;
+                maxY = 235f;
+            }
+            Debug.Log("Nodes.Length = " + nodes.Length);
+            botMap = new BotMap(nodes.Length);
+            SetBotMap();
             StartCoroutine("StartWaiter");
         }
 
@@ -117,7 +133,7 @@ namespace Com.tuf31404.KeepEating
 
                 if (!isEater)
                 {
-                    Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
+                    //Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
                 }
                 if (!hasTarget)
                 {
@@ -150,7 +166,7 @@ namespace Com.tuf31404.KeepEating
 
                     if (!isEater)
                     {
-                        Debug.Log("Target name = " + target.name);
+                        //Debug.Log("Target name = " + target.name);
                     }
                     hasTarget = true;
                     wandering = false;
@@ -280,7 +296,7 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 itemTargets = GameObject.FindGameObjectsWithTag("Weapon");
-                Debug.Log("weapons size = " + itemTargets.Length);
+                //Debug.Log("weapons size = " + itemTargets.Length);
                 enemyTargets = new GameObject[teamsManager.GetTeamMembersCount(1)];
                 GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
                 int index = 0;
@@ -294,6 +310,7 @@ namespace Com.tuf31404.KeepEating
                     }
                 }
             }
+            nodes = GameObject.FindGameObjectsWithTag("Node");
         }
 
         float TargetDistance(Vector3 targetPos)
@@ -369,5 +386,44 @@ namespace Com.tuf31404.KeepEating
             yield return new WaitForSeconds(waitTime);
             newWander = true;
         }
+
+        private void SetBotMap()
+        {
+            //Vector3 a, b;
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                for (int j = 0; j < nodes.Length; j++)
+                {
+                    if (i != j)
+                    {
+                        Vector3 a = nodes[i].transform.position;
+                        Vector3 b = nodes[j].transform.position;
+                        Debug.Log("a = " + a + " b = " + b);
+                        if (TryRayCast(a, b))
+                        {
+                            botMap.Add(a, b, i, j);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool TryRayCast(Vector3 _a, Vector3 _b)
+        {
+            float dist = Mathf.Sqrt(Mathf.Pow(_a.x - _b.x, 2) + Mathf.Pow(_a.y - _b.y, 2));
+            Vector2 direction = new Vector2(_a.x - _b.x, _a.y - _b.y).normalized;
+            Vector2 a = new Vector2(_a.x, _a.y);
+            RaycastHit2D hit = Physics2D.Raycast(a, direction, dist);
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject.CompareTag("Wall"))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
+
+

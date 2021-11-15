@@ -16,6 +16,7 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
+        StaticSettings.SetVars();
         ChangeMap("SmallGameMap");
         maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         TogglePrivate();
