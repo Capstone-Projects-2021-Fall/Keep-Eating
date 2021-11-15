@@ -16,9 +16,9 @@ public class StaticSettings : MonoBehaviour
 
     public static void SetVars()
     {
-        IsPrivate = false;
+        IsPrivate = true;
         Bots = false;
-        Map = "";
+        Map = "SmallGameMap";
         MaxPlayers = 1;
         MaxEaters = 1;
         MaxEnforcers = 1;
