@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 3960797689889636146, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
   muzzle: {fileID: 4356547124849860138}
+  player: {fileID: 0}
 --- !u!114 &7482071354437681898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,13 +33,14 @@ MonoBehaviour:
   enforcerSprite: {fileID: 21300000, guid: 4836c09be31426e49b52ea966be0a3c8, type: 3}
   shotgunSprite: {fileID: -3695664891932108249, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
   revolverSprite: {fileID: -4855807490512174151, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
-  taserSprite: {fileID: 21300000, guid: ea5a4f63b3ea4ab41bb560b6b8943a95, type: 3}
+  taserSprite: {fileID: 21300000, guid: 7f4256bcea3da0e42ac3b131cc858e17, type: 3}
   mySpriteRenderer: {fileID: 5305102746383866511}
   weaponSpriteRenderer: {fileID: 1449683621800106503}
   taserSpriteRenderer: {fileID: -4871439641253659838, guid: 210e36696b85beb48b55690376894303, type: 3}
   shootScript: {fileID: 5156995716958531386}
   muzzleTransform: {fileID: 4356547124849860138}
   bulletPrefab: {fileID: 7986858786739329354, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
+  taserBulletPrefab: {fileID: 153371551782413702, guid: cb63ab708885dca44922a0fe7eeda3bb, type: 3}
 --- !u!1001 &3386362974971726178
 PrefabInstance:
   m_ObjectHideFlags: 0

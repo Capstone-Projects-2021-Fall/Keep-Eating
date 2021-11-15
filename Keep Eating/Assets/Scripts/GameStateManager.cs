@@ -47,7 +47,7 @@ namespace Com.tuf31404.KeepEating
         public Text EatersScoreText { get; set; }
         public Text EatersAliveText { get; set; }
 
-        public int EatersDead { get; set; }
+        public int EatersAlive { get; set; }
 
         public int EaterPoints { get; set; }
 
@@ -80,13 +80,21 @@ namespace Com.tuf31404.KeepEating
         void Start()
         {
             DontDestroyOnLoad(this.gameObject);
-            this.EatersDead = 0;
             this.EaterPoints = 0;
-            pointsToWin = 1000;
+            pointsToWin = 300;
             hudText = GameObject.Find("Timer").GetComponent<Text>();
             this.EatersScoreText = GameObject.Find("Eater Score").GetComponent<Text>();
             this.EatersAliveText = GameObject.Find("Eaters Alive").GetComponent<Text>();
-            this.EatersAliveText.text = "Eaters Alive: " + eaterSpawns.Length;
+            if (StaticSettings.Bots)
+            {
+                this.EatersAliveText.text = "Eaters Alive: " + eaterSpawns.Length;
+                this.EatersAlive = eaterSpawns.Length;
+            }
+            else
+            {
+                this.EatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+                this.EatersAlive = teamManager.GetTeamMembersCount(1);
+            }
             this.ReturnToLobby = false;
         }
 
@@ -94,30 +102,10 @@ namespace Com.tuf31404.KeepEating
         // TODO make generic for different maps
         private void InitArrays()
         {
-            eaterSpawns = new GameObject[3];
-            enforcerSpawns = new GameObject[2];
-            foodSpawn = new GameObject[5];
-            weaponSpawns = new GameObject[2];
-            for (int i = 0; i < 3; i++)
-            {
-                string spName = "EaterSpawn" + i;
-                eaterSpawns[i] = GameObject.Find(spName);
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                string spName = "EnforcerSpawn" + i;
-                enforcerSpawns[i] = GameObject.Find(spName);
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                string spName = "FoodSpawn" + i;
-                foodSpawn[i] = GameObject.Find(spName);
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                string spName = "WeaponSpawn" + i;
-                weaponSpawns[i] = GameObject.Find(spName);
-            }
+            eaterSpawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
+            enforcerSpawns = GameObject.FindGameObjectsWithTag("EnforcerSpawn");
+            foodSpawn = GameObject.FindGameObjectsWithTag("Food");
+            weaponSpawns = GameObject.FindGameObjectsWithTag("Weapon");
         }
 
         public void SpawnPlayers()
@@ -129,7 +117,6 @@ namespace Com.tuf31404.KeepEating
             Debug.Log("players count = " + PhotonNetwork.CurrentRoom.PlayerCount);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
-                
                 if (PhotonTeamExtensions.GetPhotonTeam(players[i + 1]).Code == 1)
                 {
                     pV.RPC("SpawnRpc", players[i+1], eaterIndex++, players[i+1].UserId);
@@ -195,7 +182,7 @@ namespace Com.tuf31404.KeepEating
         // Checks for win conditions.
         void Update()
         {
-            if (this.EatersDead == eaterSpawns.Length)
+            if (this.EatersAlive <= 0)
             {
                 GameOver("Death");
             }
@@ -203,6 +190,8 @@ namespace Com.tuf31404.KeepEating
             {
                 GameOver("Points");
             }
+
+
         }
 
 
@@ -235,8 +224,11 @@ namespace Com.tuf31404.KeepEating
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
-                PhotonNetwork.Destroy(eaterAI[0]);
-                PhotonNetwork.Destroy(enforcerAI[0]);
+                if (StaticSettings.Bots)
+                {
+                    PhotonNetwork.Destroy(eaterAI[0]);
+                    PhotonNetwork.Destroy(enforcerAI[0]);
+                }
                 Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;
                 PhotonNetwork.AutomaticallySyncScene = true;
@@ -255,10 +247,11 @@ namespace Com.tuf31404.KeepEating
         {
             if (pV.IsMine)
             {
-                this.EatersDead++;
-                if (this.EatersDead + 1 - eaterSpawns.Length != 0)
+                Debug.Log("Death pv = " + pV.ViewID);
+                this.EatersAlive--;
+                if (this.EatersAlive > 0)
                 {
-                    pV.RPC("UpdateAliveText", RpcTarget.All, 1);
+                    pV.RPC("UpdateAliveText", RpcTarget.All, -1);
                 }
             }
         }
@@ -267,8 +260,8 @@ namespace Com.tuf31404.KeepEating
         {
             if (pV.IsMine)
             {
-                this.EatersDead--;
-                pV.RPC("UpdateAliveText", RpcTarget.All, -1);
+                this.EatersAlive++;
+                pV.RPC("UpdateAliveText", RpcTarget.All, 1);
             }
         }
 

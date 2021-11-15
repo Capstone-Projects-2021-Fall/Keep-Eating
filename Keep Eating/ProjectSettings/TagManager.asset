@@ -22,6 +22,8 @@ TagManager:
   - EnforcerAI
   - SettingsButton
   - Wall
+  - Node
+  - Taser Bullet
   layers:
   - Default
   - TransparentFX
@@ -31,7 +33,7 @@ TagManager:
   - UI
   - player
   - food
-  - 
+  - Wall
   - 
   - 
   - 

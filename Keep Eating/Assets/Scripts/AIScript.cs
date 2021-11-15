@@ -14,6 +14,9 @@ using UnityEngine.EventSystems;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+
+
+
 namespace Com.tuf31404.KeepEating
 {
     public class AIScript : MonoBehaviour
@@ -51,7 +54,6 @@ namespace Com.tuf31404.KeepEating
         private Vector3 pos;
         //booleans
         private bool hasGun = false;                                //change to hasWeapon
-        private bool isAlive;
         private bool facingLeft;
         private bool gunCollision;
         private bool foodCollision;
@@ -72,6 +74,7 @@ namespace Com.tuf31404.KeepEating
         private GameObject target;
         private GameObject[] enemyTargets;
         private GameObject[] itemTargets;
+        private GameObject[] nodes;
         [SerializeField]
         private Transform myTransform;
         [SerializeField]
@@ -85,10 +88,9 @@ namespace Com.tuf31404.KeepEating
         private Vector3 wanderTarget;
         private bool hasTarget, newWander;
         private bool gameStart;
-
+        private BotMap botMap;
         public PhotonView PV { get; set; }
-
-
+        public bool IsAlive { get; set; }
         private void Start()
         {
             teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
@@ -101,10 +103,26 @@ namespace Com.tuf31404.KeepEating
             wanderTarget = Vector3.zero;
             gameStart = false;
             target = null;
-            minX = -150;
-            maxX = 152;
-            minY = -108;
-            maxY = 82;
+            IsAlive = true;
+            if (StaticSettings.Map.Equals("SmallGameMap"))
+            {
+                minX = -150;
+                maxX = 152;
+                minY = -108;
+                maxY = 82;
+            }
+            else
+            {
+                minX = -250f;
+                maxX = 250f;
+                minY = -235f;
+                maxY = 235f;
+            }
+            Debug.Log("Nodes.Length = " + nodes.Length);
+            botMap = new BotMap(nodes.Length);
+            //SetBotMap();
+            botMap.PrintMap();
+            StartCoroutine("WaitSetBotMap");
             StartCoroutine("StartWaiter");
         }
 
@@ -112,12 +130,12 @@ namespace Com.tuf31404.KeepEating
         // Update is called once per frame
         void Update()
         {
-            if (gameStart)
+            if (gameStart && IsAlive)
             {
 
                 if (!isEater)
                 {
-                    Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
+                    //Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
                 }
                 if (!hasTarget)
                 {
@@ -127,7 +145,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (TargetInView(target.transform.position))
                     {
-                        if (target.tag.Equals("Player"))
+                        if (target.tag.Equals("Player") || target.tag.Equals("EaterAI"))
                         {
                             if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
                             {
@@ -150,11 +168,11 @@ namespace Com.tuf31404.KeepEating
 
                     if (!isEater)
                     {
-                        Debug.Log("Target name = " + target.name);
+                        //Debug.Log("Target name = " + target.name);
                     }
                     hasTarget = true;
                     wandering = false;
-                    if (target.tag.Equals("Player") && hasGun)
+                    if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
                     {
                         if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
                         {
@@ -174,6 +192,7 @@ namespace Com.tuf31404.KeepEating
                             StartCoroutine("ShootWaiter");
                         }
                     }
+                    
                 }
                 else
                 {
@@ -185,6 +204,14 @@ namespace Com.tuf31404.KeepEating
                     wandering = true;
                 }
                 Move(wandering);
+            }
+            if (Health <= 0f && IsAlive)
+            {
+                //GameManager.Instance.LeaveRoom();
+                IsAlive = false;
+                PV.RPC("PlayerDead", RpcTarget.All, thisPV.ViewID);
+                IEnumerator coroutine = RespawnWaiter(thisPV.ViewID);
+                StartCoroutine(coroutine);
             }
         }
         
@@ -280,9 +307,10 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 itemTargets = GameObject.FindGameObjectsWithTag("Weapon");
-                Debug.Log("weapons size = " + itemTargets.Length);
-                enemyTargets = new GameObject[teamsManager.GetTeamMembersCount(1)];
+                //Debug.Log("weapons size = " + itemTargets.Length);
                 GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                GameObject[] eaterAI = GameObject.FindGameObjectsWithTag("EaterAI");
+                enemyTargets = new GameObject[players.Length + eaterAI.Length];
                 int index = 0;
                 foreach (GameObject player in players)
                 {
@@ -293,7 +321,12 @@ namespace Com.tuf31404.KeepEating
                         enemyTargets[index++] = player;
                     }
                 }
+                foreach (GameObject eater in eaterAI)
+                {
+                    enemyTargets[index++] = eater;
+                }
             }
+            nodes = GameObject.FindGameObjectsWithTag("Node");
         }
 
         float TargetDistance(Vector3 targetPos)
@@ -349,6 +382,13 @@ namespace Com.tuf31404.KeepEating
             }
         }
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Bullet") && isEater)
+            {
+                Health -= 0.3f;
+            }
+        }
         IEnumerator ShootWaiter()
         {
             canShoot = false;
@@ -369,5 +409,66 @@ namespace Com.tuf31404.KeepEating
             yield return new WaitForSeconds(waitTime);
             newWander = true;
         }
+
+        IEnumerator WaitSetBotMap()
+        {
+            SetBotMap();
+            Debug.Log("Bot Map Set");
+            yield return null; 
+        }
+
+        IEnumerator RespawnWaiter(int pvId)
+        {
+            yield return new WaitForSeconds(10f);
+            GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
+            if (spawns.Length != 0)
+            {
+                int spawnPoint = UnityEngine.Random.Range(0, spawns.Length);
+                PV.RPC("PlayerRespawn", RpcTarget.All, pvId, spawns[spawnPoint].transform.position);
+                GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().PlayerRespawn();
+            }
+            else
+            {
+                PV.RPC("PlayerRespawn", RpcTarget.All, pvId, Vector3.zero);
+            }
+        }
+
+        private void SetBotMap()
+        {
+            Vector3 a, b;
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                for (int j = 0; j < nodes.Length; j++)
+                {
+                    if (i != j)
+                    {
+                        a = nodes[i].transform.position;
+                        b = nodes[j].transform.position;
+                        if (TryRayCast(a, b))
+                        {
+                            botMap.Add(a, b, i, j);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool TryRayCast(Vector3 _a, Vector3 _b)
+        {
+            float dist = Mathf.Sqrt(Mathf.Pow(_a.x - _b.x, 2) + Mathf.Pow(_a.y - _b.y, 2));
+            Vector2 direction = new Vector2(_a.x - _b.x, _a.y - _b.y).normalized;
+            Vector2 a = new Vector2(_a.x, _a.y);
+            RaycastHit2D hit = Physics2D.Raycast(a, direction, dist);
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject.CompareTag("Wall"))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
+
+

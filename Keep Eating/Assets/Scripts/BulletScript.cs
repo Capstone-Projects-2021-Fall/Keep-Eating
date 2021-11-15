@@ -22,7 +22,14 @@ public class BulletScript : MonoBehaviour
 
     void Start()
     {
-        Destroy(this.gameObject, 0.5f);
+        if (BulletName.Contains("Taser"))
+        {
+            Destroy(this.gameObject, 0.1f);
+        }
+        else
+        {
+            Destroy(this.gameObject, 0.5f);
+        }
     }
 
     // Update is called once per frame

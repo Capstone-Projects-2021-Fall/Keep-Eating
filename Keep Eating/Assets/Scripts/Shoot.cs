@@ -16,6 +16,10 @@ namespace Com.tuf31404.KeepEating
         public Rigidbody2D bullet;
         public Transform muzzle;
 
+        //Instance of a player that will be shot
+        public PlayerManagerV2 player;
+
+
         /*
         public void ShootGun()
         {
@@ -47,6 +51,7 @@ namespace Com.tuf31404.KeepEating
             {
                 mousePos += Random.insideUnitSphere * 5;                            //This is where the MAGIC happens.
             }
+
             mousePos.z = 0;                                                         // z is set to 0 so the camera can see it
             direction = (mousePos - transform.position).normalized;
             direction = Quaternion.Euler(0, -45, 0) * direction;
