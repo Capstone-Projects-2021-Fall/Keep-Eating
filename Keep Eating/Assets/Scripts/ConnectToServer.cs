@@ -20,7 +20,7 @@ namespace Com.tuf31404.KeepEating
     {
 
         string gameVersion = "1";                                  //needed so you are connected to a compatible lobby
-
+        bool isConsole = false;
 
         //Awake is always the first function called
         private void Awake()
@@ -48,7 +48,14 @@ namespace Com.tuf31404.KeepEating
 
         public override void OnJoinedLobby()
         {
-            SceneManager.LoadScene("Main Menu");
+            if (isConsole)
+            {
+                SceneManager.LoadScene("LoginPage");
+            }
+            else
+            {
+                SceneManager.LoadScene("Main Menu");
+            }
             Debug.Log("Join Lobby");
         }
     }

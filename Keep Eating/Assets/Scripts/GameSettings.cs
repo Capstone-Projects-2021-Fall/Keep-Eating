@@ -1,26 +1,113 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Photon.Pun;
 
 public class GameSettings : MonoBehaviour
 {
-    //int lobbySize, eaterNum, enforcerNum;
-    //string map;
 
+    [SerializeField]
+    private Canvas settingsCanvas;
+    [SerializeField]
+    private Button bigMap, smallMap, toggleBots, makePrivate, exit;
+    [SerializeField]
+    private InputField maxPlayersInput;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        //DontDestroyOnLoad(this.gameObject);
+        StaticSettings.SetVars();
+        ChangeMap("SmallGameMap");
+        maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
+        TogglePrivate();
     }
 
-    public int LobbySize { get; set; }
+    public void OpenSettingsMenu()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            settingsCanvas.enabled = true;
+        }
+    }
 
-    public int EaterNum { get; set; }
+    public void CloseSettingsMenu()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            settingsCanvas.enabled = false;
+        }
+    }
 
-    public int EnforcerNum { get; set; }
+    public void ChangeMap(string chosenMap)
+    {
+        StaticSettings.Map = chosenMap;
+        if (chosenMap.Equals("SmallGameMap"))
+        {
+            smallMap.GetComponent<Image>().color = Color.red;
+            bigMap.GetComponent<Image>().color = Color.white;
+        }
+        else
+        {
+            smallMap.GetComponent<Image>().color = Color.white;
+            bigMap.GetComponent<Image>().color = Color.red;
+        }
+    }
 
-    public string Map { get; set; }
+    public void SetMaxPlayers()
+    {
+        int num;
+        if (!int.TryParse(maxPlayersInput.text, out num))
+        {
+            Debug.LogError("Input a number!!!!!!!!!");
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
+        }
 
+        if (num < 1 || num > 14)
+        {
+            Debug.LogError("Bad Number !!!!!!!!!!");
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
+        }
 
+        if (StaticSettings.Map.Equals("SmallGameMap") && num > 5)
+        {
+            StaticSettings.MaxPlayers = 5;
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
+        }
+        else
+        {
+            StaticSettings.MaxPlayers = num;
+        }
+
+        PhotonNetwork.CurrentRoom.MaxPlayers = (byte)StaticSettings.MaxPlayers;
+    }
+
+    public void TogglePrivate()
+    {
+        if (StaticSettings.IsPrivate)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+            StaticSettings.IsPrivate = false;
+            makePrivate.GetComponent<Image>().color = Color.white;
+        }        
+        else
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            StaticSettings.IsPrivate = true;
+            makePrivate.GetComponent<Image>().color = Color.red;
+        }
+    }
+
+    public void ToggleBots()
+    {
+        if (StaticSettings.Bots)
+        {
+            StaticSettings.Bots = false;
+            toggleBots.GetComponent<Image>().color = Color.white;
+        }
+        else
+        {
+            StaticSettings.Bots = true;
+            toggleBots.GetComponent<Image>().color = Color.red;
+        }
+    }
 }
