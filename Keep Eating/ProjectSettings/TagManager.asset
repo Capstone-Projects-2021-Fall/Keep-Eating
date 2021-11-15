@@ -23,6 +23,7 @@ TagManager:
   - SettingsButton
   - Wall
   - Node
+  - Taser Bullet
   layers:
   - Default
   - TransparentFX

@@ -19,7 +19,7 @@ namespace Com.tuf31404.KeepEating
     public class ConnectToServer : MonoBehaviourPunCallbacks      //needed for PUN functions
     {
 
-        string gameVersion = "1";                                  //needed so you are connected to a compatible lobby
+        string gameVersion = "2";                                  //needed so you are connected to a compatible lobby
         bool isConsole = false;
 
         //Awake is always the first function called

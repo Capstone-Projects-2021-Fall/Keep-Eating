@@ -47,7 +47,7 @@ namespace Com.tuf31404.KeepEating
         [SerializeField]
         private Transform muzzleTransform;
         [SerializeField]
-        private GameObject bulletPrefab;
+        private GameObject bulletPrefab, taserBulletPrefab;
         //object variables
         private CameraMovement cameraMovement;
         private PhotonTeamsManager teamsManager;
@@ -325,12 +325,8 @@ namespace Com.tuf31404.KeepEating
             {
                 if (this.HasTaser)
                 {
-                    this.FiringTaser = true;
+                    photonView.RPC("ShootGun", RpcTarget.All, "Taser", shootScript.ShootGun(weaponType), muzzleTransform.position);
                 }
-            }
-            else
-            {
-                this.FiringTaser = false;
             }
 
 
@@ -409,6 +405,12 @@ namespace Com.tuf31404.KeepEating
             if (collision.gameObject.tag.Equals("Bullet") && this.MyTeam == 1){
                 photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
+            Debug.Log("Collision");
+            if (collision.gameObject.tag.Equals("Taser Bullet") && this.MyTeam == 2)
+            {
+                Debug.Log("Taser bullet collision");
+                Freeze();
+            }
         }
 
         void OnTriggerExit2D(Collider2D other)
@@ -448,7 +450,7 @@ namespace Com.tuf31404.KeepEating
             {
                 if (this.MyTeam == 1 && collision.gameObject.GetComponent<PlayerManagerV2>().MyTeam == 1)
                 {
-                    Debug.Log("Healing");
+                    //Debug.Log("Healing");
                     photonView.RPC("Healing", RpcTarget.Others, photonView.ViewID);
                     this.Health += 0.1f;
                 }
@@ -550,13 +552,13 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void Healing(int viewId)
         {
-            Debug.Log("Healing rpc");
+            //Debug.Log("Healing rpc");
             if (PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health < 1)
             {
                 PhotonView.Find(viewId).gameObject.GetComponent<PlayerManagerV2>().Health += 0.1f;
-                Debug.Log("Adding health");
+                //Debug.Log("Adding health");
             }
-            Debug.Log("My health = " + this.Health);
+            //Debug.Log("My health = " + this.Health);
         }
 
         [PunRPC]
@@ -667,9 +669,17 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         void ShootGun(string name, Vector3 direction, Vector3 position)
         {
-                GameObject newBullet = Instantiate(bulletPrefab, position, Quaternion.identity);
-                newBullet.GetComponent<BulletScript>().BulletName = name;
-                newBullet.GetComponent<BulletScript>().SetDirection(direction);
+            GameObject newBullet;
+            if (!name.Contains("Taser"))
+            {
+                newBullet = Instantiate(bulletPrefab, position, Quaternion.identity);
+            }
+            else
+            {
+                newBullet = Instantiate(taserBulletPrefab, position, Quaternion.identity);
+            }
+            newBullet.GetComponent<BulletScript>().BulletName = name;
+            newBullet.GetComponent<BulletScript>().SetDirection(direction);
         }
 
         [PunRPC]
@@ -923,15 +933,19 @@ namespace Com.tuf31404.KeepEating
         public void Freeze()
         {
             //Starts the FreezeRoutine method
+            Debug.Log("Freeze");
             StartCoroutine(FreezeRoutine());
         }
 
         private IEnumerator FreezeRoutine()
         {
+            Debug.Log("Freeze Coroutine");
             //Constrains players movement in any direction for 5 seconds before allowing movement to resume
-            LocalPlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
-            yield return new WaitForSeconds(5);
-            LocalPlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            //this.gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+            isAlive = false;
+            yield return new WaitForSeconds(10);
+            isAlive = true;
+            //this.gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
         }
     }
 }
