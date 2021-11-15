@@ -21,6 +21,8 @@ TagManager:
   - EaterAI
   - EnforcerAI
   - SettingsButton
+  - Wall
+  - Node
   layers:
   - Default
   - TransparentFX
@@ -30,7 +32,7 @@ TagManager:
   - UI
   - player
   - food
-  - 
+  - Wall
   - 
   - 
   - 

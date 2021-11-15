@@ -19,10 +19,11 @@ public class StaticSettings : MonoBehaviour
         IsPrivate = true;
         Bots = false;
         Map = "SmallGameMap";
-        MaxPlayers = 1;
+        MaxPlayers = 2;
         MaxEaters = 1;
         MaxEnforcers = 1;
         MinEaters = 1;
         MinEnforcers = 1;
+        FreshRoom = true;
     }
 }

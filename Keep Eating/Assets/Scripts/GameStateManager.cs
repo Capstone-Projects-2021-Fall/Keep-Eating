@@ -94,30 +94,10 @@ namespace Com.tuf31404.KeepEating
         // TODO make generic for different maps
         private void InitArrays()
         {
-            eaterSpawns = new GameObject[3];
-            enforcerSpawns = new GameObject[2];
-            foodSpawn = new GameObject[5];
-            weaponSpawns = new GameObject[2];
-            for (int i = 0; i < 3; i++)
-            {
-                string spName = "EaterSpawn" + i;
-                eaterSpawns[i] = GameObject.Find(spName);
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                string spName = "EnforcerSpawn" + i;
-                enforcerSpawns[i] = GameObject.Find(spName);
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                string spName = "FoodSpawn" + i;
-                foodSpawn[i] = GameObject.Find(spName);
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                string spName = "WeaponSpawn" + i;
-                weaponSpawns[i] = GameObject.Find(spName);
-            }
+            eaterSpawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
+            enforcerSpawns = GameObject.FindGameObjectsWithTag("EnforcerSpawn");
+            foodSpawn = GameObject.FindGameObjectsWithTag("Food");
+            weaponSpawns = GameObject.FindGameObjectsWithTag("Weapon");
         }
 
         public void SpawnPlayers()
