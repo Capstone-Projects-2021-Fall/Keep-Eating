@@ -145,7 +145,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (TargetInView(target.transform.position))
                     {
-                        if (target.tag.Equals("Player"))
+                        if (target.tag.Equals("Player") || target.tag.Equals("EaterAI"))
                         {
                             if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
                             {
@@ -172,7 +172,7 @@ namespace Com.tuf31404.KeepEating
                     }
                     hasTarget = true;
                     wandering = false;
-                    if (target.tag.Equals("Player") && hasGun)
+                    if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
                     {
                         if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
                         {
@@ -192,6 +192,7 @@ namespace Com.tuf31404.KeepEating
                             StartCoroutine("ShootWaiter");
                         }
                     }
+                    
                 }
                 else
                 {
@@ -307,8 +308,9 @@ namespace Com.tuf31404.KeepEating
             {
                 itemTargets = GameObject.FindGameObjectsWithTag("Weapon");
                 //Debug.Log("weapons size = " + itemTargets.Length);
-                enemyTargets = new GameObject[teamsManager.GetTeamMembersCount(1)];
                 GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                GameObject[] eaterAI = GameObject.FindGameObjectsWithTag("EaterAI");
+                enemyTargets = new GameObject[players.Length + eaterAI.Length];
                 int index = 0;
                 foreach (GameObject player in players)
                 {
@@ -318,6 +320,10 @@ namespace Com.tuf31404.KeepEating
                         Debug.Log("Adding Enemy targets");
                         enemyTargets[index++] = player;
                     }
+                }
+                foreach (GameObject eater in eaterAI)
+                {
+                    enemyTargets[index++] = eater;
                 }
             }
             nodes = GameObject.FindGameObjectsWithTag("Node");
