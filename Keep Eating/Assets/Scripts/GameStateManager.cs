@@ -47,7 +47,7 @@ namespace Com.tuf31404.KeepEating
         public Text EatersScoreText { get; set; }
         public Text EatersAliveText { get; set; }
 
-        public int EatersDead { get; set; }
+        public int EatersAlive { get; set; }
 
         public int EaterPoints { get; set; }
 
@@ -80,7 +80,6 @@ namespace Com.tuf31404.KeepEating
         void Start()
         {
             DontDestroyOnLoad(this.gameObject);
-            this.EatersDead = 0;
             this.EaterPoints = 0;
             pointsToWin = 300;
             hudText = GameObject.Find("Timer").GetComponent<Text>();
@@ -89,10 +88,12 @@ namespace Com.tuf31404.KeepEating
             if (StaticSettings.Bots)
             {
                 this.EatersAliveText.text = "Eaters Alive: " + eaterSpawns.Length;
+                this.EatersAlive = eaterSpawns.Length;
             }
             else
             {
                 this.EatersAliveText.text = "Eaters Alive: " + teamManager.GetTeamMembersCount(1);
+                this.EatersAlive = teamManager.GetTeamMembersCount(1);
             }
             this.ReturnToLobby = false;
         }
@@ -116,7 +117,6 @@ namespace Com.tuf31404.KeepEating
             Debug.Log("players count = " + PhotonNetwork.CurrentRoom.PlayerCount);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
-                
                 if (PhotonTeamExtensions.GetPhotonTeam(players[i + 1]).Code == 1)
                 {
                     pV.RPC("SpawnRpc", players[i+1], eaterIndex++, players[i+1].UserId);
@@ -182,7 +182,7 @@ namespace Com.tuf31404.KeepEating
         // Checks for win conditions.
         void Update()
         {
-            if (this.EatersDead == eaterSpawns.Length)
+            if (this.EatersAlive <= 0)
             {
                 GameOver("Death");
             }
@@ -244,22 +244,20 @@ namespace Com.tuf31404.KeepEating
         {
             if (pV.IsMine)
             {
-                this.EatersDead++;
-                if (this.EatersDead + 1 - eaterSpawns.Length != 0)
+                this.EatersAlive--;
+                if (this.EatersAlive > 0)
                 {
-                    pV.RPC("UpdateAliveText", RpcTarget.All, 1);
+                    pV.RPC("UpdateAliveText", RpcTarget.All, -1);
                 }
             }
         }
-
-                
 
         public void PlayerRespawn()
         {
             if (pV.IsMine)
             {
-                this.EatersDead--;
-                pV.RPC("UpdateAliveText", RpcTarget.All, -1);
+                this.EatersAlive++;
+                pV.RPC("UpdateAliveText", RpcTarget.All, 1);
             }
         }
 

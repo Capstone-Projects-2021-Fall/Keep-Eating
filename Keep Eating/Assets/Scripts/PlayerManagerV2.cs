@@ -767,7 +767,7 @@ namespace Com.tuf31404.KeepEating
                 try
                 {
                     
-                    string newAliveText = "Eaters Alive: " + (teamsManager.GetTeamMembersCount(1) - GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersDead);
+                    string newAliveText = "Eaters Alive: " + GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAlive;
                     GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAliveText.text = newAliveText;
                 }
                 catch (System.NullReferenceException e)
