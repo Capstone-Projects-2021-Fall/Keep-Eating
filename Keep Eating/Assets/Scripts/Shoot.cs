@@ -15,6 +15,8 @@ namespace Com.tuf31404.KeepEating
 
         public Rigidbody2D bullet;
         public Transform muzzle;
+
+        //Instance of a player that will be shot
         public PlayerManagerV2 player;
 
 
@@ -52,7 +54,7 @@ namespace Com.tuf31404.KeepEating
 
             if (weaponType == Items.Taser)
             {
-                player.Freeze();
+                player.Freeze(); //player object will freeze if shot by a taser
             }
             mousePos.z = 0;                                                         // z is set to 0 so the camera can see it
             direction = (mousePos - transform.position).normalized;
