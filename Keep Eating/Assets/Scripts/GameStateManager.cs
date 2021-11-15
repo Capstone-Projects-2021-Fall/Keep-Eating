@@ -258,3 +258,23 @@ namespace Com.tuf31404.KeepEating
 
     }
 }
+
+
+
+
+
+
+
+
+
+/*
+
+imagining yourself as a abacus
+or like a kangaroo jumping around
+breathing in the cold air from this morning
+inhale exhale
+like breathing soup
+
+-JHC 
+ 
+ */
