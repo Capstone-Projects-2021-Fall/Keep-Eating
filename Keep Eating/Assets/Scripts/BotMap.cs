@@ -27,7 +27,7 @@ namespace Com.tuf31404.KeepEating
         public void Add(Vector3 a, Vector3 b, int _a, int _b)
         {
 
-            Debug.Log("Adding to Matrix");
+            //Debug.Log("Adding to Matrix");
             float dist = Mathf.Sqrt(Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.y - b.y, 2));
             AdjMatrix[_a, _b] = dist;
             AdjMatrix[_b, _a] = dist;

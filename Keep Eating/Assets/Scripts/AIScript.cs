@@ -120,7 +120,7 @@ namespace Com.tuf31404.KeepEating
             }
             Debug.Log("Nodes.Length = " + nodes.Length);
             botMap = new BotMap(nodes.Length);
-            SetBotMap();
+            StartCoroutine("WaitSetBotMap");
             StartCoroutine("StartWaiter");
         }
 
@@ -387,18 +387,24 @@ namespace Com.tuf31404.KeepEating
             newWander = true;
         }
 
+        IEnumerator WaitSetBotMap()
+        {
+            SetBotMap();
+            Debug.Log("Bot Map Set");
+            yield return null; 
+        }
+
         private void SetBotMap()
         {
-            //Vector3 a, b;
+            Vector3 a, b;
             for (int i = 0; i < nodes.Length; i++)
             {
                 for (int j = 0; j < nodes.Length; j++)
                 {
                     if (i != j)
                     {
-                        Vector3 a = nodes[i].transform.position;
-                        Vector3 b = nodes[j].transform.position;
-                        Debug.Log("a = " + a + " b = " + b);
+                        a = nodes[i].transform.position;
+                        b = nodes[j].transform.position;
                         if (TryRayCast(a, b))
                         {
                             botMap.Add(a, b, i, j);
