@@ -11,8 +11,18 @@ picking up the bombs and explode them to death :smiling_imp:. Just like Megumin!
 |1.02|Ju-Hung Chen|Sept. 9 2021| Add game discription outline |
 |1.03|Brendan Lisowski, Ju-Hung Chen, Omran Farighi| Sept. 14, 2021| Update system block diagram, update user stories|
 |1.04|Ji Park, Omran Farighi| Sept. 14, 2021| Update user stories|
+|1.05| Omran Farighi | Nov. 15 2021 | Updated project overview and linked QA testing document | 
+
+## Overview
+Keep Eating is an online multiplayer game, powered by the Unity engine and Photon Unity Networking (PUN) framework. Unity scripts are written in C# and are used to create the game logic. The game state, player manager, and handling of assets are all handled via C# scripts. PUN is a Unity package that allows for matchmaking by placing players into rooms. Within these rooms, the game is synced over the network allowing for a low latency multiplayer gameplay to be played on either MAC or PC. 
+
+The matchmaking, which is handled by PUN, is done by creating lobbies. Either a player can join a lobby or create their own. Players within a lobby can choose which team they want to be a part of, Eaters or Enforcers.   The Eaters team objective is to win the match by reaching their score goal. They gain points by eating "food" that spawns all over the map. The Enforcers team objective is to prevent the Eaters from scoring points by shooting them with weapons. If an Eater's health is depleted by the attacks from the Enforcers, they respawn on the map with a new full bar of health. The Enforcers win by preventing the Eaters from reaching the winning score as time runs out. 
 
 
+## QA Testing
+[Use the following document for QA testing](https://github.com/Capstone-Projects-2021-Fall/Keep-Eating/blob/Updated-ReadMe-for-pre-release/Keep%20Eating%20Acceptance%20QA%20Testing%20doc.xlsx)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Project Abstract
 This document proposes an online video game in which players compete against each other in order to eat more food than their opponents. The game takes place inside an arena where food items spawn in from the sides. Players eat by colliding with the food, earning points. The player with the most points when a timer runs out is the winner. Players can create their own lobbies to play against each other over the internet.
@@ -81,11 +91,4 @@ In order to complete this project, all team members need:
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Overview
-Keep Eating is an online multiplayer game, powered by the Unity engine and Photon Unity Networking (PUN) framework. Unity scripts are written in C# and are used to create the game logic. The game state, player manager, and handling of assets are all handled via C# scripts. PUN is a Unity package that allows for matchmaking by placing players into rooms. Within these rooms, the game is synced over the network allowing for a low latency multiplayer gameplay to be played on either MAC or PC. 
-
-The matchmaking, which is handled by PUN, is done by creating lobbies. Either a player can join a lobby or create their own. Players within a lobby can choose which team they want to be a part of, Eaters or Enforcers.   The Eaters team objective is to win the match by reaching their score goal. They gain points by eating "food" that spawns all over the map. The Enforcers team objective is to prevent the Eaters from scoring points by shooting them with weapons. If an Eater's health is depleted by the attacks from the Enforcers, they respawn on the map with a new full bar of health. The Enforcers win by preventing the Eaters from reaching the winning score as time runs out. 
-
-## QA Testing
-[Use the following document for QA testing](https://github.com/Capstone-Projects-2021-Fall/Keep-Eating/blob/Updated-ReadMe-for-pre-release/Keep%20Eating%20Acceptance%20QA%20Testing%20doc.xlsx)
 
