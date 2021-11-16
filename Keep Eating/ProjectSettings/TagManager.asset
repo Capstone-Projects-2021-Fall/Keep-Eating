@@ -4,10 +4,26 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - food
   - Eater
+  - Enforcer
+  - Bullet
   - Gun
+  - Food
+  - EaterSpawn
+  - EnforcerSpawn
+  - WeaponSpawn
+  - Spawn
   - PlayerSpawn
-  - ItemSpawn
+  - GSM
+  - Weapon
+  - Taser
+  - EaterAI
+  - EnforcerAI
+  - SettingsButton
+  - Wall
+  - Node
+  - Taser Bullet
   layers:
   - Default
   - TransparentFX
@@ -15,9 +31,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - player
+  - food
+  - Wall
   - 
   - 
   - 

@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: us
     Server: 
     Port: 0
     ProxyServer: 
@@ -39,6 +39,26 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - PickUpFood
+  - PickUpShotgun
+  - ShootGun
+  - SetTeam
+  - SetTimer
+  - Spawn
+  - PlayerDead
+  - PlayerRespawn
+  - PickUpGun
+  - UpdateAliveText
+  - UpdateScoreText
+  - HitByBullet
+  - SetBulletDirection
+  - SpawnRpc
+  - SpawnFoodRpc
+  - SpawnWeaponRpc
+  - InitSpawnArrays
+  - Healing
+  - setPositionClamps
+  - UpdateClamp
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
