@@ -41,6 +41,20 @@ public class GameSettings : MonoBehaviour
     public void ChangeMap(string chosenMap)
     {
         StaticSettings.Map = chosenMap;
+
+        /*if (StaticSettings.MaxPlayers <= 5)
+        {
+            chosenMap.Equals("SmallGameMap");
+            smallMap.GetComponent<Image>().color = Color.red;
+            bigMap.GetComponent<Image>().color = Color.white;
+
+        }
+        else
+        {
+            chosenMap.Equals("BigGameMap");
+            smallMap.GetComponent<Image>().color = Color.white;
+            bigMap.GetComponent<Image>().color = Color.red;
+        }*/
         if (chosenMap.Equals("SmallGameMap"))
         {
             smallMap.GetComponent<Image>().color = Color.red;
@@ -53,8 +67,10 @@ public class GameSettings : MonoBehaviour
         }
     }
 
-    public void SetMaxPlayers()
+    public void SetMaxPlayers(string chosenMap)
     {
+        StaticSettings.Map = chosenMap;
+
         int num;
         if (!int.TryParse(maxPlayersInput.text, out num))
         {
@@ -68,16 +84,16 @@ public class GameSettings : MonoBehaviour
             maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         }
 
-        if (StaticSettings.Map.Equals("SmallGameMap") && num > 5)
+        StaticSettings.MaxPlayers = num;
+
+        if (num <= 5)
         {
-            StaticSettings.MaxPlayers = 5;
-            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
+            ChangeMap("SmallGameMap");
         }
         else
         {
-            StaticSettings.MaxPlayers = num;
+            ChangeMap("BigGameMap");
         }
-
         PhotonNetwork.CurrentRoom.MaxPlayers = (byte)StaticSettings.MaxPlayers;
     }
 
