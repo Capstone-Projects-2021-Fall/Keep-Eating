@@ -73,7 +73,11 @@ public class GameSettings : MonoBehaviour
 
         StaticSettings.MaxPlayers = num;
 
-        //If there are 5 or less players, the default map will be the small map. If more than 5, it will default to the big game map
+        /*
+         
+          If there are 5 or less playersthe default map will be the small map. If more than 5, it will default to the big game map
+
+         */
         if (num <= 5)
         {
             ChangeMap("SmallGameMap");
