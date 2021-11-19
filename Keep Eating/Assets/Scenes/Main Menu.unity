@@ -1332,7 +1332,7 @@ GameObject:
   - component: {fileID: 1261964376}
   - component: {fileID: 1261964375}
   m_Layer: 5
-  m_Name: CreateInput
+  m_Name: Create Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2288,7 +2288,7 @@ GameObject:
   - component: {fileID: 2050117752}
   - component: {fileID: 2050117751}
   m_Layer: 5
-  m_Name: JoinInput
+  m_Name: Join Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

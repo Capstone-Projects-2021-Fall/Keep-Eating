@@ -143,6 +143,7 @@ namespace Com.tuf31404.KeepEating
                     enforcerAI[i] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[enforcerIndex++].transform.position, Quaternion.identity);
                     enforcerAI[i].GetComponent<AIScript>().PV = pV;
                 }
+                eaterAI[0].GetComponent<AIScript>().isAlpha = true;
             }
             
         }

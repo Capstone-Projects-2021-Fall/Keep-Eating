@@ -8,6 +8,7 @@
  ********************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -28,11 +29,9 @@ namespace Com.tuf31404.KeepEating
         [SerializeField]
         private float speed;
         [SerializeField]
-        private GameObject PlayerUiPrefab;
-        [SerializeField]
         private Sprite shotgunSprite, revolverSprite, taserSprite;
         [SerializeField]
-        private SpriteRenderer mySpriteRenderer, weaponSpriteRenderer, taserSpriteRenderer;
+        private SpriteRenderer mySpriteRenderer, weaponSpriteRenderer;
         [SerializeField]
         private Shoot shootScript;
         [SerializeField]
@@ -41,32 +40,13 @@ namespace Com.tuf31404.KeepEating
         private GameObject bulletPrefab;
         //object variables
         private PhotonTeamsManager teamsManager;
-        private GameStateManager gsm;
-        private GameObject[] enforcerSpawns;
-        private GameObject[] eaterSpawns;
-        private GameObject[] foodSpawns;
-        private GameObject[] weaponSpawns;
-        //numbers
-        private int eaterTeamMax, enforcerTeamMax;
         private int bulletsShot;
-        private int myPoints;
-        //vectors
-        private Vector3 pos;
         //booleans
         private bool hasGun = false;                                //change to hasWeapon
-        private bool facingLeft;
-        private bool gunCollision;
-        private bool foodCollision;
-        private bool taserCollision;
-        private bool inGame;
         //strings
         private Items weaponType;
-        private Items tempWeaponType;
         private string tempItemName;
         private Items tempFoodType;
-        //public variables
-        [Tooltip("The Player's UI GameObject Prefab")]
-        public static GameObject LocalPlayerInstance;
         [Tooltip("The current Health of our player")]
         public float Health = 1f;
 
@@ -91,6 +71,11 @@ namespace Com.tuf31404.KeepEating
         private BotMap botMap;
         public PhotonView PV { get; set; }
         public bool IsAlive { get; set; }
+
+        public bool isAlpha = false;
+
+        //static string path = "Assets/Resources/deboog.txt";
+        //StreamWriter writer = new StreamWriter(path, true);
         private void Start()
         {
             teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
@@ -121,7 +106,7 @@ namespace Com.tuf31404.KeepEating
             Debug.Log("Nodes.Length = " + nodes.Length);
             botMap = new BotMap(nodes.Length);
             //SetBotMap();
-            botMap.PrintMap();
+            //botMap.PrintMap();
             StartCoroutine("WaitSetBotMap");
             StartCoroutine("StartWaiter");
         }
@@ -451,19 +436,33 @@ namespace Com.tuf31404.KeepEating
                     }
                 }
             }
+            if (isAlpha)
+            {
+                botMap.PrintMap(nodes);
+            }
         }
 
         private bool TryRayCast(Vector3 _a, Vector3 _b)
         {
             float dist = Mathf.Sqrt(Mathf.Pow(_a.x - _b.x, 2) + Mathf.Pow(_a.y - _b.y, 2));
-            Vector2 direction = new Vector2(_a.x - _b.x, _a.y - _b.y).normalized;
+            Vector2 direction = new Vector2(_b.x - _a.x, _b.y - _a.y).normalized;
             Vector2 a = new Vector2(_a.x, _a.y);
-            RaycastHit2D hit = Physics2D.Raycast(a, direction, dist);
+            LayerMask mask = LayerMask.GetMask("Wall");
+            RaycastHit2D hit = Physics2D.Raycast(a, direction, dist, mask);
+         
             if (hit.collider != null)
             {
+                if (isAlpha)
+                {
+                    Debug.Log(hit.collider.gameObject.tag);
+                }
                 if (hit.collider.gameObject.CompareTag("Wall"))
                 {
                     return false;
+                }
+                else
+                {
+                    Debug.Log("somethin wrong");
                 }
             }
             return true;

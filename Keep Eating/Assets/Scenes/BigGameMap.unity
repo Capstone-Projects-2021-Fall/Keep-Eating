@@ -1036,11 +1036,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5921879830170773801, guid: f39e1208ebff15943bdda98ba3f2e532, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.5165367
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 5921879830170773801, guid: f39e1208ebff15943bdda98ba3f2e532, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -57.625427
+      value: -61
       objectReference: {fileID: 0}
     - target: {fileID: 5921879830170773801, guid: f39e1208ebff15943bdda98ba3f2e532, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2102,7 +2102,7 @@ GameObject:
   - component: {fileID: 702441294}
   - component: {fileID: 702441293}
   - component: {fileID: 702441296}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallV10
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -2730,7 +2730,7 @@ GameObject:
   - component: {fileID: 883832759}
   - component: {fileID: 883832758}
   - component: {fileID: 883832761}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallV9
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -3575,7 +3575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 0}
-  smoothing: 0.5
   playerTransform: {fileID: 0}
 --- !u!20 &1088035858
 Camera:

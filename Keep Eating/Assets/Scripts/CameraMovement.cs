@@ -13,7 +13,6 @@ namespace Com.tuf31404.KeepEating
     public class CameraMovement : MonoBehaviour
     {
         public Transform cameraTransform;
-        public float smoothing = 0.5f;
         public Transform playerTransform;
         private bool isFollowing = false;
 
