@@ -74,10 +74,14 @@ namespace Com.tuf31404.KeepEating
 
         public bool isAlpha = false;
 
-        [SerializeField]
-        private GameObject[] nodies;
-        //static string path = "Assets/Resources/deboog.txt";
-        //StreamWriter writer = new StreamWriter(path, true);
+        public bool inDijkstra = false;
+
+        private int[] shortestPath;
+        private int pathCounter = 1;
+        int dijkstraTarget;
+        int currentNode = -1;
+
+
         private void Start()
         {
             teamsManager = GameObject.Find("Team Manager(Clone)").GetComponent<PhotonTeamsManager>();
@@ -107,6 +111,7 @@ namespace Com.tuf31404.KeepEating
             }
             Debug.Log("Nodes.Length = " + nodes.Length);
             botMap = new BotMap(nodes.Length);
+            shortestPath = new int[36];
             //SetBotMap();
             //botMap.PrintMap();
             StartCoroutine("WaitSetBotMap");
@@ -119,78 +124,126 @@ namespace Com.tuf31404.KeepEating
         {
             if (gameStart && IsAlive)
             {
-
-                if (!isEater)
+                if (!isAlpha)
                 {
-                    //Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
-                }
-                if (!hasTarget)
-                {
-                    target = GetTarget();
-                }
-                else
-                {
-                    if (TargetInView(target.transform.position))
+                    if (!isEater)
                     {
-                        if (target.tag.Equals("Player") || target.tag.Equals("EaterAI"))
+                        //Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
+                    }
+                    if (!hasTarget)
+                    {
+                        target = GetTarget();
+                    }
+                    else
+                    {
+                        if (TargetInView(target.transform.position))
                         {
-                            if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                            if (target.tag.Equals("Player") || target.tag.Equals("EaterAI"))
+                            {
+                                if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                                {
+                                    target = GetTarget();
+                                }
+                            }
+                            else if (!target.GetComponent<SpriteRenderer>().enabled)
                             {
                                 target = GetTarget();
                             }
                         }
-                        else if (!target.GetComponent<SpriteRenderer>().enabled)
+                        else
                         {
                             target = GetTarget();
                         }
                     }
-                    else
-                    {
-                        target = GetTarget();
-                    }
-                }
 
-                if (target != null)
-                {
+                    if (target != null)
+                    {
 
-                    if (!isEater)
-                    {
-                        //Debug.Log("Target name = " + target.name);
-                    }
-                    hasTarget = true;
-                    wandering = false;
-                    if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
-                    {
-                        if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
+                        if (!isEater)
                         {
-                            if (weaponType == Items.Shotgun)
+                            //Debug.Log("Target name = " + target.name);
+                        }
+                        hasTarget = true;
+                        wandering = false;
+                        if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                        {
+                            if (TargetDistance(target.transform.position) <= shootDistance && canShoot)
                             {
-                                for (int i = 0; i < 5; i++)
+                                if (weaponType == Items.Shotgun)
+                                {
+                                    for (int i = 0; i < 5; i++)
+                                    {
+                                        bulletsShot++;
+                                        this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
+                                    }
+                                }
+                                else
                                 {
                                     bulletsShot++;
                                     this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
                                 }
+                                StartCoroutine("ShootWaiter");
                             }
-                            else
-                            {
-                                bulletsShot++;
-                                this.PV.RPC("ShootGun", RpcTarget.All, PhotonNetwork.NickName, shootScript.ShootGun(weaponType, target.transform.position), muzzleTransform.position);
-                            }
-                            StartCoroutine("ShootWaiter");
                         }
+
                     }
-                    
+                    else
+                    {
+                        hasTarget = false;
+                        if (newWander || myTransform.position == wanderTarget)
+                        {
+                            wanderTarget = Wander();
+                        }
+                        wandering = true;
+                    }
+                    Move(wandering);
                 }
                 else
                 {
-                    hasTarget = false;
-                    if (newWander || myTransform.position == wanderTarget)
+                    if (!inDijkstra)
                     {
-                        wanderTarget = Wander();
+                        Debug.Log("In Dijkstra");
+                        pathCounter = 1;
+                        for (int i = 0; i < shortestPath.Length; i++)
+                        {
+                            shortestPath[i] = -1;
+                        }
+                        MoveDjikstra();
                     }
-                    wandering = true;
+                    else
+                    {
+                        if (shortestPath[pathCounter] != -1)
+                        {
+                            if (TargetDistance(nodes[shortestPath[pathCounter]].transform.position) == 0)
+                            {
+                                Debug.Log("Node = " + shortestPath[pathCounter]);
+                                currentNode = shortestPath[pathCounter];
+                                pathCounter++;
+                            }
+                        }
+                        else
+                        {
+                            inDijkstra = false;
+                        }
+                        if (pathCounter <= 35)
+                        {
+                            if (shortestPath[pathCounter] != -1)
+                            {
+                                float step = speed * Time.deltaTime;
+                                myTransform.position = Vector3.MoveTowards(myTransform.position, nodes[shortestPath[pathCounter]].transform.position, step);
+                                myTransform.position = new Vector3(
+                            Mathf.Clamp(myTransform.position.x, minX, maxX),
+                            Mathf.Clamp(myTransform.position.y, minY, maxY),
+                            0.0f);
+                            }
+                        }
+                        else
+                        {
+                            inDijkstra = false;
+                        }
+                    }
+
                 }
-                Move(wandering);
             }
             if (Health <= 0f && IsAlive)
             {
@@ -218,6 +271,56 @@ namespace Com.tuf31404.KeepEating
                     Mathf.Clamp(myTransform.position.x, minX, maxX),
                     Mathf.Clamp(myTransform.position.y, minY, maxY),
                     0.0f);
+        }
+
+        void MoveDjikstra()
+        {
+            inDijkstra = true;
+            if (currentNode == -1)
+            {
+                int closestNode = -1;
+                float prev = Mathf.Infinity;
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    float temp = TargetDistance(nodes[i].transform.position);
+                    if (temp < prev)
+                    {
+                        if (TryRayCast(this.gameObject.transform.position, nodes[i].transform.position))
+                        {
+                            prev = temp;
+                            closestNode = i;
+                        }
+                    }
+                }
+                if (closestNode == -1)
+                {
+                    Debug.Log("CLOSEST NODE ERROR");
+                }
+                currentNode = closestNode;
+            }
+
+            int targetNode;
+            while ((targetNode = UnityEngine.Random.Range(0,36)) == currentNode){ }
+            Debug.Log("Current position = " + this.gameObject.transform.position);
+            Debug.Log("Current node = " + nodes[currentNode].name);
+            Debug.Log("target node = " + nodes[targetNode].name);
+            int[] tempPath = botMap.Dijkstra(currentNode, targetNode);
+            shortestPath[0] = currentNode;
+            for (int i = tempPath.Length-1; i >= 0; i--)
+            {
+                if (tempPath[i] != -1)
+                {
+                    shortestPath[pathCounter++] = tempPath[i];
+                }
+            }
+            string print = "shortestPath = ";
+            for (int i = 0; i < shortestPath.Length; i++)
+            {
+                print += shortestPath[i] + " ";
+            }
+            Debug.Log(print);
+            pathCounter = 0;
+            
         }
 
         GameObject GetTarget()
@@ -313,7 +416,13 @@ namespace Com.tuf31404.KeepEating
                     enemyTargets[index++] = eater;
                 }
             }
-            nodes = GameObject.FindGameObjectsWithTag("Node");
+            nodes = new GameObject[36];
+
+            string n = "Node";
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                nodes[i] = GameObject.Find(n + i);
+            }
         }
 
         float TargetDistance(Vector3 targetPos)
@@ -440,8 +549,8 @@ namespace Com.tuf31404.KeepEating
             }
             if (isAlpha)
             {
-                botMap.PrintMap(nodes);
-                botMap.Dijkstra(1, 20);
+                //botMap.PrintMap(nodes);
+                //botMap.Dijkstra(1, 20);
             }
         }
 

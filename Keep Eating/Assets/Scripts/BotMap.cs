@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
+using Photon.Pun;
 
 namespace Com.tuf31404.KeepEating
 {
@@ -35,7 +35,7 @@ namespace Com.tuf31404.KeepEating
             //AdjMatrix[_b, _a] = dist;
         }
 
-        public void Dijkstra(int source, int target)
+        public int[] Dijkstra(int source, int target)
         {
             int[] Q = new int[36];
             float[] dist = new float[36];
@@ -75,12 +75,16 @@ namespace Com.tuf31404.KeepEating
                 }
                 if (k++ >= 200000)
                 {
-                    Debug.Log("oh fuck");
+                    Debug.Log("oh no");
                     break;
                 }
             }
 
             int[] S = new int[36];
+            for (int i = 0; i < 36; i++)
+            {
+                S[i] = -1;
+            }
             u = target;
 
             if (prev[u] != -1 || u == source)
@@ -94,6 +98,7 @@ namespace Com.tuf31404.KeepEating
             }
 
             StreamWriter writer = new StreamWriter(path, true);
+            writer.WriteLine(PhotonNetwork.Time);
             string print = "dist ";
             foreach (float d in dist)
             {
@@ -119,6 +124,8 @@ namespace Com.tuf31404.KeepEating
             }
             writer.WriteLine(print);
             writer.Close();
+
+            return S;
         }
 
         private int GetMin(int[] Q, float[] _dist)

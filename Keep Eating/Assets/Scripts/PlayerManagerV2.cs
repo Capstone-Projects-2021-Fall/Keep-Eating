@@ -364,6 +364,16 @@ namespace Com.tuf31404.KeepEating
             {
                 LeaveRoom();
             }
+
+            if (Input.GetKeyDown(KeyCode.LeftBracket))
+            {
+                cameraMovement.Spectate();
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightBracket))
+            {
+                cameraMovement.StopSpectating();
+            }
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -509,12 +519,12 @@ namespace Com.tuf31404.KeepEating
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
-                speed = 30;
+                speed = 50;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
-                speed = 25;
+                speed = 50;
                 
             }
         }
@@ -902,6 +912,7 @@ namespace Com.tuf31404.KeepEating
                     //gsm.SpawnAI();
                     gsm.eaterCount = 0;
                 }
+                cameraMovement.SetSpectating();
             }
         }
 
