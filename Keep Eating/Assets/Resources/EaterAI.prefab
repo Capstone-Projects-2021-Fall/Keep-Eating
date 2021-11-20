@@ -56,6 +56,8 @@ MonoBehaviour:
   fieldOfVisionX: 122
   fieldOfVisionY: 50
   isAlpha: 0
+  nodies:
+  - {fileID: 0}
 --- !u!1001 &5100315445830017151
 PrefabInstance:
   m_ObjectHideFlags: 0

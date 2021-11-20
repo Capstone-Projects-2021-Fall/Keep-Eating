@@ -74,6 +74,8 @@ namespace Com.tuf31404.KeepEating
 
         public bool isAlpha = false;
 
+        [SerializeField]
+        private GameObject[] nodies;
         //static string path = "Assets/Resources/deboog.txt";
         //StreamWriter writer = new StreamWriter(path, true);
         private void Start()
@@ -439,6 +441,7 @@ namespace Com.tuf31404.KeepEating
             if (isAlpha)
             {
                 botMap.PrintMap(nodes);
+                botMap.Dijkstra(1, 20);
             }
         }
 
