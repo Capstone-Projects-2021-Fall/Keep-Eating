@@ -97,6 +97,7 @@ namespace Com.tuf31404.KeepEating
                 }
             }
 
+            /*
             StreamWriter writer = new StreamWriter(path, true);
             writer.WriteLine(PhotonNetwork.Time);
             string print = "dist ";
@@ -124,6 +125,7 @@ namespace Com.tuf31404.KeepEating
             }
             writer.WriteLine(print);
             writer.Close();
+            */
 
             return S;
         }

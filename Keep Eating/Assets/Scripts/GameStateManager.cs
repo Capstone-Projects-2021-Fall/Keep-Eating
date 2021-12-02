@@ -133,7 +133,7 @@ namespace Com.tuf31404.KeepEating
 
             if (StaticSettings.Bots)
             {
-                /*
+                
                 for (int i = 0; i < eaterAiCount; i++)
                 {
                     eaterAI[i] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
@@ -144,9 +144,9 @@ namespace Com.tuf31404.KeepEating
                     enforcerAI[i] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[enforcerIndex++].transform.position, Quaternion.identity);
                     enforcerAI[i].GetComponent<AIScript>().PV = pV;
                 }
-                */
-                eaterAI[0] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
-                eaterAI[0].GetComponent<AIScript>().PV = pV;
+                
+                //eaterAI[0] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
+                //eaterAI[0].GetComponent<AIScript>().PV = pV;
                 eaterAI[0].GetComponent<AIScript>().isAlpha = true;
             }
             
@@ -164,6 +164,7 @@ namespace Com.tuf31404.KeepEating
 
         public void SpawnWeapons()
         {
+            /*
             int rand = UnityEngine.Random.Range(1, 3);
             if (rand == 1)
             {
@@ -181,6 +182,13 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 2);
+            } */
+
+            int rand;
+            foreach (GameObject spawn in weaponSpawns)
+            {
+                rand = UnityEngine.Random.Range(1, 3);
+                pV.RPC("SpawnFoodRpc", RpcTarget.AllBuffered, spawn.name, rand);
             }
         }
 
