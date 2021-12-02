@@ -4,35 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/Loading.unity
-    guid: 73ec0d47af59cbe49bf3fd5cabebd245
-  - enabled: 0
-    path: Assets/Scenes/LoginPage.unity
-    guid: fb41ba377afe7884d9621292dadd48a2
-  - enabled: 0
-    path: Assets/Scenes/Dashboard.unity
-    guid: f4b567996bae07a4b8c841ff402cdb3c
-  - enabled: 0
-    path: Assets/Scenes/Logoff.unity
-    guid: c20253f07821b984b9dc0a69a6fa079c
-  - enabled: 1
-    path: Assets/Scenes/Main Menu.unity
-    guid: bf1f5bc7a2b5cb647aaca4ae7a497f3b
-  - enabled: 1
-    path: Assets/Scenes/Lobby.unity
-    guid: 9c972f73a00d83e478e8cbd4d8286e4b
-  - enabled: 1
-    path: Assets/Scenes/SmallGameMap.unity
-    guid: 1127b4415422bbf48aad56ca5ecf8973
-  - enabled: 1
-    path: Assets/Scenes/BigGameMap.unity
-    guid: 3ffc0c8d9b5c6924b8886dcadb9a31b8
+  m_Scenes: []
   m_configObjects: {}
