@@ -42,7 +42,7 @@ namespace Com.tuf31404.KeepEating
         private PhotonTeamsManager teamsManager;
         private int bulletsShot;
         //booleans
-        private bool hasGun = false;                                //change to hasWeapon
+        private bool hasGun = false;                                
         //strings
         private Items weaponType;
         private string tempItemName;
@@ -552,6 +552,7 @@ namespace Com.tuf31404.KeepEating
             StartCoroutine("WanderWaiter");
             return new Vector3(xPos, yPos, 0f);
         }
+
         void SetTargets()
         {
             if (isEater)
@@ -653,7 +654,7 @@ namespace Com.tuf31404.KeepEating
         {
             if (collision.gameObject.CompareTag("Bullet") && isEater)
             {
-                Health -= 0.3f;
+                Health -= 1f;
             }
         }
         IEnumerator ShootWaiter()
@@ -698,6 +699,8 @@ namespace Com.tuf31404.KeepEating
             {
                 PV.RPC("PlayerRespawn", RpcTarget.All, pvId, Vector3.zero);
             }
+            IsAlive = true;
+            Health = 1f;
         }
 
         private void SetBotMap()

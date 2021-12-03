@@ -237,10 +237,19 @@ namespace Com.tuf31404.KeepEating
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
+                player.cameraMovement.StopSpectating();
                 if (StaticSettings.Bots)
                 {
-                    PhotonNetwork.Destroy(eaterAI[0]);
-                    PhotonNetwork.Destroy(enforcerAI[0]);
+                    foreach (GameObject eater in eaterAI)
+                    {
+                        PhotonNetwork.Destroy(eater);
+                    }
+                    foreach (GameObject enforcer in enforcerAI)
+                    {
+                        PhotonNetwork.Destroy(enforcer);
+                    }
+                    //PhotonNetwork.Destroy(eaterAI[0]);
+                    //PhotonNetwork.Destroy(enforcerAI[0]);
                 }
                 Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;

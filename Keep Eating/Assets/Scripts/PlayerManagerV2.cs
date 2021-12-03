@@ -49,7 +49,7 @@ namespace Com.tuf31404.KeepEating
         [SerializeField]
         private GameObject bulletPrefab, taserBulletPrefab;
         //object variables
-        private CameraMovement cameraMovement;
+        public CameraMovement cameraMovement;
         private PhotonTeamsManager teamsManager;
         private GameStateManager gsm;
         private Button eaterSwitch, enforcerSwitch;
