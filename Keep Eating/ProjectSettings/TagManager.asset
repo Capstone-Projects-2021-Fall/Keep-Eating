@@ -24,6 +24,7 @@ TagManager:
   - Wall
   - Node
   - Taser Bullet
+  - Timer
   layers:
   - Default
   - TransparentFX

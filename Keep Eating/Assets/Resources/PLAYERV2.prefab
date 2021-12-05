@@ -42,6 +42,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7986858786739329354, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
   taserBulletPrefab: {fileID: 153371551782413702, guid: cb63ab708885dca44922a0fe7eeda3bb, type: 3}
   cameraMovement: {fileID: 0}
+  isAlive: 0
 --- !u!1001 &3386362974971726178
 PrefabInstance:
   m_ObjectHideFlags: 0

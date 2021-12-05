@@ -67,7 +67,6 @@ namespace Com.tuf31404.KeepEating
         private bool wandering;
         private Vector3 wanderTarget;
         private bool hasTarget, newWander;
-        private bool gameStart;
         private BotMap botMap;
         public PhotonView PV { get; set; }
         public bool IsAlive { get; set; }
@@ -94,9 +93,8 @@ namespace Com.tuf31404.KeepEating
             hasTarget = false;
             newWander = true;
             wanderTarget = Vector3.zero;
-            gameStart = false;
             target = null;
-            IsAlive = true;
+            IsAlive = false;
             if (StaticSettings.Map.Equals("SmallGameMap"))
             {
                 minX = -150;
@@ -118,14 +116,13 @@ namespace Com.tuf31404.KeepEating
                 //botMap.PrintMap();
                 StartCoroutine("WaitSetBotMap");
             }
-            StartCoroutine("StartWaiter");
         }
 
 
         // Update is called once per frame
         void Update()
         {
-            if (gameStart && IsAlive)
+            if (IsAlive)
             {
 
                 if (StaticSettings.Map.Equals("SmallGameMap"))
@@ -364,7 +361,7 @@ namespace Com.tuf31404.KeepEating
 
         private void TryShoot()
         {
-            if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+            if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled)
             {
                 if (TargetDistance(target.transform.position, myTransform.position, false) <= shootDistance && canShoot)
                 {
@@ -618,6 +615,7 @@ namespace Com.tuf31404.KeepEating
             {
                 tempItemName = other.gameObject.name;
                 weaponType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
+                Debug.Log("weapon type = " + weaponType);
                 hasGun = true;
                 this.PV.RPC("PickUpGun", RpcTarget.All, thisPV.ViewID, weaponType, tempItemName);
                 if (weaponType == Items.Shotgun)
@@ -655,12 +653,6 @@ namespace Com.tuf31404.KeepEating
             canShoot = false;
             yield return new WaitForSeconds(1);
             canShoot = true;
-        }
-
-        IEnumerator StartWaiter()
-        {
-            yield return new WaitForSeconds(3);
-            gameStart = true;
         }
 
         IEnumerator WanderWaiter()
