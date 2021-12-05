@@ -80,6 +80,7 @@ namespace Com.tuf31404.KeepEating
                 Spectating = true;
             }
             followTransform = otherPlayers[spectatingCounter];
+            Debug.Log("spectating " + followTransform.name + " pv = " + followTransform.gameObject.GetComponent<PhotonView>().ViewID);
         }
 
         public void StopSpectating()

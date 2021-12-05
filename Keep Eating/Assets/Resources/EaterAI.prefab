@@ -58,6 +58,7 @@ MonoBehaviour:
   isAlpha: 0
   hasDijkstraTarget: 0
   inDijkstra: 0
+  shortestPath: 
 --- !u!1001 &5100315445830017151
 PrefabInstance:
   m_ObjectHideFlags: 0
