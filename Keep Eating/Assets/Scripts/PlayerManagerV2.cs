@@ -122,19 +122,19 @@ namespace Com.tuf31404.KeepEating
             minY = -100;
             maxY = 100;
 
-            //Debug.Log("I AM AWAKE");
+            Debug.Log("I AM AWAKE");
         }
 
 
         private void Start()
         {
             this.Health = 1f;
-            //Debug.Log("STARTING PLAYER STARTING PLAYER");
+            Debug.Log("STARTING PLAYER STARTING PLAYER");
             DontDestroyOnLoad(this.gameObject);
             //Only the player prefab that you control can call these methods.
             if (this.photonView.IsMine)
             {
-               // Debug.Log("photon view = " + photonView.ViewID);
+                Debug.Log("photon view = " + photonView.ViewID);
                 //mySpriteRenderer = this.gameObject.transform.Find("PlayerSpriteRenderer").gameObject.GetComponent<SpriteRenderer>();
                 //Debug.Log(this.gameObject.transform.GetChild(0).gameObject.name);
                 //Camera movement - see CameraMovement script
@@ -148,7 +148,7 @@ namespace Com.tuf31404.KeepEating
                     }
                     else
                     {
-                        Debug.Log("Crap");
+                        Debug.Log("Fuck");
                     }
                 }
 
@@ -158,7 +158,6 @@ namespace Com.tuf31404.KeepEating
                 
                 if (teamsManager == null)
                 {
-                    
                     Debug.Log("wtf???");
                 }
                 //Trying to join a team (randomly) when you get in the lobby.
@@ -187,7 +186,7 @@ namespace Com.tuf31404.KeepEating
             {
                 GameObject _uiGo = Instantiate(PlayerUiPrefab);
                 _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-                //DontDestroyOnLoad(_uiGo);
+                DontDestroyOnLoad(_uiGo);
             }
             else
             {
@@ -223,7 +222,7 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-           // Debug.Log("switching teams");
+            Debug.Log("switching teams");
             PhotonTeamExtensions.SwitchTeam(PhotonNetwork.LocalPlayer, teamNum);
             if (this.MyTeam == 1)
             {
@@ -333,10 +332,10 @@ namespace Com.tuf31404.KeepEating
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                //Debug.Log("minx = " + minX + "maxx = " + maxX + "miny = " + minY + "maxy = " + minY);
+                Debug.Log("minx = " + minX + "maxx = " + maxX + "miny = " + minY + "maxy = " + minY);
                 if (gunCollision && this.MyTeam == 2)
                 {
-                   // Debug.Log("Picking Up Gun");
+                    Debug.Log("Picking Up Gun");
                     hasGun = true;
                     weaponType = tempWeaponType;
                     photonView.RPC("PickUpGun", RpcTarget.All, photonView.ViewID, weaponType, tempItemName);
@@ -400,7 +399,7 @@ namespace Com.tuf31404.KeepEating
 
             if (other.gameObject.name.Contains("Taser"))
             {
-                //Debug.Log("Taser trigger");
+                Debug.Log("Taser trigger");
                 tempItemName = other.gameObject.name;
                 taserCollision = true;
             }
@@ -416,9 +415,10 @@ namespace Com.tuf31404.KeepEating
             if (collision.gameObject.tag.Equals("Bullet") && this.MyTeam == 1){
                 photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
-            
+            Debug.Log("Collision");
             if (collision.gameObject.tag.Equals("Taser Bullet") && this.MyTeam == 2)
             {
+                Debug.Log("Taser bullet collision");
                 Freeze();
             }
         }
@@ -514,7 +514,7 @@ namespace Com.tuf31404.KeepEating
             }
 
             this.MyTeam = teamNum;
-            //Debug.Log("my team on start = " + this.MyTeam);
+            Debug.Log("my team on start = " + this.MyTeam);
             this.photonView.RPC("SetTeam", RpcTarget.AllBuffered, teamNum, this.photonView.ViewID);
             if (teamNum == 1)
             {
@@ -532,19 +532,19 @@ namespace Com.tuf31404.KeepEating
         public void Spawn(int spawnNum)
         {
             this.MyTeam = PhotonTeamExtensions.GetPhotonTeam(PhotonNetwork.LocalPlayer).Code;
-            //Debug.Log("my team = " + this.MyTeam);
-            //Debug.Log("Owner of photon view " + photonView + " is " + photonView.Owner.NickName);
+            Debug.Log("my team = " + this.MyTeam);
+            Debug.Log("Owner of photon view " + photonView + " is " + photonView.Owner.NickName);
             if (this.MyTeam == 1)
             {
                 LocalPlayerInstance.transform.position = eaterSpawns[spawnNum].transform.position;
-               // Debug.Log("objpos = " + this.gameObject.transform.position);
-               // Debug.Log("eaterspawns pos = " + eaterSpawns[spawnNum].transform.position);
+                Debug.Log("objpos = " + this.gameObject.transform.position);
+                Debug.Log("eaterspawns pos = " + eaterSpawns[spawnNum].transform.position);
             }
             else
             {
                 LocalPlayerInstance.transform.position = enforcerSpawns[spawnNum].transform.position;
-                //Debug.Log("objpos = " + this.gameObject.transform.position);
-               // Debug.Log("enforcerspawns pos = " + enforcerSpawns[spawnNum].transform.position);
+                Debug.Log("objpos = " + this.gameObject.transform.position);
+                Debug.Log("enforcerspawns pos = " + enforcerSpawns[spawnNum].transform.position);
             }
         }
 
@@ -732,7 +732,7 @@ namespace Com.tuf31404.KeepEating
             //Spawn(spawnLoc);
             if (playerId.Equals(PhotonNetwork.LocalPlayer.UserId))
             {
-                //Debug.Log("Spawning " + PhotonNetwork.LocalPlayer.NickName + " in pos " + spawnLoc);
+                Debug.Log("Spawning " + PhotonNetwork.LocalPlayer.NickName + " in pos " + spawnLoc);
                 Spawn(spawnLoc);
             }
             else
@@ -806,7 +806,7 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void UpdateClamp(string map)
         {
-            //Debug.Log("Map = " + map);
+            Debug.Log("Map = " + map);
             if (map.Equals("SmallGameMap"))
             {
                 minX = -150f;
@@ -816,19 +816,18 @@ namespace Com.tuf31404.KeepEating
             }
             else
             {
-               // Debug.Log("Clamp rpc working");
+                Debug.Log("Clamp rpc working");
                 minX = -244f;
                 maxX = 244f;
                 minY = -227f;
                 maxY = 227f;
             }
-           // Debug.Log("minx = " + minX + "maxx = " + maxX + "miny = " + minY + "maxy = " + maxY);
+            Debug.Log("minx = " + minX + "maxx = " + maxX + "miny = " + minY + "maxy = " + maxY);
         }
 
         IEnumerator RespawnWaiter(int pvId)
         {
             GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().Death();
-            this.transform.position = Vector3.zero;
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             if (spawns.Length != 0)
@@ -890,7 +889,7 @@ namespace Com.tuf31404.KeepEating
 
                 eaterSwitch.onClick.AddListener(() => SwitchTeams(1));
                 enforcerSwitch.onClick.AddListener(() => SwitchTeams(2));
-                //Debug.Log("Owner = " + photonView.Owner);
+                Debug.Log("Owner = " + photonView.Owner);
             }
 
             cameraMovement.GetCamera();
@@ -900,16 +899,16 @@ namespace Com.tuf31404.KeepEating
                 photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
                 //Debug.Log("scene loaded called");
                 gsm = GameObject.FindWithTag("GSM").GetComponent<GameStateManager>();
-               // Debug.Log(gsm.ToString());
+                Debug.Log(gsm.ToString());
                 gsm.player = this;
                 if (PhotonNetwork.IsMasterClient && photonView.IsMine)
                 {
                     photonView.RPC("UpdateClamp", RpcTarget.AllBuffered, StaticSettings.Map);
                     PhotonNetwork.CurrentRoom.IsOpen = false;
+                    gsm.SpawnPlayers();
+                    //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position;
                     gsm.SpawnFood();
                     gsm.SpawnWeapons();
-                    gsm.SpawnPlayers();
-                    //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position
                     //gsm.SpawnAI();
                     gsm.eaterCount = 0;
                 }
@@ -957,13 +956,13 @@ namespace Com.tuf31404.KeepEating
         public void Freeze()
         {
             //Starts the FreezeRoutine method
-           // Debug.Log("Freeze");
+            Debug.Log("Freeze");
             StartCoroutine(FreezeRoutine());
         }
 
         private IEnumerator FreezeRoutine()
         {
-            //Debug.Log("Freeze Coroutine");
+            Debug.Log("Freeze Coroutine");
             //Constrains players movement in any direction for 5 seconds before allowing movement to resume
             //this.gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             isAlive = false;
