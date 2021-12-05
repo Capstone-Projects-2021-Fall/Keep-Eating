@@ -43,7 +43,7 @@ namespace Com.tuf31404.KeepEating
 
         public void SetTarget(PlayerManagerV2 _target)
         {
-            //Debug.Log("Setting target");
+            Debug.Log("Setting target");
             if (_target == null)
             {
                 Debug.LogError("<Color=Red><a>Missing</a></Color> PlayMakerManager target for PlayerUI.SetTarget.", this);
@@ -68,7 +68,7 @@ namespace Com.tuf31404.KeepEating
 
             _canvasGroup = this.GetComponent<CanvasGroup>();
 
-            //Debug.Log("PlayerUI awake");
+            Debug.Log("PlayerUI awake");
         }
 
 

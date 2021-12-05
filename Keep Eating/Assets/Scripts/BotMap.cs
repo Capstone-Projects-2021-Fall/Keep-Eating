@@ -6,7 +6,7 @@ using Photon.Pun;
 
 namespace Com.tuf31404.KeepEating
 {
-    public class BotMap
+    public class BotMap : MonoBehaviour
     {
 
         public float[,] AdjMatrix { get; }
@@ -57,7 +57,7 @@ namespace Com.tuf31404.KeepEating
                 u = GetMin(Q, dist);
                 if (u == target)
                 {
-                    //Debug.Log("Target Reached");
+                    Debug.Log("Target Reached");
                     break;
                 }
                 Q[u] = -1;
