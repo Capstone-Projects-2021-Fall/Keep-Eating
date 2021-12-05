@@ -411,7 +411,7 @@ namespace Com.tuf31404.KeepEating
                 return;
             }
 
-            if (collision.gameObject.tag.Equals("Bullet") && this.MyTeam == 1){
+            if (collision.gameObject.CompareTag("Bullet") && this.MyTeam == 1){
                 photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
             
