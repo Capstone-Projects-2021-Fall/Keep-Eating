@@ -17,7 +17,7 @@ public class GameSettings : MonoBehaviour
     private void Start()
     {
         StaticSettings.SetVars();
-        //ChangeMap("SmallGameMap");
+        ChangeMap("SmallGameMap");
         maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         TogglePrivate();
     }
@@ -41,12 +41,10 @@ public class GameSettings : MonoBehaviour
     public void ChangeMap(string chosenMap)
     {
         StaticSettings.Map = chosenMap;
-
         if (chosenMap.Equals("SmallGameMap"))
         {
             smallMap.GetComponent<Image>().color = Color.red;
             bigMap.GetComponent<Image>().color = Color.white;
-           
         }
         else
         {
@@ -57,7 +55,6 @@ public class GameSettings : MonoBehaviour
 
     public void SetMaxPlayers()
     {
-
         int num;
         if (!int.TryParse(maxPlayersInput.text, out num))
         {
@@ -71,20 +68,14 @@ public class GameSettings : MonoBehaviour
             maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         }
 
-        StaticSettings.MaxPlayers = num;
-
-        /*
-         
-          If there are 5 or less playersthe default map will be the small map. If more than 5, it will default to the big game map
-
-         */
-        if (num <= 5)
+        if (StaticSettings.Map.Equals("SmallGameMap") && num > 5)
         {
-            ChangeMap("SmallGameMap");
+            StaticSettings.MaxPlayers = 5;
+            maxPlayersInput.text = "" + StaticSettings.MaxPlayers;
         }
         else
         {
-            ChangeMap("BigGameMap");
+            StaticSettings.MaxPlayers = num;
         }
 
         PhotonNetwork.CurrentRoom.MaxPlayers = (byte)StaticSettings.MaxPlayers;

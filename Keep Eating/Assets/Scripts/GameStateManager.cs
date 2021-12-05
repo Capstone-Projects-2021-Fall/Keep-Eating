@@ -64,9 +64,9 @@ namespace Com.tuf31404.KeepEating
                 PhotonView tempPv = player.GetPhotonView();
                 if (tempPv != null)
                 {
-                    Debug.Log("tempPv = " + tempPv.ViewID);
+                   // Debug.Log("tempPv = " + tempPv.ViewID);
                     pV = tempPv;
-                    Debug.Log("Owner of photon view " + pV + " is " + pV.Owner.NickName);
+                    //Debug.Log("Owner of photon view " + pV + " is " + pV.Owner.NickName);
                     break;
                 }
             }
@@ -113,26 +113,27 @@ namespace Com.tuf31404.KeepEating
             players = PhotonNetwork.CurrentRoom.Players;
             eaterIndex = 0;
             enforcerIndex = 0;
-            Debug.Log("players = " + players);
-            Debug.Log("players count = " + PhotonNetwork.CurrentRoom.PlayerCount);
+           // Debug.Log("players = " + players);
+           // Debug.Log("players count = " + PhotonNetwork.CurrentRoom.PlayerCount);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
                 if (PhotonTeamExtensions.GetPhotonTeam(players[i + 1]).Code == 1)
                 {
                     pV.RPC("SpawnRpc", players[i+1], eaterIndex++, players[i+1].UserId);
                     //Debug.Log("UserId = " + players[i + 1].UserId);
-                    Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an eater");
+                   // Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an eater");
                 }
                 else
                 {
                     //Debug.Log("player id = " + players[i + 1].UserId);
                     pV.RPC("SpawnRpc", players[i+1], enforcerIndex++, players[i + 1].UserId);
-                   Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an enforcer");
+                  // Debug.Log("player name " + i + " = " + players[i + 1].NickName + " is spawning as an enforcer");
                 }
             }
 
             if (StaticSettings.Bots)
             {
+                
                 for (int i = 0; i < eaterAiCount; i++)
                 {
                     eaterAI[i] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
@@ -143,6 +144,10 @@ namespace Com.tuf31404.KeepEating
                     enforcerAI[i] = PhotonNetwork.InstantiateRoomObject("EnforcerAI", enforcerSpawns[enforcerIndex++].transform.position, Quaternion.identity);
                     enforcerAI[i].GetComponent<AIScript>().PV = pV;
                 }
+                
+                //eaterAI[0] = PhotonNetwork.InstantiateRoomObject("EaterAI", eaterSpawns[eaterIndex++].transform.position, Quaternion.identity);
+                //eaterAI[0].GetComponent<AIScript>().PV = pV;
+                eaterAI[0].GetComponent<AIScript>().isAlpha = true;
             }
             
         }
@@ -159,6 +164,7 @@ namespace Com.tuf31404.KeepEating
 
         public void SpawnWeapons()
         {
+            /*
             int rand = UnityEngine.Random.Range(1, 3);
             if (rand == 1)
             {
@@ -176,6 +182,13 @@ namespace Com.tuf31404.KeepEating
             else
             {
                 pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 2);
+            } */
+
+            int rand;
+            foreach (GameObject spawn in weaponSpawns)
+            {
+                rand = UnityEngine.Random.Range(1, 3);
+                pV.RPC("SpawnFoodRpc", RpcTarget.AllBuffered, spawn.name, rand);
             }
         }
 
@@ -218,18 +231,27 @@ namespace Com.tuf31404.KeepEating
                     hudText.text = "Tie Game";
                     break;
                 default:
-                    Debug.Log("Oh shit something went wrong");
+                    Debug.Log("Oh crap something went wrong");
                     break;
             }
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
+                player.cameraMovement.StopSpectating();
                 if (StaticSettings.Bots)
                 {
-                    PhotonNetwork.Destroy(eaterAI[0]);
-                    PhotonNetwork.Destroy(enforcerAI[0]);
+                    foreach (GameObject eater in eaterAI)
+                    {
+                        PhotonNetwork.Destroy(eater);
+                    }
+                    foreach (GameObject enforcer in enforcerAI)
+                    {
+                        PhotonNetwork.Destroy(enforcer);
+                    }
+                    //PhotonNetwork.Destroy(eaterAI[0]);
+                    //PhotonNetwork.Destroy(enforcerAI[0]);
                 }
-                Debug.Log("Master Client returning to lobby");
+               // Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;
                 PhotonNetwork.AutomaticallySyncScene = true;
                 PhotonNetwork.LoadLevel("Lobby");
@@ -247,7 +269,7 @@ namespace Com.tuf31404.KeepEating
         {
             if (pV.IsMine)
             {
-                Debug.Log("Death pv = " + pV.ViewID);
+                //Debug.Log("Death pv = " + pV.ViewID);
                 this.EatersAlive--;
                 if (this.EatersAlive > 0)
                 {

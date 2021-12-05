@@ -42,13 +42,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isEater: 0
   speed: 20
-  PlayerUiPrefab: {fileID: 0}
   shotgunSprite: {fileID: -3695664891932108249, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
   revolverSprite: {fileID: -4855807490512174151, guid: b071b51d5d9e27945835b2fc1e40fc49, type: 3}
   taserSprite: {fileID: 0}
   mySpriteRenderer: {fileID: 4230723736554968497}
   weaponSpriteRenderer: {fileID: 7437485428050761017}
-  taserSpriteRenderer: {fileID: 0}
   shootScript: {fileID: 2744821492715974044}
   muzzleTransform: {fileID: 5718619910400643348}
   bulletPrefab: {fileID: 7986858786739329354, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
@@ -57,6 +55,10 @@ MonoBehaviour:
   thisPV: {fileID: 4716197586251352982}
   fieldOfVisionX: 122
   fieldOfVisionY: 50
+  isAlpha: 0
+  hasDijkstraTarget: 0
+  inDijkstra: 0
+  shortestPath: 
 --- !u!1001 &8298179205779476286
 PrefabInstance:
   m_ObjectHideFlags: 0

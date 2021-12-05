@@ -18,7 +18,7 @@ namespace Com.tuf31404.KeepEating
 {
     public class ConnectToServer : MonoBehaviourPunCallbacks      //needed for PUN functions
     {
-
+        
         string gameVersion = "2";                                  //needed so you are connected to a compatible lobby
         bool isConsole = false;
 
@@ -32,6 +32,7 @@ namespace Com.tuf31404.KeepEating
         // Start is called before the first frame update
         void Start()
         {
+            UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = gameVersion;
             Debug.Log("Start");
