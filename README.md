@@ -61,7 +61,7 @@ In order to complete this project, all team members need:
     
 -   An understanding of C#
     
--   AWS Cloud Computing Service
+-   Photon Cloud Computing Service
 
 ## User Story 
 ### Ji wants a fun way to pass the time
