@@ -3287,6 +3287,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5070733807557779943, guid: e27c66ef7c5726f46956afc098e731f9, type: 3}
+      propertyPath: statusText
+      value: 
+      objectReference: {fileID: 597162253}
     - target: {fileID: 5070733807557779944, guid: e27c66ef7c5726f46956afc098e731f9, type: 3}
       propertyPath: m_Name
       value: Game State Manager
