@@ -42,6 +42,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7986858786739329354, guid: 00d0fed10fad8e64fa5d29e5d33ca55c, type: 3}
   taserBulletPrefab: {fileID: 153371551782413702, guid: cb63ab708885dca44922a0fe7eeda3bb, type: 3}
   cameraMovement: {fileID: 0}
+  isAlive: 0
 --- !u!1001 &3386362974971726178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68,6 +69,10 @@ PrefabInstance:
     - target: {fileID: -7914678325390154641, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_PositionModel.InterpolateLerpSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1336258094389614408, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2063921439197384138, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: observableSearch
@@ -150,16 +155,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380070, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353768009470380070, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_Size.x
-      value: 1.5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_Size.y
-      value: 1.5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5353768009470380071, guid: 7dd3f78beaec8c448abc21caf0baca90, type: 3}
       propertyPath: m_Offset.x

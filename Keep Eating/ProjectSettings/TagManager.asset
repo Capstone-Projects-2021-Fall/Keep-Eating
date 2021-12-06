@@ -24,6 +24,9 @@ TagManager:
   - Wall
   - Node
   - Taser Bullet
+  - Timer
+  - Purgatory
+  - Status
   layers:
   - Default
   - TransparentFX

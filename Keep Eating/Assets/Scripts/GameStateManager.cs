@@ -42,6 +42,8 @@ namespace Com.tuf31404.KeepEating
         public PlayerManagerV2 player;
         [SerializeField]
         PhotonView pV;
+        [SerializeField]
+        Text statusText;
 
         public bool ReturnToLobby { get; set; }
         public Text EatersScoreText { get; set; }
@@ -164,47 +166,28 @@ namespace Com.tuf31404.KeepEating
 
         public void SpawnWeapons()
         {
-            /*
-            int rand = UnityEngine.Random.Range(1, 3);
-            if (rand == 1)
-            {
-                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn0", 1);
-            }
-            else
-            {
-                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn0", 2);
-            }
-            rand = UnityEngine.Random.Range(1, 3);
-            if (rand == 1)
-            {
-                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 1);
-            }
-            else
-            {
-                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, "WeaponSpawn1", 2);
-            } */
-
             int rand;
             foreach (GameObject spawn in weaponSpawns)
             {
                 rand = UnityEngine.Random.Range(1, 3);
-                pV.RPC("SpawnFoodRpc", RpcTarget.AllBuffered, spawn.name, rand);
+                pV.RPC("SpawnWeaponRpc", RpcTarget.AllBuffered, spawn.name, rand);
             }
         }
 
         // Checks for win conditions.
         void Update()
         {
-            if (this.EatersAlive <= 0)
+            if (!this.ReturnToLobby && PhotonNetwork.IsMasterClient)
             {
-                GameOver("Death");
+                if (this.EatersAlive <= 0)
+                {
+                    GameOver("Death");
+                }
+                else if (this.EaterPoints >= pointsToWin)
+                {
+                    GameOver("Points");
+                }
             }
-            else if (this.EaterPoints >= pointsToWin)
-            {
-                GameOver("Points");
-            }
-
-
         }
 
 
@@ -216,45 +199,21 @@ namespace Com.tuf31404.KeepEating
         */
         public void GameOver(string cause)
         {
-            switch (cause)
-            {
-                case "Death":
-                    //enforcers win
-                    hudText.text = "Enforcers Win";
-                    break;
-                case "Points":
-                    //eaters win
-                    hudText.text = "Eaters Win";
-                    break;
-                case "Time":
-                    //tie??
-                    hudText.text = "Tie Game";
-                    break;
-                default:
-                    Debug.Log("Oh crap something went wrong");
-                    break;
-            }
             
             if (PhotonNetwork.IsMasterClient && !this.ReturnToLobby)
             {
                 player.cameraMovement.StopSpectating();
-                if (StaticSettings.Bots)
-                {
-                    foreach (GameObject eater in eaterAI)
-                    {
-                        PhotonNetwork.Destroy(eater);
-                    }
-                    foreach (GameObject enforcer in enforcerAI)
-                    {
-                        PhotonNetwork.Destroy(enforcer);
-                    }
-                    //PhotonNetwork.Destroy(eaterAI[0]);
-                    //PhotonNetwork.Destroy(enforcerAI[0]);
-                }
-               // Debug.Log("Master Client returning to lobby");
                 this.ReturnToLobby = true;
-                PhotonNetwork.AutomaticallySyncScene = true;
-                PhotonNetwork.LoadLevel("Lobby");
+                pV.RPC("GameEnd", RpcTarget.All, cause);
+                foreach (GameObject eater in eaterAI)
+                {
+                    eater.GetComponent<AIScript>().IsAlive = false;
+                }
+                foreach (GameObject enforcer in enforcerAI)
+                {
+                    enforcer.GetComponent<AIScript>().IsAlive = false;
+                }
+                StartCoroutine("EndGame");
             }
         }
 
@@ -269,11 +228,10 @@ namespace Com.tuf31404.KeepEating
         {
             if (pV.IsMine)
             {
-                //Debug.Log("Death pv = " + pV.ViewID);
                 this.EatersAlive--;
-                if (this.EatersAlive > 0)
+                if (this.EatersAlive >= 0)
                 {
-                    pV.RPC("UpdateAliveText", RpcTarget.All, -1);
+                    pV.RPC("UpdateAliveText", RpcTarget.All);
                 }
             }
         }
@@ -283,10 +241,34 @@ namespace Com.tuf31404.KeepEating
             if (pV.IsMine)
             {
                 this.EatersAlive++;
-                pV.RPC("UpdateAliveText", RpcTarget.All, 1);
+                pV.RPC("UpdateAliveText", RpcTarget.All);
             }
         }
 
+        public void SetStatusText(string _text)
+        {
+            statusText.text = _text;
+        }
+
+        IEnumerator EndGame()
+        {
+
+            yield return new WaitForSeconds(5);
+            if (StaticSettings.Bots)
+            {
+                foreach (GameObject eater in eaterAI)
+                {
+                    PhotonNetwork.Destroy(eater);
+                }
+
+                foreach (GameObject enforcer in enforcerAI)
+                {
+                    PhotonNetwork.Destroy(enforcer);
+                }
+            }
+            PhotonNetwork.AutomaticallySyncScene = true;
+            PhotonNetwork.LoadLevel("Lobby");
+        }
     }
 }
 

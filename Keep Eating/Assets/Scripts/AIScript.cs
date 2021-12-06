@@ -67,7 +67,6 @@ namespace Com.tuf31404.KeepEating
         private bool wandering;
         private Vector3 wanderTarget;
         private bool hasTarget, newWander;
-        private bool gameStart;
         private BotMap botMap;
         public PhotonView PV { get; set; }
         public bool IsAlive { get; set; }
@@ -90,19 +89,18 @@ namespace Com.tuf31404.KeepEating
             SetTargets();
             shootDistance = 0;
             canShoot = true;
-            wandering = false;
             hasTarget = false;
             newWander = true;
             wanderTarget = Vector3.zero;
-            gameStart = false;
             target = null;
-            IsAlive = true;
+            IsAlive = false;
             if (StaticSettings.Map.Equals("SmallGameMap"))
             {
                 minX = -150;
                 maxX = 152;
                 minY = -108;
                 maxY = 82;
+                wandering = true;
             }
             else
             {
@@ -110,7 +108,8 @@ namespace Com.tuf31404.KeepEating
                 maxX = 250f;
                 minY = -235f;
                 maxY = 235f;
-               // Debug.Log("Nodes.Length = " + nodes.Length);
+                wandering = false;
+                // Debug.Log("Nodes.Length = " + nodes.Length);
                 botMap = new BotMap(nodes.Length);
                 shortestPath = new int[36];
                 ResetPath();
@@ -118,14 +117,13 @@ namespace Com.tuf31404.KeepEating
                 //botMap.PrintMap();
                 StartCoroutine("WaitSetBotMap");
             }
-            StartCoroutine("StartWaiter");
         }
 
 
         // Update is called once per frame
         void Update()
         {
-            if (gameStart && IsAlive)
+            if (IsAlive)
             {
 
                 if (StaticSettings.Map.Equals("SmallGameMap"))
@@ -233,6 +231,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     float step = speed * Time.deltaTime;
                     myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
+                    RotateTo(target.transform.position);
                 }
                 else
                 {
@@ -280,6 +279,7 @@ namespace Com.tuf31404.KeepEating
                         {
                             float step = speed * Time.deltaTime;
                             myTransform.position = Vector3.MoveTowards(myTransform.position, nodes[shortestPath[pathCounter]].transform.position, step);
+                            RotateTo(nodes[shortestPath[pathCounter]].transform.position);
                         }
                         else
                         {
@@ -308,10 +308,7 @@ namespace Com.tuf31404.KeepEating
 
         private void SmallMapMove()
         {
-            if (!isEater)
-            {
-                //Debug.Log("has target = " + hasTarget + " has gun = " + hasGun + " wandering = " + wandering);
-            }
+
             if (!hasTarget)
             {
                 target = GetTarget();
@@ -322,7 +319,7 @@ namespace Com.tuf31404.KeepEating
                 {
                     if (target.tag.Equals("Player") || target.tag.Equals("EaterAI"))
                     {
-                        if (!target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+                        if (!target.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled)
                         {
                             target = GetTarget();
                         }
@@ -334,17 +331,12 @@ namespace Com.tuf31404.KeepEating
                 }
                 else
                 {
-                    target = GetTarget();
+                    target = null;
                 }
             }
 
             if (target != null)
             {
-
-                if (!isEater)
-                {
-                    //Debug.Log("Target name = " + target.name);
-                }
                 hasTarget = true;
                 wandering = false;
 
@@ -364,7 +356,7 @@ namespace Com.tuf31404.KeepEating
 
         private void TryShoot()
         {
-            if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+            if ((target.tag.Equals("Player") || target.tag.Equals("EaterAI")) && hasGun && target.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled)
             {
                 if (TargetDistance(target.transform.position, myTransform.position, false) <= shootDistance && canShoot)
                 {
@@ -385,22 +377,33 @@ namespace Com.tuf31404.KeepEating
                 }
             }
         }
+       
         void Move(bool _isWandering)
         {
             float step = speed * Time.deltaTime;
             if (_isWandering)
             {
                 myTransform.position = Vector3.MoveTowards(myTransform.position, wanderTarget, step);
+                RotateTo(wanderTarget);
             }
             else
             {
                 myTransform.position = Vector3.MoveTowards(myTransform.position, target.transform.position, step);
+                RotateTo(target.transform.position);
             }
 
             myTransform.position = new Vector3(
                     Mathf.Clamp(myTransform.position.x, minX, maxX),
                     Mathf.Clamp(myTransform.position.y, minY, maxY),
                     0.0f);
+        }
+
+        private void RotateTo(Vector3 targetPos)
+        {
+            Vector3 direction = targetPos - myTransform.position;
+            direction.z = 0;
+            Quaternion rotation = Quaternion.LookRotation(Vector3.forward, direction);
+            myTransform.rotation = rotation;
         }
 
         private int GetClosestNode(Vector3 _targetPos)
@@ -612,12 +615,14 @@ namespace Com.tuf31404.KeepEating
                 shortestPath[i] = -1;
             }
         }
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.name.Contains("Weapon") && !hasGun && !isEater)
             {
                 tempItemName = other.gameObject.name;
                 weaponType = other.gameObject.GetComponent<ItemSpawnScript>().ItemType;
+                Debug.Log("weapon type = " + weaponType);
                 hasGun = true;
                 this.PV.RPC("PickUpGun", RpcTarget.All, thisPV.ViewID, weaponType, tempItemName);
                 if (weaponType == Items.Shotgun)
@@ -641,12 +646,33 @@ namespace Com.tuf31404.KeepEating
                 inDijkstra = false;
                 hasDijkstraTarget = false;
             }
+
+            Debug.Log("trigger");
+            if (other.gameObject.CompareTag("Bullet") && isEater)
+            {
+                Debug.Log("Ouch");
+                Health -= 0.3f;
+            }
+
+            if (other.gameObject.CompareTag("Taser Bullet") && !isEater)
+            {
+                StartCoroutine(FreezeRoutine());
+            }
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private IEnumerator FreezeRoutine()
         {
+            IsAlive = false;
+            yield return new WaitForSeconds(10);
+            IsAlive = true;
+        }
+
+            private void OnCollisionEnter2D(Collision2D collision)
+        {
+            Debug.Log("Collision");
             if (collision.gameObject.CompareTag("Bullet") && isEater)
             {
+                Debug.Log("Ouch");
                 Health -= 1f;
             }
         }
@@ -655,12 +681,6 @@ namespace Com.tuf31404.KeepEating
             canShoot = false;
             yield return new WaitForSeconds(1);
             canShoot = true;
-        }
-
-        IEnumerator StartWaiter()
-        {
-            yield return new WaitForSeconds(3);
-            gameStart = true;
         }
 
         IEnumerator WanderWaiter()
@@ -680,7 +700,7 @@ namespace Com.tuf31404.KeepEating
 
         IEnumerator RespawnWaiter(int pvId)
         {
-            myTransform.position = Vector3.zero;
+            myTransform.position = GameObject.FindGameObjectWithTag("Purgatory").transform.position;
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             if (spawns.Length != 0)

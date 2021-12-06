@@ -19,29 +19,6 @@ namespace Com.tuf31404.KeepEating
         //Instance of a player that will be shot
         public PlayerManagerV2 player;
 
-
-        /*
-        public void ShootGun()
-        {
-            Debug.Log("in shootgun");
-            if (this.gameObject.name.Contains("Revolver"))
-            {
-                //Instantiates one bullet
-                PhotonNetwork.Instantiate("RevolverBullet", muzzle.position, muzzle.rotation);
-            }
-            else if (this.gameObject.name.Contains("Shotgun"))
-            {
-                Debug.Log("shooting shotgun");
-
-                //Instantiates 5 bullets in different directions like a real shotgun!!!
-                for (int i = 0; i < 5; i++)
-                {
-                    PhotonNetwork.Instantiate("ShotgunBullet", muzzle.position, muzzle.rotation);
-                }
-            }
-        }
-        */
-
         public Vector3 ShootGun(Items weaponType)
         {
             Vector3 mousePos;

@@ -59,6 +59,10 @@ MonoBehaviour:
   - Healing
   - setPositionClamps
   - UpdateClamp
+  - GameStart
+  - GetReady
+  - PleaseWait
+  - GameEnd
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
