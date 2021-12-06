@@ -64,13 +64,14 @@ In order to complete this project, all team members need:
 -   AWS Cloud Computing Service
 
 ## User Story 
-### Ji wants a fun way to pass the time
-- Ji downloads the app from the Google Play Store
-- Upon the start of the app, he is prompted to create an account and personalize his profile/character
-- After creating his account, he is directed to the main menu where he selects “join a game”
-- Ji joins a random server and waits in the lobby for it to be filled with enough players to start the game
-- After the host starts the game, all of the players are randomized into two teams to compete against each other
-- The winning team is decided by the team that survived the longest and/or optimized the most points by eating the food generated across the map
+### Alice has heard about Keep Eating from her friends so she decides to play together: 
+- Alice downloads the app from the Google Play Store
+- Alice has arrived at the main menu. She wants to start a game, so she clicks on the “Create Lobby” button
+- Upon clicking on the button, a request to create the server is sent to Photon. The Photon infrastructure creates the server, connects Alice to that server, assigns her as the   master client, and places her avatar into a unique lobby room. Each room created by Photon has its own unique lobby code. From this point forward, anyone can join this lobby     using the join lobby button
+- Once Alice has been placed into her lobby, she wants to have other people join. At any time, anyone who clicks on the Join Lobby button could join her lobby. But Alice was       really looking forward to only playing with her friends. So Alice, as the master client, clicks on a button to make the lobby private
+- At this point, the only way to join is to enter a lobby code on the “Join Lobby” menu. Alice uses Discord to share the code to her friends and all of her friends are able to     join the lobby
+- Alice selects the settings for her game once all of her friends join, including playing with bots on the BigGameMap, with a max of six players. When everyone is ready, Alice     presses a button to start the game
+- All players load into the mtch and a game of Keep Eating begins
 
 ### Darnell wants to play a multiplayer game with his friends:
 - Darnell wants to play a multiplayer game with his friends:
