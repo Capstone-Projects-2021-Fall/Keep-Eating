@@ -1,3 +1,12 @@
+/*
+    This is the first script called !!!!!
+    
+    Used by the Connect To Server GameObject on the Loading scene.
+    Pretty much just connects to a Photon server.
+
+    PhotonNetwork is very important. Used to connect to and get info from the server.
+ */
+
 
 using System.Collections;
 using System.Collections.Generic;

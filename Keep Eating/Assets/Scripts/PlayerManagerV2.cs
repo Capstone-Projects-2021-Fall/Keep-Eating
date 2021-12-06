@@ -60,12 +60,13 @@ namespace Com.tuf31404.KeepEating
         //numbers
         private int eaterTeamMax, enforcerTeamMax;
         private int bulletsShot;
+        private int myPoints;
         private static float minX, maxX, minY, maxY;
         //vectors
         private Vector3 pos;
         //booleans
-        private bool hasGun;
-        public bool isAlive;
+        private bool hasGun;                                //change to hasWeapon
+        private bool isAlive;
         private bool facingLeft;
         private bool gunCollision;
         private bool foodCollision;
@@ -82,6 +83,7 @@ namespace Com.tuf31404.KeepEating
 
         //Old Variables, will probably remove
         GameObject weapon;
+        bool hasWeapon = false;
         private byte myTeam;
         private GameObject tempWeapon;
         private int foodId;
@@ -179,6 +181,7 @@ namespace Com.tuf31404.KeepEating
                 foodCollision = false;
                 weaponType = Items.Fist;
                 bulletsShot = 0;
+                myPoints = 0;
             }
             if (PlayerUiPrefab != null)
             {
@@ -199,44 +202,17 @@ namespace Com.tuf31404.KeepEating
         void Update()
         {
 
-            if (photonView.IsMine)
+            if (photonView.IsMine && isAlive)
             {
-                if (isAlive)
+                ProcessInputs();
+                if (Health <= 0f && inGame)
                 {
-                    ProcessInputs();
-                    if (Health <= 0f && inGame)
-                    {
-                        //GameManager.Instance.LeaveRoom();
-                        isAlive = false;
-                        Debug.Log("updating twice");
-                        photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
-                    }
+                    //GameManager.Instance.LeaveRoom();
+                    isAlive = false;
+                    photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
                 }
-
-            }
-            /*
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.LeftBracket))
-                {
-                    cameraMovement.Spectate();
-                }
-
-                if (Input.GetKeyDown(KeyCode.RightBracket))
-                {
-                    cameraMovement.StopSpectating();
-                }
-            } */
-
-            if (Input.GetKeyDown(KeyCode.LeftBracket))
-            {
-                cameraMovement.Spectate();
             }
 
-            if (Input.GetKeyDown(KeyCode.RightBracket))
-            {
-                cameraMovement.StopSpectating();
-            }
         }
 
 
@@ -390,6 +366,15 @@ namespace Com.tuf31404.KeepEating
                 LeaveRoom();
             }
 
+            if (Input.GetKeyDown(KeyCode.LeftBracket))
+            {
+                cameraMovement.Spectate();
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightBracket))
+            {
+                cameraMovement.StopSpectating();
+            }
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -419,11 +404,6 @@ namespace Com.tuf31404.KeepEating
                 tempItemName = other.gameObject.name;
                 taserCollision = true;
             }
-
-            if (other.gameObject.CompareTag("Bullet") && this.MyTeam == 1)
-            {
-                photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, other.gameObject.name);
-            }
         }
 
         void OnCollisionEnter2D(Collision2D collision)
@@ -431,6 +411,10 @@ namespace Com.tuf31404.KeepEating
             if (!this.photonView.IsMine)
             {
                 return;
+            }
+
+            if (collision.gameObject.tag.Equals("Bullet") && this.MyTeam == 1){
+                photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
             
             if (collision.gameObject.tag.Equals("Taser Bullet") && this.MyTeam == 2)
@@ -590,52 +574,50 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void PlayerDead(int pvId)
         {
-            if (PlayerManagerV2.LocalPlayerInstance == this.gameObject)
+            if (photonView.ViewID == pvId)
             {
-                if (photonView.ViewID == pvId)
-                {
-                    mySpriteRenderer.enabled = false;
-                    this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                    IEnumerator coroutine = RespawnWaiter(pvId);
-                    StartCoroutine(coroutine);
-                }
-                else
-                {
-                    PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                    PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                }
-                    GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().Death();
+                mySpriteRenderer.enabled = false;
+                this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                IEnumerator coroutine = RespawnWaiter(pvId);
+                StartCoroutine(coroutine);
+            }
+            else
+            {
+                PhotonView.Find(pvId).gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                PhotonView.Find(pvId).gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            
+            if (photonView.IsMine)
+            {
+                GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().Death();
             }
         }
 
         [PunRPC]
         public void PlayerRespawn(int pvId, Vector3 pos)
         {
-            if (PlayerManagerV2.LocalPlayerInstance == this.gameObject)
+            if (this.photonView.ViewID == pvId)
             {
-                if (this.photonView.ViewID == pvId)
+                mySpriteRenderer.enabled = true;
+                this.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+                this.gameObject.transform.position = pos;
+                Health = 1f;
+                isAlive = true;
+            }
+            else
+            {
+                GameObject obj = PhotonView.Find(pvId).gameObject;
+                obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                obj.GetComponent<BoxCollider2D>().enabled = true;
+                obj.transform.position = pos;
+                if (obj.CompareTag("Player"))
                 {
-                    mySpriteRenderer.enabled = true;
-                    this.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-                    this.gameObject.transform.position = pos;
-                    Health = 1f;
-                    isAlive = true;
+                    obj.GetComponent<PlayerManagerV2>().Health = 1f;
                 }
                 else
                 {
-                    GameObject obj = PhotonView.Find(pvId).gameObject;
-                    obj.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
-                    obj.GetComponent<BoxCollider2D>().enabled = true;
-                    obj.transform.position = pos;
-                    if (obj.CompareTag("Player"))
-                    {
-                        obj.GetComponent<PlayerManagerV2>().Health = 1f;
-                    }
-                    else
-                    {
-                        obj.GetComponent<AIScript>().Health = 1f;
-                        obj.GetComponent<AIScript>().IsAlive = true;
-                    }
+                    obj.GetComponent<AIScript>().Health = 1f;
+                    obj.GetComponent<AIScript>().IsAlive = true;
                 }
             }
         }
@@ -763,8 +745,8 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void SpawnWeaponRpc(string name, int type)
         {
-            Debug.Log("SW Photon view owner " + photonView.Owner);
-            if (type == 1)
+
+                if (type == 1)
                 {
                     GameObject.Find(name).GetComponent<ItemSpawnScript>().Spawn(type, Items.Shotgun);
                 }
@@ -791,12 +773,14 @@ namespace Com.tuf31404.KeepEating
         }
 
         [PunRPC]
-        public void UpdateAliveText() 
+        public void UpdateAliveText(int newDeath) 
         {
+            if (photonView.IsMine)
+            {
 
-            Debug.Log("Updating Alive Text pv = " + photonView);
                 try
                 {
+                    
                     string newAliveText = "Eaters Alive: " + GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAlive;
                     GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().EatersAliveText.text = newAliveText;
                 }
@@ -815,7 +799,7 @@ namespace Com.tuf31404.KeepEating
                         Debug.Log("???");
                     }
                 }
-            
+            }
         }
         #endregion
 
@@ -843,10 +827,9 @@ namespace Com.tuf31404.KeepEating
 
         IEnumerator RespawnWaiter(int pvId)
         {
-            cameraMovement.Spectate();
-            this.transform.position = GameObject.FindGameObjectWithTag("Purgatory").transform.position;
+            GameObject.FindWithTag("GSM").GetComponent<GameStateManager>().Death();
+            this.transform.position = Vector3.zero;
             yield return new WaitForSeconds(10f);
-            cameraMovement.StopSpectating();
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             if (spawns.Length != 0)
             {
@@ -893,7 +876,6 @@ namespace Com.tuf31404.KeepEating
                 {
                     Destroy(GameObject.FindGameObjectWithTag("GSM"));
                 }
-                isAlive = true;
                 inGame = false;
                 hasGun = false;
                 weaponType = Items.NA;
@@ -915,7 +897,6 @@ namespace Com.tuf31404.KeepEating
             if (level == 3 || level == 4)
             {
                 inGame = true;
-                isAlive = false;
                 photonView.RPC("InitSpawnArrays", RpcTarget.AllBuffered);
                 //Debug.Log("scene loaded called");
                 gsm = GameObject.FindWithTag("GSM").GetComponent<GameStateManager>();
@@ -928,71 +909,11 @@ namespace Com.tuf31404.KeepEating
                     gsm.SpawnFood();
                     gsm.SpawnWeapons();
                     gsm.SpawnPlayers();
-                    StartCoroutine(GetReadyWaiter());
+                    //this.gameObject.transform.position = GameObject.Find("EaterSpawn").transform.position
+                    //gsm.SpawnAI();
                     gsm.eaterCount = 0;
                 }
                 cameraMovement.SetSpectating();
-            }
-        }
-        IEnumerator GetReadyWaiter()
-        {
-            yield return new WaitForSeconds(5);
-            photonView.RPC("GetReady", RpcTarget.AllBufferedViaServer);
-            StartCoroutine(GameStartWaiter());
-        }
-
-        IEnumerator GameStartWaiter()
-        {
-            yield return new WaitForSeconds(1.5f);
-            photonView.RPC("GameStart", RpcTarget.AllBufferedViaServer);
-            GameObject.FindGameObjectWithTag("Timer").GetComponent<Timer>().StartGame = true;
-            if (StaticSettings.Bots)
-            {
-                GameObject[] eaterAI = GameObject.FindGameObjectsWithTag("EaterAI");
-                GameObject[] enforcerAI = GameObject.FindGameObjectsWithTag("EnforcerAI");
-                foreach (GameObject eater in eaterAI)
-                {
-                    eater.GetComponent<AIScript>().IsAlive = true;
-                }
-
-                foreach (GameObject enforcer in enforcerAI)
-                {
-                    enforcer.GetComponent<AIScript>().IsAlive = true;
-                }
-            }
-        }
-
-        [PunRPC]
-        private void GetReady()
-        {
-            Debug.Log("GR Photon view owner " + photonView.Owner);
-            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("START!");
-        }
-
-        [PunRPC]
-        private void GameStart()
-        {
-            Debug.Log("GS Photon view owner " + photonView.Owner);
-            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("");
-            isAlive = true;
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject player in players)
-            {
-                player.GetComponent<PlayerManagerV2>().isAlive = true;
-            }
-        }
-
-        [PunRPC]
-        private void GameEnd(string cause)
-        {
-            isAlive = false;
-            if (cause.Equals("Points"))
-            {
-                GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("EATERS WIN!");
-            }
-            else
-            {
-                GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("ENFORCERS WIN!");
             }
         }
 

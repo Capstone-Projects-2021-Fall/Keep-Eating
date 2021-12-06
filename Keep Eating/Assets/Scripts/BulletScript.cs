@@ -38,11 +38,7 @@ public class BulletScript : MonoBehaviour
         if (hasDirection)
         {
             float step = speed * Time.deltaTime;
-            Vector3 tempPos = transform.position;
-            tempPos += direction * step;
-            tempPos.z = 0;
-            transform.position = tempPos;
-            Debug.Log("bullet rotation = " + transform.rotation.ToString());
+            transform.position += direction * step;
         }
     }
     
@@ -50,7 +46,6 @@ public class BulletScript : MonoBehaviour
     public void SetDirection(Vector3 _direction)
     {
         direction = _direction;
-        direction.z = 0;
         hasDirection = true;
     }
 

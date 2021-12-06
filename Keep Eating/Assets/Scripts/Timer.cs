@@ -20,7 +20,20 @@ namespace Com.tuf31404.KeepEating {
         public Text timerText;
         [SerializeField]
         PhotonView pV;
-        public bool StartGame { get; set; }
+
+        void Start()
+        {
+            //Master Client gets the start time and sends it to the other players.
+            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                startTime = PhotonNetwork.Time;
+                startTimer = true;
+                
+                pV.RPC("SetTimer", RpcTarget.AllBuffered, startTime);
+            }
+
+            timerText.text = "" + timer;
+        }
 
         [PunRPC]
         void SetTimer(double _startTime)
@@ -31,23 +44,7 @@ namespace Com.tuf31404.KeepEating {
 
         void Update()
         {
-            if (StartGame)
-            {
-                //Master Client gets the start time and sends it to the other players.
-                if (PhotonNetwork.LocalPlayer.IsMasterClient)
-                {
-                    startTime = PhotonNetwork.Time;
-                    startTimer = true;
-
-                    pV.RPC("SetTimer", RpcTarget.AllBuffered, startTime);
-                }
-
-                timerText.text = "" + timer;
-                StartGame = false;
-            }
-
             if (!startTimer) return;
-
             timerIncrementValue = PhotonNetwork.Time - startTime;
 
             if (timerIncrementValue > timer)

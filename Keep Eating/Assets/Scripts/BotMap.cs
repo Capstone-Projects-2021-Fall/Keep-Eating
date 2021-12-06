@@ -96,6 +96,37 @@ namespace Com.tuf31404.KeepEating
                     u = prev[u];
                 }
             }
+
+            /*
+            StreamWriter writer = new StreamWriter(path, true);
+            writer.WriteLine(PhotonNetwork.Time);
+            string print = "dist ";
+            foreach (float d in dist)
+            {
+                print += d + " ";
+            }
+            writer.WriteLine(print);
+            print = "prev ";
+            foreach (int i in prev)
+            {
+                print += i + " ";
+            }
+            writer.WriteLine(print);
+            print = "Q ";
+            foreach (int q in Q)
+            {
+                print += q + " ";
+            }
+            writer.WriteLine(print);
+            print = "S ";
+            foreach (int s in S)
+            {
+                print += s + " ";
+            }
+            writer.WriteLine(print);
+            writer.Close();
+            */
+
             return S;
         }
 

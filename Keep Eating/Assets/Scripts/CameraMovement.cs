@@ -6,7 +6,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 
 namespace Com.tuf31404.KeepEating
@@ -19,8 +18,6 @@ namespace Com.tuf31404.KeepEating
         private bool isFollowing = false;
         private Transform[] otherPlayers;
         private int spectatingCounter;
-        [SerializeField]
-        Text statusText;
         public bool Spectating { get; set; }
 
         void Start()
@@ -37,7 +34,6 @@ namespace Com.tuf31404.KeepEating
 
         public void SetSpectating()
         {
-            statusText = GameObject.FindGameObjectWithTag("Status").GetComponent<Text>();
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             GameObject[] eaterAI = GameObject.FindGameObjectsWithTag("EaterAI");
             GameObject[] enforcerAI = GameObject.FindGameObjectsWithTag("EnforcerAI");
@@ -83,16 +79,14 @@ namespace Com.tuf31404.KeepEating
             {
                 Spectating = true;
             }
-            
             followTransform = otherPlayers[spectatingCounter];
-            statusText.text = "Spectating " + followTransform.GetComponent<PhotonView>().Owner.NickName;
+            Debug.Log("spectating " + followTransform.name + " pv = " + followTransform.gameObject.GetComponent<PhotonView>().ViewID);
         }
 
         public void StopSpectating()
         {
             Spectating = false;
             followTransform = playerTransform;
-            statusText.text = "";
         }
 
         public void GetCamera()

@@ -1,3 +1,11 @@
+/*
+    Should probably be called Lobby (Room) Manager.
+    Controls what happens when players join and leave the room.
+
+    TODO: Maybe implement a game settings jawn to choose the map and set the 
+          max players per room, idk.
+ */
+
 
 using System.Collections;
 using System.Collections.Generic;
@@ -53,6 +61,8 @@ namespace Com.tuf31404.KeepEating
 
             UnityEngine.UI.Text codeText = GameObject.Find("Lobby Code").GetComponent<UnityEngine.UI.Text>();
             codeText.text = PhotonNetwork.CurrentRoom.Name;         //Lobby code
+            //DontDestroyOnLoad(this.gameObject);                     //This causes the GameManager object to go to the map
+            //DontDestroyOnLoad(GameObject.Find("Team Manager(Clone)"));     //Team Manager object goes to the map
             startButton.onClick.AddListener(() => StartGame());     //Start button listener
 
         }
@@ -90,6 +100,14 @@ namespace Com.tuf31404.KeepEating
          */
         public void StartGame()
         {
+            /*
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= playersNeededToStart && teamManager.GetTeamMembersCount(1) > 0 && teamManager.GetTeamMembersCount(2) > 0)
+            {
+                Debug.Log("Starting game");
+                //Loads the game map and starts the game.
+                LoadArena();
+            }
+            */
             if (PhotonNetwork.IsMasterClient)
             {
                 if (StaticSettings.Bots)
@@ -104,6 +122,35 @@ namespace Com.tuf31404.KeepEating
                     //Loads the game map and starts the game.
                     LoadArena();
                 }
+            }
+        }
+
+
+        /*
+            I was using this to automatically start the game after enough player joined
+            before the start button was implemented.
+            Might remove.
+         */
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            Debug.LogFormat("OnPlayerEnteredRoom() {0}", newPlayer.NickName);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //StaticSettings.FreshRoom = true;
+            }
+        }
+
+
+        //Not sure why this was ever here
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            Debug.LogFormat("OnPlayerLeftRoom() {0}", otherPlayer.NickName);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Debug.LogFormat("OnPlayerLeftRoom() isMasterClient {0}", PhotonNetwork.IsMasterClient);
+
+                //LoadArena();
             }
         }
 
