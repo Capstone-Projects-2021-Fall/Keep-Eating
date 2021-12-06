@@ -973,7 +973,6 @@ namespace Com.tuf31404.KeepEating
                     enforcer.GetComponent<AIScript>().IsAlive = true;
                 }
             }
-            isAlive = true;
         }
 
         [PunRPC]
