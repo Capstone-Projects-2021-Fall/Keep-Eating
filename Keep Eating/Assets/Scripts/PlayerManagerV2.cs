@@ -519,12 +519,12 @@ namespace Com.tuf31404.KeepEating
             if (teamNum == 1)
             {
                 mySpriteRenderer.sprite = eaterSprite;
-                speed = 50;
+                speed = 30;
             }
             else
             {
                 mySpriteRenderer.sprite = enforcerSprite;
-                speed = 50;
+                speed = 25;
                 
             }
         }
