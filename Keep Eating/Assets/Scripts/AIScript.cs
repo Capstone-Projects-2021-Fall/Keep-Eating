@@ -653,9 +653,24 @@ namespace Com.tuf31404.KeepEating
                 Debug.Log("Ouch");
                 Health -= 0.3f;
             }
+
+            if (other.gameObject.CompareTag("Taser Bullet") && !isEater)
+            {
+                StartCoroutine(FreezeRoutine());
+            }
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private IEnumerator FreezeRoutine()
+        {
+            //Debug.Log("Freeze Coroutine");
+            //Constrains players movement in any direction for 5 seconds before allowing movement to resume
+            //this.gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+            IsAlive = false;
+            yield return new WaitForSeconds(10);
+            IsAlive = true;
+        }
+
+            private void OnCollisionEnter2D(Collision2D collision)
         {
             Debug.Log("Collision");
             if (collision.gameObject.CompareTag("Bullet") && isEater)
