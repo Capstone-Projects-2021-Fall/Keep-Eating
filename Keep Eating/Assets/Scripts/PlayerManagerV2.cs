@@ -199,18 +199,44 @@ namespace Com.tuf31404.KeepEating
         void Update()
         {
 
-            if (photonView.IsMine && isAlive)
+            if (photonView.IsMine)
             {
-                ProcessInputs();
-                if (Health <= 0f && inGame)
+                if (isAlive)
                 {
-                    //GameManager.Instance.LeaveRoom();
-                    isAlive = false;
-                    Debug.Log("updating twice");
-                    photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
+                    ProcessInputs();
+                    if (Health <= 0f && inGame)
+                    {
+                        //GameManager.Instance.LeaveRoom();
+                        isAlive = false;
+                        Debug.Log("updating twice");
+                        photonView.RPC("PlayerDead", RpcTarget.All, this.photonView.ViewID);
+                    }
                 }
+
+            }
+            /*
+            else
+            {
+                if (Input.GetKeyDown(KeyCode.LeftBracket))
+                {
+                    cameraMovement.Spectate();
+                }
+
+                if (Input.GetKeyDown(KeyCode.RightBracket))
+                {
+                    cameraMovement.StopSpectating();
+                }
+            } */
+
+            if (Input.GetKeyDown(KeyCode.LeftBracket))
+            {
+                cameraMovement.Spectate();
             }
 
+            if (Input.GetKeyDown(KeyCode.RightBracket))
+            {
+                cameraMovement.StopSpectating();
+            }
         }
 
 
@@ -364,15 +390,6 @@ namespace Com.tuf31404.KeepEating
                 LeaveRoom();
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftBracket))
-            {
-                cameraMovement.Spectate();
-            }
-
-            if (Input.GetKeyDown(KeyCode.RightBracket))
-            {
-                cameraMovement.StopSpectating();
-            }
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -402,6 +419,11 @@ namespace Com.tuf31404.KeepEating
                 tempItemName = other.gameObject.name;
                 taserCollision = true;
             }
+
+            if (other.gameObject.CompareTag("Bullet") && this.MyTeam == 1)
+            {
+                photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, other.gameObject.name);
+            }
         }
 
         void OnCollisionEnter2D(Collision2D collision)
@@ -409,10 +431,6 @@ namespace Com.tuf31404.KeepEating
             if (!this.photonView.IsMine)
             {
                 return;
-            }
-
-            if (collision.gameObject.CompareTag("Bullet") && this.MyTeam == 1){
-                photonView.RPC("HitByBullet", RpcTarget.All, photonView.ViewID, collision.gameObject.name);
             }
             
             if (collision.gameObject.tag.Equals("Taser Bullet") && this.MyTeam == 2)
@@ -825,8 +843,10 @@ namespace Com.tuf31404.KeepEating
 
         IEnumerator RespawnWaiter(int pvId)
         {
-            this.transform.position = Vector3.zero;
+            cameraMovement.Spectate();
+            this.transform.position = GameObject.FindGameObjectWithTag("Purgatory").transform.position;
             yield return new WaitForSeconds(10f);
+            cameraMovement.StopSpectating();
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             if (spawns.Length != 0)
             {

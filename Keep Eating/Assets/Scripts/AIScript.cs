@@ -688,7 +688,7 @@ namespace Com.tuf31404.KeepEating
 
         IEnumerator RespawnWaiter(int pvId)
         {
-            myTransform.position = Vector3.zero;
+            myTransform.position = GameObject.FindGameObjectWithTag("Purgatory").transform.position;
             yield return new WaitForSeconds(10f);
             GameObject[] spawns = GameObject.FindGameObjectsWithTag("EaterSpawn");
             if (spawns.Length != 0)
