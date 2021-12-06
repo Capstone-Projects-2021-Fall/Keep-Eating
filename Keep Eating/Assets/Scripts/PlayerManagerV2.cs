@@ -199,7 +199,7 @@ namespace Com.tuf31404.KeepEating
         void Update()
         {
 
-            if (PlayerManagerV2.LocalPlayerInstance == this.gameObject)
+            if (photonView.IsMine)
             {
                 if (isAlive)
                 {
