@@ -83,6 +83,7 @@ namespace Com.tuf31404.KeepEating
             {
                 Spectating = true;
             }
+            
             followTransform = otherPlayers[spectatingCounter];
             statusText.text = "Spectating " + followTransform.GetComponent<PhotonView>().Owner.NickName;
         }

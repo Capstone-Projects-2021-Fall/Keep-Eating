@@ -936,8 +936,8 @@ namespace Com.tuf31404.KeepEating
         }
         IEnumerator GetReadyWaiter()
         {
-            yield return new WaitForSeconds(3);
-            photonView.RPC("GetReady", RpcTarget.All);
+            yield return new WaitForSeconds(5);
+            photonView.RPC("GetReady", RpcTarget.AllBuffered);
             StartCoroutine(GameStartWaiter());
         }
 
