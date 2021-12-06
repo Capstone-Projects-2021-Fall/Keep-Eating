@@ -662,9 +662,6 @@ namespace Com.tuf31404.KeepEating
 
         private IEnumerator FreezeRoutine()
         {
-            //Debug.Log("Freeze Coroutine");
-            //Constrains players movement in any direction for 5 seconds before allowing movement to resume
-            //this.gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             IsAlive = false;
             yield return new WaitForSeconds(10);
             IsAlive = true;

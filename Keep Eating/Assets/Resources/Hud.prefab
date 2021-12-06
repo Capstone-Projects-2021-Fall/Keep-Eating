@@ -416,7 +416,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'timer
+  m_Text: '000
 
 '
 --- !u!114 &8163757270312398679
