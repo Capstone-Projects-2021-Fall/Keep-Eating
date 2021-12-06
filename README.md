@@ -12,6 +12,7 @@ picking up the bombs and explode them to death :smiling_imp:. Just like Megumin!
 |1.03|Brendan Lisowski, Ju-Hung Chen, Omran Farighi| Sept. 14, 2021| Update system block diagram, update user stories|
 |1.04|Ji Park, Omran Farighi| Sept. 14, 2021| Update user stories|
 |1.05| Omran Farighi | Nov. 15 2021 | Updated project overview and linked QA testing document | 
+|1.06|Ji Park|Dec. 5 2021| Last minute Readme changes
 
 ## Overview
 Keep Eating is an online multiplayer game, powered by the Unity engine and Photon Unity Networking (PUN) framework. Unity scripts are written in C# and are used to create the game logic. The game state, player manager, and handling of assets are all handled via C# scripts. PUN is a Unity package that allows for matchmaking by placing players into rooms. Within these rooms, the game is synced over the network allowing for a low latency multiplayer gameplay to be played on either MAC or PC. 
@@ -64,24 +65,21 @@ In order to complete this project, all team members need:
 -   AWS Cloud Computing Service
 
 ## User Story 
-### Ji wants a fun way to pass the time
-- Ji downloads the app from the Google Play Store
-- Upon the start of the app, he is prompted to create an account and personalize his profile/character
-- After creating his account, he is directed to the main menu where he selects “join a game”
-- Ji joins a random server and waits in the lobby for it to be filled with enough players to start the game
-- After the host starts the game, all of the players are randomized into two teams to compete against each other
-- The winning team is decided by the team that survived the longest and/or optimized the most points by eating the food generated across the map
+### Alice has heard about Keep Eating from her friends and she wants to play with her friends:
+- Alice has arrived at the main menu. She wants to start a game, so she clicks on the “Create Lobby” button
+- Upon clicking on the button, a request to create the server is sent to Photon. The Photon infrastructure creates the server, connects Alice to that server, assigns her as the   master client, and places her avatar into a unique lobby room. Each room created by Photon has its own unique lobby code. From this point forward, anyone can join this lobby     using the join lobby button
+- Once Alice has been placed into her lobby, she wants to have other people join. At any time, anyone who clicks on the Join Lobby button could join her lobby. But Alice was       really looking forward to only playing with her friends. So Alice, as the master client, clicks on a button to make the lobby private
+- At this point, the only way to join is to enter a lobby code on the “Join Lobby” menu. Alice uses Discord to share the code to her friends and all of her friends are able to     join the lobby
+- Alice selects the settings for her game once all of her friends join, including playing with bots on the BigGameMap, with a max of six players. When everyone is ready, Alice     presses a button to start the game
+- All players load into the mtch and a game of Keep Eating begins
+### Bob gets a text from Alice to play with her and her friends
+- Bob wants to join Alice’s game of Keep Eating. He enters the lobby code he got from Discord on the main and hits the Join Lobby button
+- The request to join the lobby is sent to Photon. Photon checks the number of players in the lobby and realizes that there are already six players, which is the limit Alice set   previously. The server prevents Bob from joining the lobby
+- Alice realizes that Bob can’t join. While she could increase the max number of players, Alice decides instead to stop playing for the day and quits
+- The server updates the number of players in the lobby and randomly assigns a new master (Carol)
+- Bob tries to join the lobby again and this time he succeeds.
+- Carol finally starts a new match
 
-### Darnell wants to play a multiplayer game with his friends:
-- Darnell wants to play a multiplayer game with his friends:
-- Darnell downloads the Keep Eating game from the Google Play Store.
-- His friends also download the same app from the Play Store.
-- They all start the app and from the main menu, Darnell selects the “create lobby” function.
-- Darnell is able to generate a unique lobby code for his friends to use to join his lobby.
-- Darnell distributes the code to his friends.
-- His friends select the “join lobby” function from the main menu to join the lobby Darnell has already created.
-- While his friends are joining the lobby, Darnell is able to set the rules for the game and selects a map to play on.
-- Once everyone is in the lobby, Darnell starts the match and the players are separated into two teams, ready to compete.
 
 
 
