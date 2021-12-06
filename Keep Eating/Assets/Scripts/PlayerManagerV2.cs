@@ -951,13 +951,13 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         private void GetReady()
         {
-            gsm.SetStatusText("START!");
+            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("START!");
         }
 
         [PunRPC]
         private void GameStart()
         {
-            gsm.SetStatusText("");
+            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("");
             isAlive = true;
             if (StaticSettings.Bots && PhotonNetwork.IsMasterClient)
             {
@@ -981,11 +981,11 @@ namespace Com.tuf31404.KeepEating
             isAlive = false;
             if (cause.Equals("Points"))
             {
-                gsm.SetStatusText("EATERS WIN!");
+                GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("EATERS WIN!");
             }
             else
             {
-                gsm.SetStatusText("ENFORCERS WIN!");
+                GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("ENFORCERS WIN!");
             }
         }
 
