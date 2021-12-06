@@ -763,8 +763,8 @@ namespace Com.tuf31404.KeepEating
         [PunRPC]
         public void SpawnWeaponRpc(string name, int type)
         {
-
-                if (type == 1)
+            Debug.Log("SW Photon view owner " + photonView.Owner);
+            if (type == 1)
                 {
                     GameObject.Find(name).GetComponent<ItemSpawnScript>().Spawn(type, Items.Shotgun);
                 }
@@ -937,29 +937,16 @@ namespace Com.tuf31404.KeepEating
         IEnumerator GetReadyWaiter()
         {
             yield return new WaitForSeconds(5);
-            photonView.RPC("GetReady", RpcTarget.AllBuffered);
+            photonView.RPC("GetReady", RpcTarget.AllBufferedViaServer);
             StartCoroutine(GameStartWaiter());
         }
 
         IEnumerator GameStartWaiter()
         {
             yield return new WaitForSeconds(1.5f);
-            photonView.RPC("GameStart", RpcTarget.All);
+            photonView.RPC("GameStart", RpcTarget.AllBufferedViaServer);
             GameObject.FindGameObjectWithTag("Timer").GetComponent<Timer>().StartGame = true;
-        }
-
-        [PunRPC]
-        private void GetReady()
-        {
-            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("START!");
-        }
-
-        [PunRPC]
-        private void GameStart()
-        {
-            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("");
-            isAlive = true;
-            if (StaticSettings.Bots && PhotonNetwork.IsMasterClient)
+            if (StaticSettings.Bots)
             {
                 GameObject[] eaterAI = GameObject.FindGameObjectsWithTag("EaterAI");
                 GameObject[] enforcerAI = GameObject.FindGameObjectsWithTag("EnforcerAI");
@@ -972,6 +959,26 @@ namespace Com.tuf31404.KeepEating
                 {
                     enforcer.GetComponent<AIScript>().IsAlive = true;
                 }
+            }
+        }
+
+        [PunRPC]
+        private void GetReady()
+        {
+            Debug.Log("GR Photon view owner " + photonView.Owner);
+            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("START!");
+        }
+
+        [PunRPC]
+        private void GameStart()
+        {
+            Debug.Log("GS Photon view owner " + photonView.Owner);
+            GameObject.FindGameObjectWithTag("GSM").GetComponent<GameStateManager>().SetStatusText("");
+            isAlive = true;
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in players)
+            {
+                player.GetComponent<PlayerManagerV2>().isAlive = true;
             }
         }
 
