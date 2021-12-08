@@ -1,5 +1,5 @@
 ﻿
-# Keep Eating! :joy:
+# Keep Eating!
 Keep Eating is a online mulitplayer game project developed for Temple CIS4398 capstone course. 
 In this game, players take the role of eaters who attempt to score points by eating food and enforcers who try to stop them at all costs.
 
