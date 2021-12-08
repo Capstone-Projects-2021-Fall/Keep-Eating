@@ -22,7 +22,7 @@ The matchmaking, which is handled by PUN, is done by creating lobbies. Either a 
 
 
 ## QA Testing
-[Use the following document for QA testing](https://github.com/Capstone-Projects-2021-Fall/Keep-Eating/blob/Updated-ReadMe-for-pre-release/Keep%20Eating%20Acceptance%20QA%20Testing%20doc.xlsx)
+[Use the following document for QA testing](Keep_Eating_Acceptance_Testing.xlsx)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
